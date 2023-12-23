@@ -27,6 +27,9 @@
 import os
 import subprocess
 
+# from qtile_extras.widget import StatusNotifier
+import colors
+import owm
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
 from libqtile.config import (
@@ -45,10 +48,6 @@ from libqtile.lazy import lazy
 # Make sure 'qtile-extras' is installed or this config will not work.
 from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
-
-# from qtile_extras.widget import StatusNotifier
-import colors
-import owm
 
 mod = "mod4"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
@@ -82,6 +81,14 @@ keys = [
         desc="Run Launcher",
     ),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
+    Key([mod], "e", lazy.spawn(myTerm + " -e ranger"), desc="File explorer"),
+    Key(
+        [mod],
+        "s",
+        lazy.spawn(myTerm + " -e htop"),
+        desc="System Info",
+    ),
+    Key([mod], "c", lazy.spawn(myTerm + " -e xcalc"), desc="Calculator"),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
@@ -180,6 +187,13 @@ keys = [
     # Switch focus of monitors
     Key([mod], "period", lazy.next_screen(), desc="Move focus to next monitor"),
     Key([mod], "comma", lazy.prev_screen(), desc="Move focus to prev monitor"),
+    # Scratchpads
+    Key(
+        [mod],
+        "d",
+        lazy.group["scratchpad"].dropdown_toggle("term"),
+        desc="dropdown scratchpad",
+    ),
 ]
 
 groups = []
@@ -242,13 +256,6 @@ for i in groups:
                 i.name,
                 lazy.window.togroup(i.name, switch_group=False),
                 desc="Move focused window to group {}".format(i.name),
-            ),
-            # Scratchpads
-            Key(
-                [mod],
-                "d",
-                lazy.group["scratchpad"].dropdown_toggle("term"),
-                desc="dropdown scratchpad",
             ),
         ]
     )
@@ -343,7 +350,9 @@ def init_widgets_list():
         widget.Image(
             filename="~/.config/qtile/icons/python.png",
             scale="False",
-            mouse_callbacks={"Button1": lambda: qtile.cmd_spawn(myTerm)},
+            mouse_callbacks={
+                "Button1": lambda: qtile.cmd_spawn(myTerm + ' -e "ranger"')
+            },
         ),
         widget.Prompt(font="Ubuntu Mono", fontsize=14, foreground=colors[1]),
         widget.GroupBox(
