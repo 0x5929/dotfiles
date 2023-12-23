@@ -29,7 +29,17 @@ import subprocess
 
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
-from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
+from libqtile.config import (
+    Click,
+    Drag,
+    DropDown,
+    Group,
+    Key,
+    KeyChord,
+    Match,
+    ScratchPad,
+    Screen,
+)
 from libqtile.lazy import lazy
 
 # Make sure 'qtile-extras' is installed or this config will not work.
@@ -233,8 +243,24 @@ for i in groups:
                 lazy.window.togroup(i.name, switch_group=False),
                 desc="Move focused window to group {}".format(i.name),
             ),
+            # Scratchpads
+            Key(
+                [mod],
+                "d",
+                lazy.group["scratchpad"].dropdown_toggle("term"),
+                desc="dropdown scratchpad",
+            ),
         ]
     )
+groups.append(
+    ScratchPad(
+        "scratchpad",
+        [
+            # define a drop down terminal
+            DropDown("term", myTerm, height=0.4, width=0.5, x=0.25),
+        ],
+    ),
+)
 
 
 ### COLORSCHEME ###
