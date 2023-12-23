@@ -89,6 +89,7 @@ keys = [
         desc="System Info",
     ),
     Key([mod], "c", lazy.spawn(myTerm + " -e xcalc"), desc="Calculator"),
+    Key([mod, "control"], "m", lazy.spawn(myTerm + " -e cmatrix"), desc="Matrix"),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
