@@ -210,26 +210,26 @@ group_names = [
     "9",
 ]
 group_labels = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
+    "1:1",
+    "2:2",
+    "1:3",
+    "2:4",
+    "1:5",
+    "2:6",
+    "1:7",
+    "2:8",
+    "1:9",
 ]
 group_layouts = [
+    "stack",
     "monadtall",
+    "stack",
     "monadtall",
+    "stack",
     "monadtall",
+    "stack",
     "monadtall",
-    "monadtall",
-    "monadtall",
-    "monadtall",
-    "monadtall",
-    "monadtall",
+    "stack",
 ]
 
 for i in range(len(group_names)):
@@ -303,16 +303,16 @@ layout_theme = {
 
 layouts = [
     # layout.Bsp(**layout_theme),
-    layout.MonadTall(**layout_theme),
+    layout.Stack(**layout_theme, num_stacks=2),
     layout.RatioTile(**layout_theme),
     layout.Zoomy(**layout_theme, property_big="1.0", columnwidth=850),
     # layout.VerticalTile(**layout_theme),
     # layout.Matrix(**layout_theme),
-    layout.Stack(**layout_theme, num_stacks=2),
     layout.Max(
         border_width=0,
         margin=0,
     ),
+    layout.MonadTall(**layout_theme),
     # layout.Columns(**layout_theme),
     # layout.TreeTab(
     #      font = "Ubuntu Bold",
