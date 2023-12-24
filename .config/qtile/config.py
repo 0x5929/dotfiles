@@ -104,6 +104,7 @@ keys = [
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "g", lazy.layout.client_to_next(), desc="Move window to next stack"),
     Key([mod, "control"], "n", lazy.group.next_window(), desc="next window"),
     Key([mod, "shift"], "n", lazy.group.next_window(), desc="next window"),
     Key([mod, "shift"], "p", lazy.group.prev_window(), desc="prev window"),
