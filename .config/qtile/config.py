@@ -88,7 +88,6 @@ keys = [
         lazy.spawn(myTerm + " -e htop"),
         desc="System Info",
     ),
-    Key([mod], "c", lazy.spawn(myTerm + " -e xcalc"), desc="Calculator"),
     Key([mod, "control"], "m", lazy.spawn(myTerm + " -e cmatrix"), desc="Matrix"),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
@@ -223,13 +222,13 @@ group_labels = [
 ]
 group_layouts = [
     "stack",
-    "monadtall",
+    "monadwide",
     "stack",
-    "monadtall",
+    "monadwide",
     "stack",
-    "monadtall",
+    "monadwide",
     "stack",
-    "monadtall",
+    "monadwide",
     "stack",
 ]
 
@@ -314,6 +313,7 @@ layouts = [
         margin=0,
     ),
     layout.MonadTall(**layout_theme),
+    layout.MonadWide(**layout_theme),
     # layout.Columns(**layout_theme),
     # layout.TreeTab(
     #      font = "Ubuntu Bold",
