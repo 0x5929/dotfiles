@@ -265,6 +265,8 @@ for i in groups:
             Key(
                 [mod],
                 i.name,
+                # lazy.group[i.name].toscreen(),
+                # custom function for binding workspace to screens while moving workspaces
                 lazy.function(go_to_group(i.name)),
                 desc="Switch to group {}".format(i.name),
             ),
@@ -272,6 +274,8 @@ for i in groups:
             Key(
                 [mod, "shift"],
                 i.name,
+                # lazy.window.togroup(i.name, switch_group=False),
+                # custom function for binding workspace to screens while moving windows
                 lazy.function(go_to_group_and_move_window(i.name)),
                 desc="Move focused window to group {}".format(i.name),
             ),
