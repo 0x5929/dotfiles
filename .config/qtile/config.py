@@ -198,48 +198,65 @@ keys = [
 ]
 
 groups = []
-group_names = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-]
-group_labels = [
-    "1:1",
-    "2:2",
-    "1:3",
-    "2:4",
-    "1:5",
-    "2:6",
-    "1:7",
-    "2:8",
-    "1:9",
-]
-group_layouts = [
-    "stack",
-    "monadwide",
-    "stack",
-    "monadwide",
-    "stack",
-    "monadwide",
-    "stack",
-    "monadwide",
-    "stack",
+group_configs = [
+    {"name": "1", "label": "1:1", "layout": "stack", "screen": 0},
+    {"name": "2", "label": "2:2", "layout": "monadwide", "screen": 1},
+    {"name": "3", "label": "1:3", "layout": "stack", "screen": 0},
+    {"name": "4", "label": "2:4", "layout": "monadwide", "screen": 1},
+    {"name": "5", "label": "1:5", "layout": "stack", "screen": 0},
+    {"name": "6", "label": "2:6", "layout": "monadwide", "screen": 1},
+    {"name": "7", "label": "1:7", "layout": "stack", "screen": 0},
+    {"name": "8", "label": "2:8", "layout": "monadwide", "screen": 1},
+    {"name": "9", "label": "1:9", "layout": "stack", "screen": 0},
 ]
 
-for i in range(len(group_names)):
+screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
+screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
+
+for i, group in enumerate(group_configs):
     groups.append(
         Group(
-            name=group_names[i],
-            layout=group_layouts[i].lower(),
-            label=group_labels[i],
+            name=group["name"],
+            layout=group["layout"].lower(),
+            label=group["label"],
+            screen_affinity=group["screen"],
         )
     )
+
+
+def go_to_group(name):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.groups_map[name].toscreen()
+            return
+
+        if name in screen_one_groups:
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+        elif name in screen_two_groups:
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+    return _inner
+
+
+def go_to_group_and_move_window(name):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.current_window.togroup(name, switch_group=False)
+            return
+
+        if name in screen_one_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+        elif name in screen_two_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+    return _inner
+
 
 for i in groups:
     keys.extend(
@@ -248,14 +265,14 @@ for i in groups:
             Key(
                 [mod],
                 i.name,
-                lazy.group[i.name].toscreen(),
+                lazy.function(go_to_group(i.name)),
                 desc="Switch to group {}".format(i.name),
             ),
             # mod1 + shift + letter of group = move focused window to group
             Key(
                 [mod, "shift"],
                 i.name,
-                lazy.window.togroup(i.name, switch_group=False),
+                lazy.function(go_to_group_and_move_window(i.name)),
                 desc="Move focused window to group {}".format(i.name),
             ),
         ]
@@ -373,6 +390,7 @@ def init_widgets_list():
             this_screen_border=colors[4],
             other_current_screen_border=colors[7],
             other_screen_border=colors[4],
+            visible_groups=["1", "3", "5", "7", "9"],
         ),
         widget.TextBox(
             text="|", font="Ubuntu Mono", foreground=colors[1], padding=2, fontsize=14
@@ -591,6 +609,7 @@ def init_widgets_screen1():
 # All other monitors' bars will display only workspace info
 def init_widgets_screen2():
     exclude_indices = [
+        2,
         8,
         9,
         10,
@@ -620,6 +639,25 @@ def init_widgets_screen2():
     filtered_widget_screen2 = [
         i for j, i in enumerate(init_widgets_list()) if j not in exclude_indices
     ]
+    groupbox_screen2 = widget.GroupBox(
+        fontsize=11,
+        margin_y=3,
+        margin_x=4,
+        padding_y=2,
+        padding_x=3,
+        borderwidth=3,
+        active=colors[8],
+        inactive=colors[1],
+        rounded=False,
+        highlight_color=colors[2],
+        highlight_method="line",
+        this_current_screen_border=colors[7],
+        this_screen_border=colors[4],
+        other_current_screen_border=colors[7],
+        other_screen_border=colors[4],
+        visible_groups=["2", "4", "6", "8"],
+    )
+    filtered_widget_screen2[1] = groupbox_screen2
     return filtered_widget_screen2
 
 
