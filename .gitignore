@@ -1,1 +1,5 @@
 **/__pycache__/
+**/.stack-work/
+**/.ghc.environment.x86_64-linux-8.8.4
+**/stack.yaml
+**/stack.yaml.lock
