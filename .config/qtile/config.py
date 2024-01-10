@@ -199,15 +199,46 @@ keys = [
 
 groups = []
 group_configs = [
-    {"name": "1", "label": "1:1", "layout": "stack", "screen": 0},
-    {"name": "2", "label": "2:2", "layout": "monadwide", "screen": 1},
-    {"name": "3", "label": "1:3", "layout": "stack", "screen": 0},
-    {"name": "4", "label": "2:4", "layout": "monadwide", "screen": 1},
-    {"name": "5", "label": "1:5", "layout": "stack", "screen": 0},
-    {"name": "6", "label": "2:6", "layout": "monadwide", "screen": 1},
-    {"name": "7", "label": "1:7", "layout": "stack", "screen": 0},
-    {"name": "8", "label": "2:8", "layout": "monadwide", "screen": 1},
-    {"name": "9", "label": "1:9", "layout": "stack", "screen": 0},
+    {"name": "1", "match_group": "2", "label": "1:1", "layout": "stack", "screen": 0},
+    {
+        "name": "2",
+        "match_group": "1",
+        "label": "2:2",
+        "layout": "monadwide",
+        "screen": 1,
+    },
+    {"name": "3", "match_group": "4", "label": "1:3", "layout": "stack", "screen": 0},
+    {
+        "name": "4",
+        "match_group": "3",
+        "label": "2:4",
+        "layout": "monadwide",
+        "screen": 1,
+    },
+    {"name": "5", "match_group": "6", "label": "1:5", "layout": "stack", "screen": 0},
+    {
+        "name": "6",
+        "match_group": "5",
+        "label": "2:6",
+        "layout": "monadwide",
+        "screen": 1,
+    },
+    {"name": "7", "match_group": "8", "label": "1:7", "layout": "stack", "screen": 0},
+    {
+        "name": "8",
+        "match_group": "7",
+        "label": "2:8",
+        "layout": "monadwide",
+        "screen": 1,
+    },
+    {"name": "9", "match_group": "0", "label": "1:9", "layout": "stack", "screen": 0},
+    {
+        "name": "0",
+        "match_group": "9",
+        "label": "2:0",
+        "layout": "monadwide",
+        "screen": 1,
+    },
 ]
 
 screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
@@ -231,11 +262,33 @@ def go_to_group(name):
             return
 
         if name in screen_one_groups:
+            # focus screen and go to workgroup
             qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to second screen
+            qtile.focus_screen(1)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(0)
         elif name in screen_two_groups:
+            # focus screen and go to workgroup
             qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to second screen
+            qtile.focus_screen(0)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(1)
 
     return _inner
 
@@ -659,7 +712,7 @@ def init_widgets_screen2():
         this_screen_border=colors[4],
         other_current_screen_border=colors[7],
         other_screen_border=colors[4],
-        visible_groups=["2", "4", "6", "8"],
+        visible_groups=["2", "4", "6", "8", "0"],
     )
     filtered_widget_screen2[1] = groupbox_screen2
     return filtered_widget_screen2
