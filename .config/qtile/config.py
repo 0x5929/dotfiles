@@ -673,17 +673,17 @@ def init_widgets_screen2():
         11,
         12,
         13,
-        14,
-        15,
+        # 14, # uptime
+        # 15, # spacer
         16,
         17,
         18,
         # 19,#memory
-        # 20, #spacer
+        20,
         21,
         22,
         23,
-        # 24,  # volume
+        24,
         # 25, # spacer
         26,
         27,
