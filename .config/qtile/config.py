@@ -69,6 +69,77 @@ def minimize_all(qtile):
             win.toggle_minimize()
 
 
+def go_to_group(name):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.groups_map[name].toscreen()
+            return
+
+        if name in screen_one_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to second screen
+            qtile.focus_screen(1)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(0)
+        elif name in screen_two_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to second screen
+            qtile.focus_screen(0)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(1)
+
+    return _inner
+
+
+def go_to_group_and_move_window(name):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.current_window.togroup(name, switch_group=False)
+            return
+
+        if name in screen_one_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+        elif name in screen_two_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+    return _inner
+
+
+def go_to_last_group(qtile):
+    qtile.current_screen.set_group(qtile.current_screen.previous_group)
+
+    screen = qtile.screens.index(qtile.current_screen)
+
+    if screen == 0:
+        qtile.focus_screen(1)
+        qtile.current_screen.set_group(qtile.current_screen.previous_group)
+        qtile.focus_screen(0)
+    elif screen == 1:
+        qtile.focus_screen(0)
+        qtile.current_screen.set_group(qtile.current_screen.previous_group)
+        qtile.focus_screen(1)
+
+
 # A list of available commands that can be bound to keys can be found
 # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 keys = [
@@ -83,11 +154,12 @@ keys = [
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
     Key([mod], "e", lazy.spawn(myTerm + " -e ranger"), desc="File explorer"),
     Key(
-        [mod],
+        [mod, "shift"],
         "s",
         lazy.spawn(myTerm + " -e htop"),
         desc="System Info",
     ),
+    Key([mod], "s", lazy.function(go_to_last_group)),
     Key(
         [mod, "control"], "m", lazy.spawn(myTerm + " -e cmatrix -C cyan"), desc="Matrix"
     ),
@@ -255,62 +327,6 @@ for i, group in enumerate(group_configs):
             screen_affinity=group["screen"],
         )
     )
-
-
-def go_to_group(name):
-    def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.groups_map[name].toscreen()
-            return
-
-        if name in screen_one_groups:
-            # focus screen and go to workgroup
-            qtile.focus_screen(0)
-            qtile.groups_map[name].toscreen()
-
-            # grab name of matching group to second screen
-            qtile.focus_screen(1)
-            target_group = next(
-                group for group in group_configs if group["name"] == name
-            )
-            qtile.groups_map[target_group["match_group"]].toscreen()
-
-            # focus back on original screen
-            qtile.focus_screen(0)
-        elif name in screen_two_groups:
-            # focus screen and go to workgroup
-            qtile.focus_screen(1)
-            qtile.groups_map[name].toscreen()
-
-            # grab name of matching group to second screen
-            qtile.focus_screen(0)
-            target_group = next(
-                group for group in group_configs if group["name"] == name
-            )
-            qtile.groups_map[target_group["match_group"]].toscreen()
-
-            # focus back on original screen
-            qtile.focus_screen(1)
-
-    return _inner
-
-
-def go_to_group_and_move_window(name):
-    def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.current_window.togroup(name, switch_group=False)
-            return
-
-        if name in screen_one_groups:
-            qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(0)
-            qtile.groups_map[name].toscreen()
-        elif name in screen_two_groups:
-            qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(1)
-            qtile.groups_map[name].toscreen()
-
-    return _inner
 
 
 for i in groups:
