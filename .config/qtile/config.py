@@ -117,10 +117,26 @@ def go_to_group_and_move_window(name):
             qtile.current_window.togroup(name, switch_group=False)
             qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(1)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            qtile.focus_screen(0)
         elif name in screen_two_groups:
             qtile.current_window.togroup(name, switch_group=False)
             qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(0)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            qtile.focus_screen(1)
 
     return _inner
 
