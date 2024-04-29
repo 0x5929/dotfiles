@@ -19,4 +19,7 @@ if status is-interactive
     # vim binding
     # fish_vi_key_bindings
     fish_default_key_bindings
+
+    # init pyenv
+    pyenv init - | source
 end

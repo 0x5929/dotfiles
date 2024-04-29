@@ -12,7 +12,7 @@ return {
 			typescriptreact = { "eslint_d" },
 			vue = { "eslint_d" },
 			svelte = { "eslint_d" },
-			python = { "pylint" },
+			-- python = { "pylint" },
 			-- install other linters:
 			-- 1. install linters on local machine
 			--    (NOT THE ONE INSIDE DOCKER, that one is inside docker and will not affect YOUR dev env)
