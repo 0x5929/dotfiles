@@ -1,3 +1,6 @@
+# import inspect module
+import inspect
+
 from libqtile import layout
 from libqtile.command.base import expose_command
 from libqtile.layout.base import Layout, _ClientList
@@ -8,8 +11,9 @@ class _WinStack(_ClientList):
     # no split in this version of helper
     cw = _ClientList.current_client
 
-    def __init__(self, autosplit=False):
+    def __init__(self, _id, autosplit=False):
         _ClientList.__init__(self)
+        self._id = _id
 
     def __str__(self):
         return "_WinStack: %s, %s" % (
@@ -45,16 +49,18 @@ class WideCenterStack(Layout):
         ("num_stacks", 2, "Number of stacks."),
         ("margin", 0, "Margin of the layout (int or list of ints [N E S W])"),
     ]
+    window_count = 0
 
     def __init__(self, **config):
         Layout.__init__(self, **config)
         self.add_defaults(WideCenterStack.defaults)
 
         # change from stack, only two allowed
+        self.big_stack = True
         if self.num_stacks != 2:
             self.num_stacks = 2
         self.stacks = [
-            _WinStack(autosplit=self.autosplit) for i in range(self.num_stacks)
+            _WinStack(i, autosplit=self.autosplit) for i in range(self.num_stacks)
         ]
 
     @property
@@ -72,6 +78,7 @@ class WideCenterStack(Layout):
     def clients(self):
         client_list = []
         for stack in self.stacks:
+            logger.warning(f"stack.clients {stack.clients}")
             client_list.extend(stack.clients)
         return client_list
 
@@ -153,11 +160,80 @@ class WideCenterStack(Layout):
         return None
 
     def add_client(self, client):
-        for i in self.stacks:
-            if self.group.current_window not in i:
-                i.add_client(client)
-                return
-        self.current_stack.add_client(client)
+
+        inspector = inspect.getmembers(self.clients)
+        len_clients = len(self.clients)
+        big_win_id = 1
+        little_win_id = 0
+
+        logger.warning(f"client::: {client.__dir__()}")
+        logger.warning(f"len(clients)::: {len(self.clients)}")
+        # logger.exception(f"clients length: {len_clients}")
+        # for indx, client in enumerate(self.clients):
+        #     logger.exception(f"INESPECT indx, client=========, {indx} {client}")
+        #
+        #
+
+        for indx, stack in enumerate(self.stacks):
+            logger.warning(
+                f"self.stacks[{indx}].clients length:: {len(self.stacks[indx].clients)}"
+            )
+            logger.warning(f"stack.clients length:: {len(stack.clients)}")
+
+        logger.warning(f"GROUP NAME:: {self.group.name}")
+        logger.warning(f"GROUP WINDOWS:: {self.group.windows}")
+        if client not in self.group.windows:
+            return
+            # if client not in self.clients:
+            # if self.group.current_window not in self.clients:
+            # if client not in self.clients:
+        if self.__class__.window_count == 0:
+            stack = next((x for x in self.stacks if x._id == big_win_id), None)
+            logger.warning(f"stack._id {stack._id}")
+            stack.add_client(client)
+            logger.warning("big")
+        else:
+            stack = next((x for x in self.stacks if x._id == little_win_id), None)
+            logger.warning(f"stack._id {stack._id}")
+            stack.add_client(client)
+            logger.warning("small")
+            self.big_stack = False
+
+        # for indx, stack in enumerate(self.stacks):
+        #     # if client not in stack.clients:
+        #     if indx == big_win_id and len(stack.clients) == 0:
+        #         logger.warning(f"first if")
+        #         return stack.add_client(client)
+        #     elif indx == big_win_id and len(stack.clients) >= 1:
+        #         logger.warning(f"second if")
+        #         continue
+        #     elif indx == little_win_id:
+        #         logger.warning(f"third if")
+        #         return stack.add_client(client)
+        #     else:
+        #         pass
+        #
+        #     return
+        # for stack in self.stacks:
+        #
+        #     # if self.group.current_window not in stack.clients:
+        #     if client not in stack.clients:
+        #         if len(stack.clients) >= 1:
+        #             continue
+        #         stack.add_client(client)
+        #         return
+
+        # return self.current_stack.add_client(client)
+
+        # return self.current_stack.add_client(client)
+        # for i in self.stacks:
+        #     if not i:
+        #         if self.group.current_window not in i.clients:
+        #             i.add_client(client)
+        #         return
+        #
+        # if self.group.current_window not in self.current_stack.clients:
+        #     self.current_stack.add_client(client)
 
     def remove(self, client):
         current_offset = self.current_stack_offset
@@ -178,8 +254,15 @@ class WideCenterStack(Layout):
     def configure(self, client, screen_rect):
         # pylint: disable=undefined-loop-variable
         # We made sure that self.stacks is not empty, so s is defined.
+        try:
+            index = self.clients.index(client)
+        except ValueError:
+            # Layout not expecting this window so ignore it
+            return
+
         for i, s in enumerate(self.stacks):
             if client in s:
+                logger.warning(f"ARE WE EVER HERE?")
                 break
         else:
             client.hide()
@@ -187,23 +270,27 @@ class WideCenterStack(Layout):
 
         if client.has_focus:
             if self.border_focus_stack:
-                if s.split:
-                    px = self.border_focus
-                else:
-                    px = self.border_focus_stack
+                px = self.border_focus_stack
             else:
                 px = self.border_focus
         else:
             if self.border_normal_stack:
-                if s.split:
-                    px = self.border_normal
-                else:
-                    px = self.border_normal_stack
+                px = self.border_normal_stack
             else:
                 px = self.border_normal
 
         # OVERRIDING DEFAULT
-        big_window = True if self.clients.index(client) == 0 else False
+        logger.warning(f"what is s {s.__dict__}")
+        big_win_id = 1
+        little_win_id = 0
+        # big_stack = next((x for x in self.stacks if x._id == little_win_id), None)
+        # big_stack = False if s._id == little_win_id else True
+        big_window = True if client in s and s._id == big_win_id else False
+        # big_window = True if self.__class__.window_count == 0 else False
+        # big_window = True if self.clients.index(client) == 0 else False
+        # big_window = True if client in big_stack else False
+        # big_window = True if big_stack else False
+        logger.warning(f"big_window {big_window}")
         ratio = 0.8
 
         column_width = (
@@ -219,6 +306,25 @@ class WideCenterStack(Layout):
 
         window_width = column_width - 2 * self.border_width
 
+        # if client == s.cw:
+        #     client.place(
+        #         xoffset,
+        #         screen_rect.y,
+        #         window_width,
+        #         screen_rect.height - 2 * self.border_width,
+        #         self.border_width,
+        #         px,
+        #         margin=self.margin,
+        #     )
+        #     client.unhide()
+        # else:
+        #     client.hide()
+        #
+        logger.warning(f"xoffset {xoffset}")
+        logger.warning(f"screen_rect.y {screen_rect.y}")
+        logger.warning(f"window_width {window_width}")
+        logger.warning(f"px {px}")
+
         if client == s.cw:
             client.place(
                 xoffset,
@@ -229,9 +335,8 @@ class WideCenterStack(Layout):
                 px,
                 margin=self.margin,
             )
-            client.unhide()
-        else:
-            client.hide()
+        # client.unhide()
+        self.__class__.window_count += 1
 
     @expose_command()
     def info(self):
