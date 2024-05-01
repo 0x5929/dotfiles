@@ -104,7 +104,17 @@ class WideCenterStack(Layout):
                 self.group.focus(self.stacks[off].cw, False)
 
     def next_stack(self):
-        n = self._find_next(self.stacks, self.current_stack_offset)
+        logger.warning(f"CALLED NEXT_STACK")
+        big_in_id = 1
+        little_win_id = 0
+
+        if self.current_stack_offset == big_in_id:
+            stack_offset = little_win_id
+        else:
+            stack_offset = big_in_id
+
+        n = next((x for x in self.stacks if x._id == stack_offset), None)
+        # n = self._find_next(self.stacks, self.current_stack_offset)
         if n:
             self.group.focus(n.cw, True)
 
@@ -199,6 +209,9 @@ class WideCenterStack(Layout):
             logger.warning("small")
             self.big_stack = False
 
+        little_stack = next((x for x in self.stacks if x._id == little_win_id), None)
+        self.current_client = little_stack.cw
+        # client.unhide()
         # for indx, stack in enumerate(self.stacks):
         #     # if client not in stack.clients:
         #     if indx == big_win_id and len(stack.clients) == 0:
@@ -335,7 +348,11 @@ class WideCenterStack(Layout):
                 px,
                 margin=self.margin,
             )
-        # client.unhide()
+
+            client.unhide()
+        else:
+            client.hide()
+
         self.__class__.window_count += 1
 
     @expose_command()
@@ -352,11 +369,23 @@ class WideCenterStack(Layout):
 
     @expose_command()
     def down(self):
+        big_win_id = 1
+        little_win_id = 0
+
+        if self.current_stack._id == big_win_id:
+            return
+
         self.current_stack.current_index += 1
         self.group.focus(self.current_stack.cw, False)
 
     @expose_command()
     def up(self):
+        big_win_id = 1
+        little_win_id = 0
+
+        if self.current_stack._id == big_win_id:
+            return
+
         self.current_stack.current_index -= 1
         self.group.focus(self.current_stack.cw, False)
 
