@@ -27,9 +27,6 @@
 import os
 import subprocess
 
-# from qtile_extras.widget import StatusNotifier
-import colors
-import owm
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
 from libqtile.config import (
@@ -48,6 +45,11 @@ from libqtile.lazy import lazy
 # Make sure 'qtile-extras' is installed or this config will not work.
 from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
+
+# from qtile_extras.widget import StatusNotifier
+import colors
+import owm
+from layouts.wide_center_stacks import WideCenterStack
 
 mod = "mod4"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
@@ -411,6 +413,7 @@ layout_theme = {
 
 layouts = [
     # layout.Bsp(**layout_theme),
+    WideCenterStack(**layout_theme),
     layout.Stack(**layout_theme, num_stacks=2),
     layout.RatioTile(**layout_theme),
     layout.Zoomy(**layout_theme, property_big="1.0", columnwidth=850),
