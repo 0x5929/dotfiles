@@ -1,0 +1,49 @@
+{
+    "editor.formatOnSave": true,
+    "workbench.colorTheme": "Dracula Pro (Van Helsing)",
+    "editor.fontSize": 16,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.lineNumbers": "relative",
+    "debug.console.fontSize": 14,
+    "markdown.preview.fontSize": 18,
+    "terminal.integrated.fontSize": 12,
+    "python.pythonPath": "/home/kevin/Software_and_Development/pickmeup/bin/python3",
+    "[python]": {},
+    "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
+    "editor.renderLineHighlight": "all",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "python.defaultInterpreterPath": "/home/kevin/Software_and_Development/pickmeup/bin/python3",
+    "explorer.confirmDelete": false,
+    "python.analysis.extraPaths": [
+        "/home/kevin/Documents/software/ST-SMS/apps/"
+    ],
+    "window.zoomLevel": -1,
+    "workbench.editor.revealIfOpen": false,
+    "update.showReleaseNotes": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "vscode-neovim.compositeKeys": {
+        "jk": {
+            "command": "vscode-neovim.escape"
+        }
+        // "jk": {
+        //     // Use lua to execute any logic
+        //     "command": "vscode-neovim.lua",
+        //     "args": [
+        //         [
+        //             "local code = require('vscode-neovim')",
+        //             "code.action('vscode-neovim.escape')",
+        //             "code.action('workbench.action.files.save')",
+        //         ],
+        //     ],
+        // },
+    },
+    "window.titleBarStyle": "custom",
+    "prettier.tabWidth": 4,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "codeium.enableCodeLens": false
+}

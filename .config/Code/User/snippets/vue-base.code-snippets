@@ -1,0 +1,35 @@
+{
+	"vue-composition-template": {
+		"scope": "javascript,typescript,vue",
+		"prefix": "vc",
+		"body": [
+			"<script setup>",
+			"</script>",
+			"<template>",
+			"<div class='$1'>",
+			"</div>",
+			"</template>",
+			"<style lang='scss' scoped>",
+			"</style>",
+		],
+		"description": "vue composition api template"
+	},
+	"vue-option-template": {
+		"scope": "javascript,typescript,vue",
+		"prefix": "vo",
+		"body": [
+			"<template>",
+			"<div class='$1'>",
+			"</div>",
+			"</template>",
+			"<script>",
+			"export default {",
+			"name: '$1'",
+			"}",
+			"</script>",
+			"<style lang='scss' scoped>",
+			"</style>",
+		],
+		"description": "vue option api template"
+	}
+}
