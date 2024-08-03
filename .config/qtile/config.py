@@ -535,7 +535,9 @@ def init_widgets_list():
         widget.GenPollText(
             update_interval=300,
             func=lambda: subprocess.check_output(
-                "printf $(uname -r)", shell=True, text=True
+                'printf "%s | IP: %s" "$(uname -r)" "$(ip -4 addr show eno1 | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\')"',
+                shell=True,
+                text=True,
             ),
             foreground=colors[3],
             fmt="❤  Kernel: {}",
