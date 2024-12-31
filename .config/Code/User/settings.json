@@ -1,6 +1,5 @@
 {
-    "editor.formatOnSave": true,
-    "workbench.colorTheme": "Dracula Pro (Van Helsing)",
+    "workbench.colorTheme": "Dracula Pro Edition",
     "editor.fontSize": 16,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
@@ -10,7 +9,6 @@
     "markdown.preview.fontSize": 18,
     "terminal.integrated.fontSize": 12,
     "python.pythonPath": "/home/kevin/Software_and_Development/pickmeup/bin/python3",
-    "[python]": {},
     "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
     "editor.renderLineHighlight": "all",
     "javascript.updateImportsOnFileMove.enabled": "always",
@@ -45,5 +43,16 @@
     "window.titleBarStyle": "custom",
     "prettier.tabWidth": 4,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "codeium.enableCodeLens": false
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "codeium.enableCodeLens": false,
+    "git.ignoredRepositories": [
+        "/home/kevin/Work/hedlyner-mvp/public/assets",
+        "/home/kevin/Work/hedlyner-mvp/public/mix-manifest.json"
+    ],
+    "quicknotes.config.notesLocation": "/home/kevin/Documents/notes/vscode",
+    "quicknotes.config.notesFolderList": ["/home/kevin/quick-notes"],
+    "editor.formatOnSave": true,
+    "vscode-neovim.neovimExecutablePaths.linux": "/opt/nvim-linux64/bin/nvim"
 }
