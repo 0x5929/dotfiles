@@ -51,6 +51,7 @@ from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
 
 mod = "mod4"  # Sets mod key to SUPER/WINDOWS
+alt = "mod1"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
 myBrowser = "chrome"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
@@ -167,6 +168,13 @@ keys = [
         "Return",
         # lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
         lazy.spawn("rofi -show drun -show-icons"),
+        desc="Run Launcher",
+    ),
+    Key(
+        [alt],
+        "tab",
+        # lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
+        lazy.spawn("rofi -show window"),
         desc="Run Launcher",
     ),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
