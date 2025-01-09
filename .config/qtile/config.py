@@ -165,7 +165,8 @@ keys = [
     Key(
         [mod, "shift"],
         "Return",
-        lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
+        # lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
+        lazy.spawn("rofi -show drun -show-icons"),
         desc="Run Launcher",
     ),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
@@ -405,7 +406,7 @@ colors = colors.Dracula
 # from having to type these out for each individual layout.
 layout_theme = {
     "border_width": 2,
-    "margin": 8,
+    "margin": 20,
     "border_focus": colors[8],
     "border_normal": colors[0],
 }
@@ -825,7 +826,7 @@ wl_input_rules = None
 @hook.subscribe.startup_once
 def autostart():
     processes = [
-        ["picom", "&"],
+        ["picom", "-b"],
         ["nm-applet", "&"],
         ["/home/kevin/.local/bin/init_screens"],
         [
