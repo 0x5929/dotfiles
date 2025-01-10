@@ -1,5 +1,5 @@
-import = ["/home/kevin/.config/alacritty/themes/themes/dracula.toml"]
-live_config_reload = true
+general.import = ["/home/kevin/.config/alacritty/themes/themes/dracula.toml"]
+general.live_config_reload = true
 
 [colors.bright]
 black = "#6272a4"
@@ -81,7 +81,7 @@ style = "Regular"
 [mouse]
 hide_when_typing = false
 
-[shell]
+[terminal.shell]
 program = "/bin/fish"
 
 [window]

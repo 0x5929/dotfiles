@@ -51,8 +51,9 @@ from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
 
 mod = "mod4"  # Sets mod key to SUPER/WINDOWS
+alt = "mod1"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
-myBrowser = "chrome"  # My browser of choice
+myBrowser = "google-chrome"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
 
 # Allows you to input a name when adding treetab section.
@@ -165,7 +166,15 @@ keys = [
     Key(
         [mod, "shift"],
         "Return",
-        lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
+        # lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
+        lazy.spawn("rofi -show drun -show-icons"),
+        desc="Run Launcher",
+    ),
+    Key(
+        [alt],
+        "tab",
+        # lazy.spawn("dmenu_run -bw 3 -c -l 20 -h 24"),
+        lazy.spawn("rofi -show window"),
         desc="Run Launcher",
     ),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
@@ -295,7 +304,7 @@ group_configs = [
         "name": "2",
         "match_group": "1",
         "label": "2:2",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "3", "match_group": "4", "label": "1:3", "layout": "stack", "screen": 0},
@@ -303,7 +312,7 @@ group_configs = [
         "name": "4",
         "match_group": "3",
         "label": "2:4",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "5", "match_group": "6", "label": "1:5", "layout": "stack", "screen": 0},
@@ -311,7 +320,7 @@ group_configs = [
         "name": "6",
         "match_group": "5",
         "label": "2:6",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "7", "match_group": "8", "label": "1:7", "layout": "stack", "screen": 0},
@@ -319,7 +328,7 @@ group_configs = [
         "name": "8",
         "match_group": "7",
         "label": "2:8",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "9", "match_group": "0", "label": "1:9", "layout": "stack", "screen": 0},
@@ -327,7 +336,7 @@ group_configs = [
         "name": "0",
         "match_group": "9",
         "label": "2:0",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
 ]
@@ -405,14 +414,14 @@ colors = colors.Dracula
 # from having to type these out for each individual layout.
 layout_theme = {
     "border_width": 2,
-    "margin": 8,
+    "margin": 12,
     "border_focus": colors[8],
     "border_normal": colors[0],
 }
 
 layouts = [
     # layout.Bsp(**layout_theme),
-    WideCenterStack(**layout_theme),
+    # WideCenterStack(**layout_theme),
     layout.Stack(**layout_theme, num_stacks=2),
     layout.RatioTile(**layout_theme),
     layout.Zoomy(**layout_theme, property_big="1.0", columnwidth=850),
@@ -502,7 +511,7 @@ def init_widgets_list():
         widget.GenPollText(
             update_interval=43200,
             func=lambda: subprocess.check_output(
-                "printf $(dnf list updates -q | grep -Ec 'updates')",
+                "printf $(expr $(/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 1) + $(/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2))",
                 shell=True,
                 text=True,
             ),
@@ -612,22 +621,22 @@ def init_widgets_list():
                 )
             ],
         ),
-        widget.DF(
-            update_interval=60,
-            foreground=colors[5],
-            # mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e df')},
-            partition="/home",
-            # format = '[{p}] {uf}{m} ({r:.0f}%)',
-            format="/home: {uf}{m} free",
-            fmt=" | {}",
-            visible_on_warn=False,
-            decorations=[
-                BorderDecoration(
-                    colour=colors[5],
-                    border_width=[0, 0, 2, 0],
-                )
-            ],
-        ),
+        # widget.DF(
+        #     update_interval=60,
+        #     foreground=colors[5],
+        #     # mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e df')},
+        #     partition="/home",
+        #     # format = '[{p}] {uf}{m} ({r:.0f}%)',
+        #     format="/home: {uf}{m} free",
+        #     fmt=" | {}",
+        #     visible_on_warn=False,
+        #     decorations=[
+        #         BorderDecoration(
+        #             colour=colors[5],
+        #             border_width=[0, 0, 2, 0],
+        #         )
+        #     ],
+        # ),
         widget.Spacer(length=8),
         widget.Volume(
             mouse_callbacks={"Button1": lazy.spawn(volumeMixer)},
@@ -825,9 +834,12 @@ wl_input_rules = None
 @hook.subscribe.startup_once
 def autostart():
     processes = [
-        ["picom", "&"],
+        ["picom", "-b"],
         ["nm-applet", "&"],
         ["/home/kevin/.local/bin/init_screens"],
+        ["/home/kevin/.local/bin/init_background"],
+        ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
+        ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
         [
             "conky",
             "-c",
@@ -844,9 +856,6 @@ def autostart():
             "/dev/null",
             "&",
         ],
-        ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
-        ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
-        ["/home/kevin/.local/bin/init_screensaver"],
     ]
 
     for p in processes:

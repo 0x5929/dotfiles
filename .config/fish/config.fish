@@ -23,5 +23,5 @@ if status is-interactive
     fish_default_key_bindings
 
     # init pyenv
-    pyenv init - | source
+    #pyenv init - | source
 end
