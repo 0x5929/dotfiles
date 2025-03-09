@@ -17,5 +17,6 @@ if status is-interactive
     #set -gx PATH /opt/nvim-linux64/bin $PATH
     # vim binding
     # fish_vi_key_bindings
+    starship init fish | source
     fish_default_key_bindings
 end
