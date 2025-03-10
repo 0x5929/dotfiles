@@ -25,11 +25,13 @@
 # SOFTWARE.
 
 import os
+import json
 import subprocess
 
 # from qtile_extras.widget import StatusNotifier
 import colors
 import owm
+from pathlib import Path
 from layouts.wide_center_stacks import WideCenterStack
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
@@ -55,6 +57,8 @@ alt = "mod1"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
 myBrowser = "firefox"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
+home = str(Path.home())
+
 
 # Allows you to input a name when adding treetab section.
 # @lazy.layout.function
@@ -177,6 +181,8 @@ keys = [
         lazy.spawn("rofi -show window"),
         desc="Run Launcher",
     ),
+    
+    Key([mod, "shift"], "w", lazy.spawn(home + "/.config/qtile/scripts/wallpaper.sh select"), desc="Update Theme and Wallpaper"),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
     Key([mod], "e", lazy.spawn(myTerm + " -e ranger"), desc="File explorer"),
     Key(
@@ -295,7 +301,33 @@ keys = [
         lazy.group["scratchpad"].dropdown_toggle("term"),
         desc="dropdown scratchpad",
     ),
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl -q s +20%")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl -q s 20%-"))
 ]
+
+
+# --------------------------------------------------------
+# Pywal Colors
+# --------------------------------------------------------
+
+pywal_colors = os.path.expanduser('~/.cache/wal/colors.json')
+colordict = json.load(open(pywal_colors))
+Color0=(colordict['colors']['color0'])
+Color1=(colordict['colors']['color1'])
+Color2=(colordict['colors']['color2'])
+Color3=(colordict['colors']['color3'])
+Color4=(colordict['colors']['color4'])
+Color5=(colordict['colors']['color5'])
+Color6=(colordict['colors']['color6'])
+Color7=(colordict['colors']['color7'])
+Color8=(colordict['colors']['color8'])
+Color9=(colordict['colors']['color9'])
+Color10=(colordict['colors']['color10'])
+Color11=(colordict['colors']['color11'])
+Color12=(colordict['colors']['color12'])
+Color13=(colordict['colors']['color13'])
+Color14=(colordict['colors']['color14'])
+Color15=(colordict['colors']['color15'])
 
 groups = []
 group_configs = [
@@ -304,7 +336,7 @@ group_configs = [
         "name": "2",
         "match_group": "1",
         "label": "2:2",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "3", "match_group": "4", "label": "1:3", "layout": "stack", "screen": 0},
@@ -312,7 +344,7 @@ group_configs = [
         "name": "4",
         "match_group": "3",
         "label": "2:4",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "5", "match_group": "6", "label": "1:5", "layout": "stack", "screen": 0},
@@ -320,7 +352,7 @@ group_configs = [
         "name": "6",
         "match_group": "5",
         "label": "2:6",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "7", "match_group": "8", "label": "1:7", "layout": "stack", "screen": 0},
@@ -328,7 +360,7 @@ group_configs = [
         "name": "8",
         "match_group": "7",
         "label": "2:8",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
     {"name": "9", "match_group": "0", "label": "1:9", "layout": "stack", "screen": 0},
@@ -336,7 +368,7 @@ group_configs = [
         "name": "0",
         "match_group": "9",
         "label": "2:0",
-        "layout": "monadwide",
+        "layout": "stack",
         "screen": 1,
     },
 ]
@@ -415,7 +447,7 @@ colors = colors.Dracula
 layout_theme = {
     "border_width": 2,
     "margin": 20,
-    "border_focus": colors[8],
+    "border_focus": Color2,
     "border_normal": colors[0],
 }
 
@@ -423,7 +455,6 @@ layouts = [
     # layout.Bsp(**layout_theme),
     # WideCenterStack(**layout_theme),
     layout.Stack(**layout_theme, num_stacks=2),
-    layout.RatioTile(**layout_theme),
     # layout.Zoomy(**layout_theme, property_big="1.0", columnwidth=850),
     # layout.VerticalTile(**layout_theme),
     # layout.Matrix(**layout_theme),
@@ -431,6 +462,7 @@ layouts = [
         border_width=0,
         margin=0,
     ),
+    layout.RatioTile(**layout_theme),
     # layout.MonadTall(**layout_theme),
     # layout.MonadWide(**layout_theme),
     # layout.Columns(**layout_theme),
