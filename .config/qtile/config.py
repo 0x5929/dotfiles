@@ -186,6 +186,7 @@ keys = [
     Key([mod, "shift"], "u", lazy.spawn("dm-hub -r"), desc="launch dm-hub"),
     Key([mod, "shift"], "m", lazy.spawn("dm-man -r"), desc="launch dm-man"),
     Key([mod, "shift"], "a", lazy.spawn("dm-wiki -r"), desc="launch dm-wiki"),
+    Key([mod, "shift"], "d", lazy.spawn("/home/kevin/.config/eww/dashboard/launch_dashboard"), desc="launch eww-dashboard"),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
     Key([mod], "e", lazy.spawn(myTerm + " -e ranger"), desc="File explorer"),
     Key(
