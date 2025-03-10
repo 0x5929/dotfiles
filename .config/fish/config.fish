@@ -44,4 +44,8 @@ if status is-interactive
         bind ! bind_bang
         bind '$' bind_dollar
     end
+    function fish_greeting
+      pokemon-colorscripts -r -s
+    end
+
 end
