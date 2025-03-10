@@ -48,4 +48,5 @@ if status is-interactive
       pokemon-colorscripts -r -s
     end
 
+    cat ~/.cache/wal/sequences
 end

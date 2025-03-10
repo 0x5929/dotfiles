@@ -183,6 +183,9 @@ keys = [
     ),
     
     Key([mod, "shift"], "w", lazy.spawn(home + "/.config/qtile/scripts/wallpaper.sh select"), desc="Update Theme and Wallpaper"),
+    Key([mod, "shift"], "u", lazy.spawn("dm-hub -r"), desc="launch dm-hub"),
+    Key([mod, "shift"], "m", lazy.spawn("dm-man -r"), desc="launch dm-man"),
+    Key([mod, "shift"], "a", lazy.spawn("dm-wiki -r"), desc="launch dm-wiki"),
     Key([mod], "b", lazy.spawn(myBrowser), desc="Web browser"),
     Key([mod], "e", lazy.spawn(myTerm + " -e ranger"), desc="File explorer"),
     Key(
@@ -282,11 +285,11 @@ keys = [
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    Key([mod], "m", lazy.layout.maximize(), desc="Toggle between min and max sizes"),
+    # Key([mod], "m", lazy.layout.maximize(), desc="Toggle between min and max sizes"),
     Key([mod], "t", lazy.window.toggle_floating(), desc="toggle floating"),
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="toggle fullscreen"),
     Key(
-        [mod, "shift"],
+        [mod],
         "m",
         minimize_all(),
         desc="Toggle hide/show all windows on current group",
