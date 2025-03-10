@@ -49,8 +49,15 @@ get_blight() {
 	CARD=`ls /sys/class/backlight | head -n 1`
 
 	if [[ "$CARD" == *"intel_"* ]]; then
-		BNESS=`xbacklight -get`
-		LIGHT=${BNESS%.*}
+        CURRENT_BRIGHTNESS=$(brightnessctl get)
+        MAX_BRIGHTNESS=$(brightnessctl max)
+
+        # Calculate BNESS as a fraction of the max brightness (integer division)
+        # Multiply by 100 to scale the value to a percentage, avoiding fractions
+        BNESS=$((CURRENT_BRIGHTNESS * 100 / MAX_BRIGHTNESS))
+
+        # Optional: Store percentage as LIGHT
+        LIGHT=$BNESS
 	else
 		BNESS=`blight -d $CARD get brightness`
 		PERC="$(($BNESS*100/255))"

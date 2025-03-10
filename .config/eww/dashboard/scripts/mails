@@ -1,7 +1,16 @@
 #!/bin/python
 
 import imaplib
+import subprocess
+
+def read_file(file_path):
+    result = subprocess.run(['cat', file_path], stdout=subprocess.PIPE, text=True)
+    return result.stdout.strip()  # Strip any leading/trailing whitespace
+
+# Get the email and password by calling 'cat' on the respective files
+email = read_file('/home/kevin/.config/eww/dashboard/secrets/email.secret')
+password = read_file('/home/kevin/.config/eww/dashboard/secrets/password.secret')
 obj = imaplib.IMAP4_SSL('imap.gmail.com',993)
-obj.login('username@gmail.com','PASSWORD') # write your email and password
+obj.login(email,password) # write your email and password
 obj.select()
 print(len(obj.search(None, 'UnSeen')[1][0].split()))
