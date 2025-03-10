@@ -183,6 +183,7 @@ keys = [
     ),
     
     Key([mod, "shift"], "w", lazy.spawn(home + "/.config/qtile/scripts/wallpaper.sh select"), desc="Update Theme and Wallpaper"),
+    Key([mod, "control", "shift"], "w", lazy.spawn(home + "/.config/qtile/scripts/wallpaper.sh"), desc="Update Theme and Wallpaper"),
     Key([mod, "shift"], "u", lazy.spawn("dm-hub -r"), desc="launch dm-hub"),
     Key([mod, "shift"], "m", lazy.spawn("dm-man -r"), desc="launch dm-man"),
     Key([mod, "shift"], "a", lazy.spawn("dm-wiki -r"), desc="launch dm-wiki"),
