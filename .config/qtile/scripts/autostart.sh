@@ -27,5 +27,8 @@ xfce4-power-manager &
 # Load notification service
 dunst &
 
+# Load EWW top bar
+/home/kevin/.config/eww/bar/launch_bar
+
 # Setup Wallpaper and update colors
 ~/.config/qtile/scripts/wallpaper.sh init

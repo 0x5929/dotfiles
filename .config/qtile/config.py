@@ -451,7 +451,7 @@ colors = colors.Dracula
 # from having to type these out for each individual layout.
 layout_theme = {
     "border_width": 2,
-    "margin": 20,
+    "margin": [60, 20, 20, 20],
     "border_focus": Color2,
     "border_normal": colors[0],
 }
@@ -465,7 +465,7 @@ layouts = [
     # layout.Matrix(**layout_theme),
     layout.Max(
         border_width=0,
-        margin=0,
+        margin=[60, 0, 0, 0],
     ),
     layout.RatioTile(**layout_theme),
     # layout.MonadTall(**layout_theme),
@@ -492,7 +492,7 @@ layouts = [
     #      vspace = 3,
     #      panel_width = 240
     #      ),
-    layout.Floating(**layout_theme),
+    # layout.Floating(**layout_theme),
     # layout.Spiral(**layout_theme)
 ]
 
@@ -807,8 +807,8 @@ def init_widgets_screen2():
 
 def init_screens():
     return [
-        Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26)),
-        Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=26)),
+        # Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26)),
+        # Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=26)),
     ]
 
 
