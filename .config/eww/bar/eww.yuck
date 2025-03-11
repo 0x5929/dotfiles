@@ -1,8 +1,8 @@
 ;; Variables
 (defpoll clock_time :interval "5m" "date +\%I")
 (defpoll clock_minute :interval "5s" "date +\%M")
-(defpoll clock_date :interval "10h" "date '+%d/%m'")
-(defpoll volume_percent :interval "3s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defpoll clock_date :interval "10h" "date '+%m/%d'")
+(defpoll volume_percent :interval "3s" "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1")
 (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
 (defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
 (defpoll battery :interval "15s" "./scripts/battery --bat")
@@ -119,7 +119,7 @@
 			  :tooltip "${volume_percent}%"
 			  :max 100
 			  :min 0
-			  :onchange "pactl -- set-sink-volume 0 {}%" )))))
+			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
 
 (defwidget bright []
   (eventbox :onhover "${eww} update br_reveal=true" :onhoverlost "${eww} update br_reveal=false"
