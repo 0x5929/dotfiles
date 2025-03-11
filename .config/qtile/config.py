@@ -872,12 +872,9 @@ wl_input_rules = None
 def autostart():
     autostartscript = "~/.config/qtile/scripts/autostart.sh"
     home = os.path.expanduser(autostartscript)
-    subprocess.Popen([home])
-@hook.subscribe.startup_complete
-def start_eww():
-    # Give Qtile a moment to settle
-    time.sleep(2)
-    subprocess.Popen(['/home/kevin/.config/eww/bar/launch_bar'])
+    subprocess.Popen([
+        home
+    ])
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the

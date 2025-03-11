@@ -24,6 +24,9 @@ picom -b
 # Load power manager
 xfce4-power-manager &
 
+# launch top bar
+/home/kevin/.config/eww/bar/launch_bar_startup
+
 # Load notification service
 dunst &
 
