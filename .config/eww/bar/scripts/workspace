@@ -1,0 +1,87 @@
+#!/bin/bash
+
+workspaces() {
+    # Define workspace names
+    ws1="1"
+    ws2="2"
+    ws3="3"
+    ws4="4"
+    ws5="5"
+    ws6="6"
+
+    icon=""
+    
+    # Get current focused workspace
+    current_group=$(qtile cmd-obj -o group -f current_group | tr -d '"')
+    
+    # Process each workspace
+    for ws in "$ws1" "$ws2" "$ws3" "$ws4" "$ws5" "$ws6"; do
+        # Check if workspace is occupied
+        occupied=$(qtile cmd-obj -o group $ws -f info | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('true' if len(d['windows']) > 0 else 'false')")
+        
+        # Set class and icon based on workspace state
+        if [ "$current_group" = "$ws" ]; then
+            class_prefix="occupied-focused"
+            icon=""
+        elif [ "$occupied" = "true" ]; then
+            class_prefix="occupied"
+            icon=""
+        else
+            class_prefix="empty"
+            icon=""
+        fi
+        
+        # Store the class and icon for each workspace
+        if [ "$ws" = "$ws1" ]; then
+            class1="$class_prefix"
+            icon1="$icon"
+        elif [ "$ws" = "$ws2" ]; then
+            class2="$class_prefix"
+            icon2="$icon"
+        elif [ "$ws" = "$ws3" ]; then
+            class3="$class_prefix"
+            icon3="$icon"
+        elif [ "$ws" = "$ws4" ]; then
+            class4="$class_prefix"
+            icon4="$icon"
+        elif [ "$ws" = "$ws5" ]; then
+            class5="$class_prefix"
+            icon5="$icon"
+        elif [ "$ws" = "$ws6" ]; then
+            class6="$class_prefix"
+            icon6="$icon"
+        fi
+    done
+    
+    # Output EWW box with more descriptive class names
+    echo "(box :class \"works\" :orientation \"h\" :spacing 5 :space-evenly \"false\" \
+        (button :onclick \"qtile cmd-obj -o group $ws1 -f toscreen\" :class \"$class1\" \"$icon1\") \
+        (button :onclick \"qtile cmd-obj -o group $ws2 -f toscreen\" :class \"$class2\" \"$icon2\") \
+        (button :onclick \"qtile cmd-obj -o group $ws3 -f toscreen\" :class \"$class3\" \"$icon3\") \
+        (button :onclick \"qtile cmd-obj -o group $ws4 -f toscreen\" :class \"$class4\" \"$icon4\") \
+        (button :onclick \"qtile cmd-obj -o group $ws5 -f toscreen\" :class \"$class5\" \"$icon5\") \
+        (button :onclick \"qtile cmd-obj -o group $ws6 -f toscreen\" :class \"$class6\" \"$icon6\"))"
+}
+
+# # Initial output
+# workspaces
+#
+# # Monitor for changes
+# while true; do
+#     workspaces
+#     sleep 0.5
+# done
+# Set up named pipe for EWW to read from
+workspaces
+
+# Then keep running and updating whenever there's a change
+while true; do
+    # Run workspaces command and capture output
+    current_output=$(workspaces)
+    
+    # Output to stdout for immediate consumption
+    echo "$current_output"
+    
+    # Wait a short time before checking again
+    sleep 0.3
+done
