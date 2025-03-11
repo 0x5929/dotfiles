@@ -27,6 +27,9 @@ xfce4-power-manager &
 # launch top bar
 /home/kevin/.config/eww/bar/launch_bar_startup
 
+# launch daemon for eww dashboard
+eww --config /home/kevin/.config/eww/dashboard daemon
+
 # Load notification service
 dunst &
 
