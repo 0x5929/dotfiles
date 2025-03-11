@@ -6,10 +6,9 @@ CFG="$HOME/.config/eww/dashboard"
 EWW=`which eww`
 
 ## Run eww daemon if not running already
-if [[ ! `pidof eww` ]]; then
-	${EWW} --config ${CFG} daemon
-	sleep 1
-fi
+# NOTE: this has been changed to be initialized in qtile autostart.sh script
+# ${EWW} --config ${CFG} daemon
+# sleep 1
 
 ## Open widgets 
 run_eww() {
