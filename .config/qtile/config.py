@@ -305,8 +305,17 @@ keys = [
         lazy.group["scratchpad"].dropdown_toggle("term"),
         desc="dropdown scratchpad",
     ),
+    Key(
+        [mod],
+        "p",
+        lazy.group["scratchpad"].dropdown_toggle("pad"),
+        desc="dropdown scratchpad",
+    ),
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl -q s +20%")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl -q s 20%-"))
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl -q s 20%-")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl -- set-sink-volume @DEFAULT_SINK@ +10%")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl -- set-sink-volume @DEFAULT_SINK@ -20%")),
+    Key([], "XF86AudioMute", lazy.spawn("pactl -- set-sink-mute @DEFAULT_SINK@ toggle")),
 ]
 
 
