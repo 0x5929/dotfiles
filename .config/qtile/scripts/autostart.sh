@@ -33,5 +33,8 @@ eww --config /home/kevin/.config/eww/dashboard daemon
 # Load notification service
 dunst &
 
+# Load screensavers
+xscreensaver --no-splash
+
 # Setup Wallpaper and update colors
 ~/.config/qtile/scripts/wallpaper.sh init

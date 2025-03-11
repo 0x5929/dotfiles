@@ -149,8 +149,6 @@ def go_to_group_and_move_window(name):
 
 
 def go_to_last_group(qtile):
-    qtile.current_screen.set_group(qtile.current_screen.previous_group)
-
     screen = qtile.screens.index(qtile.current_screen)
 
     if screen == 0:

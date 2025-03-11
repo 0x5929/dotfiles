@@ -2,7 +2,7 @@
 (defpoll clock_time :interval "5m" "date +\%I")
 (defpoll clock_minute :interval "5s" "date +\%M")
 (defpoll clock_date :interval "10h" "date '+%m/%d'")
-(defpoll volume_percent :interval "3s" "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1")
+(defpoll volume_percent :interval "3s" :initial "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1" "sleep 1 && pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1")
 (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
 (defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
 (defpoll battery :interval "15s" "./scripts/battery --bat")
