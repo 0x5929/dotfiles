@@ -36,5 +36,8 @@ dunst &
 # Setup Wallpaper and update colors
 ~/.config/qtile/scripts/wallpaper.sh init
 
+# Load music into player
+~/.config/qtile/scripts/add-music.sh
+
 # Load screensavers (must be after wallpapers)
 xscreensaver --no-splash

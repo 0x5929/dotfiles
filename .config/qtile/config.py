@@ -33,7 +33,7 @@ import subprocess
 import colors
 import owm
 from pathlib import Path
-from layouts.wide_center_stacks import WideCenterStack
+# from layouts.wide_center_stacks import WideCenterStack
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
 from libqtile.config import (
@@ -58,6 +58,8 @@ alt = "mod1"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
 myBrowser = "firefox"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
+textEditor = "featherpad"
+calculator = "gnome-calculator"
 home = str(Path.home())
 
 
@@ -309,13 +311,22 @@ keys = [
         [mod],
         "p",
         lazy.group["scratchpad"].dropdown_toggle("pad"),
-        desc="dropdown scratchpad",
+        desc="dropdown scratchpad text editor",
+    ),
+    Key(
+        [mod],
+        "c",
+        lazy.group["scratchpad"].dropdown_toggle("calc"),
+        desc="dropdown scratchpad calculator",
     ),
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl -q s +20%")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl -q s 20%-")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl -- set-sink-volume @DEFAULT_SINK@ +10%")),
     Key([], "XF86AudioLowerVolume", lazy.spawn("pactl -- set-sink-volume @DEFAULT_SINK@ -20%")),
     Key([], "XF86AudioMute", lazy.spawn("pactl -- set-sink-mute @DEFAULT_SINK@ toggle")),
+    Key([], "XF86AudioPlay", lazy.spawn("mpc -q toggle")),
+    Key([], "XF86AudioPrev", lazy.spawn("mpc -q prev")),
+    Key([], "XF86AudioNext", lazy.spawn("mpc -q next")),
 ]
 
 
@@ -344,44 +355,44 @@ Color15=(colordict['colors']['color15'])
 
 groups = []
 group_configs = [
-    {"name": "1", "match_group": "2", "label": "1:1", "layout": "stack", "screen": 0},
+    {"name": "1", "match_group": "2", "label": "1:1", "layout": "max", "screen": 0},
     {
         "name": "2",
         "match_group": "1",
         "label": "2:2",
-        "layout": "stack",
+        "layout": "max",
         "screen": 1,
     },
-    {"name": "3", "match_group": "4", "label": "1:3", "layout": "stack", "screen": 0},
+    {"name": "3", "match_group": "4", "label": "1:3", "layout": "max", "screen": 0},
     {
         "name": "4",
         "match_group": "3",
         "label": "2:4",
-        "layout": "stack",
+        "layout": "max",
         "screen": 1,
     },
-    {"name": "5", "match_group": "6", "label": "1:5", "layout": "stack", "screen": 0},
+    {"name": "5", "match_group": "6", "label": "1:5", "layout": "max", "screen": 0},
     {
         "name": "6",
         "match_group": "5",
         "label": "2:6",
-        "layout": "stack",
+        "layout": "max",
         "screen": 1,
     },
-    {"name": "7", "match_group": "8", "label": "1:7", "layout": "stack", "screen": 0},
+    {"name": "7", "match_group": "8", "label": "1:7", "layout": "max", "screen": 0},
     {
         "name": "8",
         "match_group": "7",
         "label": "2:8",
-        "layout": "stack",
+        "layout": "max",
         "screen": 1,
     },
-    {"name": "9", "match_group": "0", "label": "1:9", "layout": "stack", "screen": 0},
+    {"name": "9", "match_group": "0", "label": "1:9", "layout": "max", "screen": 0},
     {
         "name": "0",
         "match_group": "9",
         "label": "2:0",
-        "layout": "stack",
+        "layout": "max",
         "screen": 1,
     },
 ]
@@ -427,8 +438,10 @@ groups.append(
     ScratchPad(
         "scratchpad",
         [
+            DropDown("pad", textEditor, x = 0, y= 0.1, height=0.9, width=0.3),
+            DropDown("calc", calculator, x = 0.8, y= 0.2, height=0.4, width=0.2),
             # define a drop down terminal
-            DropDown("term", myTerm, height=0.4, width=0.5, x=0.25),
+            DropDown("term", myTerm, x=0, y= 0.5, height=0.5, width=1),
         ],
     ),
 )
@@ -467,15 +480,16 @@ layout_theme = {
 layouts = [
     # layout.Bsp(**layout_theme),
     # WideCenterStack(**layout_theme),
+    layout.Max(
+        **layout_theme
+        # border_width=0,
+        # margin=[60, 0, 0, 0],
+    ),
     layout.Stack(**layout_theme, num_stacks=2),
     # layout.Zoomy(**layout_theme, property_big="1.0", columnwidth=850),
     # layout.VerticalTile(**layout_theme),
     # layout.Matrix(**layout_theme),
-    layout.Max(
-        border_width=0,
-        margin=[60, 0, 0, 0],
-    ),
-    layout.RatioTile(**layout_theme),
+    # layout.RatioTile(**layout_theme),
     # layout.MonadTall(**layout_theme),
     # layout.MonadWide(**layout_theme),
     # layout.Columns(**layout_theme),
@@ -501,7 +515,7 @@ layouts = [
     #      panel_width = 240
     #      ),
     # layout.Floating(**layout_theme),
-    # layout.Spiral(**layout_theme)
+    layout.Spiral(**layout_theme)
 ]
 
 # Some settings that I use on almost every widget, which saves us
@@ -858,6 +872,7 @@ floating_layout = layout.Floating(
         Match(wm_class="notification"),  # notifications
         Match(wm_class="pinentry-gtk-2"),  # GPG key password entry
         Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(wm_class="gnome-calculator"),  # ssh-askpass
         Match(wm_class="toolbar"),  # toolbars
         Match(title="pinentry"),  # GPG key password entry
         Match(wm_class="pavucontrol-qt"),  # GPG key password entry
