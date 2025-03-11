@@ -16,25 +16,29 @@ workspaces() {
     
     # Process each workspace
     for ws in "$ws1" "$ws2" "$ws3" "$ws4" "$ws5" "$ws6"; do
-        # Check if workspace is occupied
-        occupied=$(qtile cmd-obj -o group $ws -f info | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('true' if len(d['windows']) > 0 else 'false')")
-        is_current_group=$(qtile cmd-obj -o group "$ws" -f info | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('True' if d['focus'] is not None else 'False')")
+        ws_info=$(qtile cmd-obj -o group $ws -f info)
 
-        # Set class and icon based on workspace state
-        # if [ "$current_group" = "$ws" ]; then
+        # Check if workspace is occupied
+        occupied=$(echo "$ws_info" | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('true' if len(d['windows']) > 0 else 'false')")
+        
+        # Check if workspace is current/focused
+        is_current_group=$(echo "$ws_info" | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('True' if d['screen'] is not None else 'False')")
+
         class_prefix="empty"
+
+        if [ "$occupied" = "true" ]; then
+            class_prefix="occupied"
+            icon=""
+        fi
         if [[ "$is_current_group" == "True" ]]; then
             class_prefix="focused"
             icon=""
         fi
-        if [ "$occupied" = "true" ]; then
-            class_prefix="occupied"
+        if [ "$occupied" = "true" ] && [[ "$is_current_group" == "True" ]]; then
+            class_prefix="occupied-focused"
             icon=""
-        # else
-        #     class_prefix="empty"
-        #     icon=""
         fi
-        
+
         # Store the class and icon for each workspace
         if [ "$ws" = "$ws1" ]; then
             class1="$class_prefix"
@@ -72,21 +76,6 @@ workspaces() {
 #
 # # Monitor for changes
 while true; do
-    workspaces
     sleep 0.5
-done
-# Set up named pipe for EWW to read from
-workspaces
-
-# Then keep running and updating whenever there's a change
-while true; do
-    # qtile cmd-obj -o hook -f subscribe.group_change
-    # Run workspaces command and capture output
-    current_output=$(workspaces)
-    
-    # Output to stdout for immediate consumption
-    echo "$current_output"
-    
-    # Wait a short time before checking again
-    sleep 0.3
+    workspaces
 done
