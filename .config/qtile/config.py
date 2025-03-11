@@ -26,6 +26,7 @@
 
 import os
 import json
+import time
 import subprocess
 
 # from qtile_extras.widget import StatusNotifier
@@ -872,34 +873,11 @@ def autostart():
     autostartscript = "~/.config/qtile/scripts/autostart.sh"
     home = os.path.expanduser(autostartscript)
     subprocess.Popen([home])
-    # processes = [
-    #     ["picom", "-b"],
-    #     ["nm-applet", "&"],
-    #     ["/home/kevin/.local/bin/init_screens"],
-    #     [
-    #         "conky",
-    #         "-c",
-    #         "/home/kevin/.config/conky/dracula.conf",
-    #         "&>",
-    #         "/dev/null",
-    #         "&",
-    #     ],
-    #     [
-    #         "conky",
-    #         "-c",
-    #         "/home/kevin/.config/conky/dracula2.conf",
-    #         "&>",
-    #         "/dev/null",
-    #         "&",
-    #     ],
-    #     ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
-    #     ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
-    #     ["/home/kevin/.local/bin/init_screensaver"],
-    # ]
-
-    # for p in processes:
-    #     subprocess.Popen(p)
-
+@hook.subscribe.startup_complete
+def start_eww():
+    # Give Qtile a moment to settle
+    time.sleep(2)
+    subprocess.Popen(['/home/kevin/.config/eww/bar/launch_bar'])
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
