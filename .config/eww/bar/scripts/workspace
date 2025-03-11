@@ -12,23 +12,27 @@ workspaces() {
     icon=""
     
     # Get current focused workspace
-    current_group=$(qtile cmd-obj -o group -f current_group | tr -d '"')
+    # current_group=$(qtile cmd-obj -o group -f current_group | tr -d '"')
     
     # Process each workspace
     for ws in "$ws1" "$ws2" "$ws3" "$ws4" "$ws5" "$ws6"; do
         # Check if workspace is occupied
         occupied=$(qtile cmd-obj -o group $ws -f info | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('true' if len(d['windows']) > 0 else 'false')")
-        
+        is_current_group=$(qtile cmd-obj -o group "$ws" -f info | python -c "import sys, ast; d = ast.literal_eval(sys.stdin.read()); print('True' if d['focus'] is not None else 'False')")
+
         # Set class and icon based on workspace state
-        if [ "$current_group" = "$ws" ]; then
-            class_prefix="occupied-focused"
+        # if [ "$current_group" = "$ws" ]; then
+        class_prefix="empty"
+        if [[ "$is_current_group" == "True" ]]; then
+            class_prefix="focused"
             icon=""
-        elif [ "$occupied" = "true" ]; then
+        fi
+        if [ "$occupied" = "true" ]; then
             class_prefix="occupied"
             icon=""
-        else
-            class_prefix="empty"
-            icon=""
+        # else
+        #     class_prefix="empty"
+        #     icon=""
         fi
         
         # Store the class and icon for each workspace
@@ -67,15 +71,16 @@ workspaces() {
 # workspaces
 #
 # # Monitor for changes
-# while true; do
-#     workspaces
-#     sleep 0.5
-# done
+while true; do
+    workspaces
+    sleep 0.5
+done
 # Set up named pipe for EWW to read from
 workspaces
 
 # Then keep running and updating whenever there's a change
 while true; do
+    # qtile cmd-obj -o hook -f subscribe.group_change
     # Run workspaces command and capture output
     current_output=$(workspaces)
     

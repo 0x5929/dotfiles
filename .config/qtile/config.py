@@ -875,6 +875,14 @@ def autostart():
     subprocess.Popen([
         home
     ])
+# @hook.subscribe.changegroup
+# def change_group():
+#     update_workspace = "~/.config/eww/bar/scripts/workspace"
+#     exe = os.path.expanduser(update_workspace)
+#     subprocess.Popen([
+#         exe
+#     ])
+#
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the

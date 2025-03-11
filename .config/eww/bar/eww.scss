@@ -156,7 +156,9 @@ scale trough {
 
 /* For unoccupied workspaces */
 .empty,
-.occupied {
+.occupied,
+.focused,
+.occupied-focused {
   margin: 0px 10px 0px 0px;
 }
 .empty {
@@ -166,12 +168,16 @@ scale trough {
 /* For occupied workspaces */
 .occupied {
   color: #bfc9db;
+  // color: green;
 }
 
 /* For focused workspaces */
-.occupied-focused {
+// .occupied-focused {
+//   // color: red;
+// }
+.focused {
   color: #a1bdce;
-  background-color: #333333;
+  // color: red;
 }
 
 .song_cover_art {
