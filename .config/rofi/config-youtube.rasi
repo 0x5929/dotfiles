@@ -112,7 +112,7 @@ entry {
     background-color:            @background;
     text-color:                  @foreground;
     cursor:                      text;
-    placeholder:                 "Search";
+    placeholder:                 "Youtube Search: ";
     placeholder-color:           inherit;
 }
 

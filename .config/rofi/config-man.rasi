@@ -92,11 +92,10 @@ inputbar {
     background-image:            url("~/.cache/wallpaper/current_wallpaper", width);
 }
 
-
 textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
-    str:                         " ";
+    str:                         "  ";
     padding:                     1em 0.2em 0em 0em;
     text-color:                  @foreground;
     border-radius:               2em 0em 0em 2em;
@@ -112,7 +111,7 @@ entry {
     background-color:            @background;
     text-color:                  @foreground;
     cursor:                      text;
-    placeholder:                 "Search";
+    placeholder:                 "Man-page Search: ";
     placeholder-color:           inherit;
 }
 
