@@ -9,7 +9,8 @@ options=(
     "📺 YouTube - youtube"
     "🔍 Google - google"
     "📝 GitHub - github"
-    "📦 Arch Packages - arch packages pacman aur"
+    "📦 Arch Packages - arch packages pacman"
+    "🎁 AUR Packages - aur packages yay"
 )
 
 # Define corresponding scripts
@@ -20,6 +21,7 @@ scripts=(
     "google.sh"
     "github.sh"
     "archpackages.sh"
+    "aurpackages.sh"
 )
 
 # Define search titles 
@@ -30,6 +32,7 @@ titles=(
     "Google"
     "GitHub"
     "Arch Packages"
+    "AUR Packages"
 )
 
 # Show menu with rofi using the specific configuration
