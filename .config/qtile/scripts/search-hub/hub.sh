@@ -1,6 +1,6 @@
 #!/bin/bash
 # Path to your search scripts directory
-SCRIPTS_DIR="$HOME/.config/qtile/scripts"
+SCRIPTS_DIR="$HOME/.config/qtile/scripts/search-hub"
 
 # Define options with icons (using Nerd Font icons)
 options=(
