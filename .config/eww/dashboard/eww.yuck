@@ -181,7 +181,7 @@
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/pycharm.png');" :class "app_pycharm" :onclick "scripts/open_apps --pc"))
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/gimp.svg');" :class "app_gimp" :onclick "scripts/open_apps --gp"))
+			  (button :style "background-image: url('images/icons/claude-ai.svg');" :class "app_claude" :onclick "scripts/open_apps --cl"))
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/monday.png');" :class "app_monday" :onclick "scripts/open_apps --mo")))))
 

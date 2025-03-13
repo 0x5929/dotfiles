@@ -33,8 +33,8 @@ elif [[ "$1" == "--cd" ]]; then
 elif [[ "$1" == "--pc" ]]; then
 	close_dash && pycharm-professional &
 
-elif [[ "$1" == "--gp" ]]; then
-	close_dash && gimp &
+elif [[ "$1" == "--cl" ]]; then
+	close_dash && dex ~/.local/share/applications/claude-ai.desktop &
 
 elif [[ "$1" == "--mo" ]]; then
 	close_dash && dex ~/.local/share/applications/gtec-mondahy.desktop &
