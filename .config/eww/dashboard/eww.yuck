@@ -167,23 +167,23 @@
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/firefox.svg');" :class "app_fox" :onclick "scripts/open_apps --ff"))
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/telegram.svg');" :class "app_telegram" :onclick "scripts/open_apps --tg"))
+			  (button :style "background-image: url('images/icons/thunderbird.png');" :class "app_thunderbird" :onclick "scripts/open_apps --tb"))
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/discord.svg');" :class "app_discord" :onclick "scripts/open_apps --dc")))
+			  (button :style "background-image: url('images/icons/slack.png');" :class "app_slack" :onclick "scripts/open_apps --sl")))
 		(box :class "appbox" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/terminal.svg');" :class "app_terminal" :onclick "scripts/open_apps --tr"))
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/files.svg');" :class "app_files" :onclick "scripts/open_apps --fm"))
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/geany.svg');" :class "app_geany" :onclick "scripts/open_apps --ge")))
+			  (button :style "background-image: url('images/icons/code.svg');" :class "app_code" :onclick "scripts/open_apps --cd")))
 		(box :class "appbox" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/code.svg');" :class "app_code" :onclick "scripts/open_apps --cd"))
+			  (button :style "background-image: url('images/icons/pycharm.png');" :class "app_pycharm" :onclick "scripts/open_apps --pc"))
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/gimp.svg');" :class "app_gimp" :onclick "scripts/open_apps --gp"))
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/virtualbox.svg');" :class "app_vbox" :onclick "scripts/open_apps --vb")))))
+			  (button :style "background-image: url('images/icons/virtualbox.svg');" :class "app_monday" :onclick "scripts/open_apps --mo")))))
 
 ;; power buttons
 (defwidget logout [] 

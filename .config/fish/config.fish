@@ -5,6 +5,8 @@ if status is-interactive
   
     # aliases
     alias vim=nvim
+    alias open=xdg-open
+    alias pycharm=pycharm-professional
     alias xclip="xclip -selection clipboard"
     alias chrome="google-chrome-stable"
     alias dotfiles="/usr/bin/git --git-dir=$HOME/Repositories/personal/dotfiles --work-tree=$HOME"

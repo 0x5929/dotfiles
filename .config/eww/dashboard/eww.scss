@@ -233,14 +233,14 @@ scale trough highlight {
 }
 
 .app_fox,
-.app_telegram,
-.app_discord,
+.app_thunderbird,
+.app_slack,
 .app_terminal,
 .app_files,
-.app_geany,
 .app_code,
+.app_pycharm,
 .app_gimp,
-.app_vbox {
+.app_monday {
   background-repeat: no-repeat;
   background-size: 64px;
   min-height: 64px;
@@ -250,21 +250,21 @@ scale trough highlight {
 
 .app_fox {
 }
-.app_telegram {
+.app_thunderbird {
 }
-.app_discord {
+.app_slack {
 }
 .app_terminal {
 }
 .app_files {
 }
-.app_geany {
-}
 .app_code {
+}
+.app_pycharm {
 }
 .app_gimp {
 }
-.app_vbox {
+.app_monday {
 }
 
 /** Links ***************************************/

@@ -15,11 +15,11 @@ close_dash() {
 if [[ "$1" == "--ff" ]]; then
 	close_dash && firefox &
 
-elif [[ "$1" == "--tg" ]]; then
-	close_dash && telegram-desktop &
+elif [[ "$1" == "--tb" ]]; then
+	close_dash && thunderbird &
 
-elif [[ "$1" == "--dc" ]]; then
-	close_dash && discord &
+elif [[ "$1" == "--sl" ]]; then
+	close_dash && slack &
 
 elif [[ "$1" == "--tr" ]]; then
 	close_dash && alacritty --working-directory ~ &
@@ -27,16 +27,16 @@ elif [[ "$1" == "--tr" ]]; then
 elif [[ "$1" == "--fm" ]]; then
 	close_dash && thunar ~ &
 
-elif [[ "$1" == "--ge" ]]; then
-	close_dash && geany &
-
 elif [[ "$1" == "--cd" ]]; then
 	close_dash && code &
+
+elif [[ "$1" == "--pc" ]]; then
+	close_dash && pycharm-professional &
 
 elif [[ "$1" == "--gp" ]]; then
 	close_dash && gimp &
 
-elif [[ "$1" == "--vb" ]]; then
-	close_dash && virtualbox &
+elif [[ "$1" == "--mo" ]]; then
+	close_dash && dex ~/.local/share/applications/gtec-mondahy.desktop &
 
 fi
