@@ -183,7 +183,7 @@
       (eventbox :cursor "pointer"
 			  (button :style "background-image: url('images/icons/gimp.svg');" :class "app_gimp" :onclick "scripts/open_apps --gp"))
       (eventbox :cursor "pointer"
-			  (button :style "background-image: url('images/icons/virtualbox.svg');" :class "app_monday" :onclick "scripts/open_apps --mo")))))
+			  (button :style "background-image: url('images/icons/monday.png');" :class "app_monday" :onclick "scripts/open_apps --mo")))))
 
 ;; power buttons
 (defwidget logout [] 
