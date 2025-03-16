@@ -41,7 +41,7 @@
   (eventbox :onhover "${eww} update wifi_rev=true"
 			  :onhoverlost "${eww} update wifi_rev=false"
 		(box :vexpand "false" :hexpand "false" :space-evenly "false"
-				(button :class "module-wif" :onclick "networkmanager_dmenu" :wrap "false" :limit-width 12 :style "color: ${COL_WLAN};" WLAN_ICON)
+				(button :class "module-wif" :onclick "~/.config/eww/bar/scripts/wifi --ed" :wrap "false" :limit-width 12 :style "color: ${COL_WLAN};" WLAN_ICON)
 	(revealer :transition "slideright"
 			  :reveal wifi_rev
 			  :duration "350ms"
