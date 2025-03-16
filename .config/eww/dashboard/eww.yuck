@@ -188,16 +188,16 @@
 ;; power buttons
 (defwidget logout [] 
 	(eventbox :cursor "pointer" :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_logout" :onclick "openbox --exit" "")))
+		(button :class "btn_logout" :onclick "scripts/power --ex" "")))
 (defwidget sleep [] 
 	(eventbox :cursor "pointer" :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_sleep" :onclick "systemctl suspend" "")))
+		(button :class "btn_sleep" :onclick "scripts/power --sl" "")))
 (defwidget reboot [] 
 	(eventbox :cursor "pointer" :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_reboot" :onclick "systemctl reboot" "")))
+		(button :class "btn_reboot" :onclick "scripts/power --re" "")))
 (defwidget poweroff [] 
 	(eventbox :cursor "pointer" :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_poweroff" :onclick "systemctl poweroff" "")))
+		(button :class "btn_poweroff" :onclick "scripts/power --sh" "")))
 
 ;; folders
 (defwidget folders [] 
