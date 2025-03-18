@@ -13,7 +13,7 @@ close_dash() {
 }
 
 if [[ "$1" == "--sh" ]]; then
-	close_dash && systemctl shutdown
+	close_dash && systemctl poweroff
 
 elif [[ "$1" == "--re" ]]; then
 	close_dash && systemctl reboot
