@@ -56,11 +56,12 @@ myTerm = "alacritty"  # My terminal of choice
 myBrowser = "chrome"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
 
+
 # Allows you to input a name when adding treetab section.
-# @lazy.layout.function
-# def add_treetab_section(layout):
-#     prompt = qtile.widgets_map["prompt"]
-#     prompt.start_input("Section name: ", layout.cmd_add_section)
+@lazy.layout.function
+def add_treetab_section(layout):
+    prompt = qtile.widgets_map["prompt"]
+    prompt.start_input("Section name: ", layout.cmd_add_section)
 
 
 # A function for hide/show all the windows in a group
@@ -214,29 +215,29 @@ keys = [
         [mod, "shift"],
         "h",
         lazy.layout.shuffle_left(),
-        # lazy.layout.move_left().when(layout=["treetab"]),
-        # desc="Move window to the left/move tab left in treetab"
+        lazy.layout.move_left().when(layout=["treetab"]),
+        desc="Move window to the left/move tab left in treetab",
     ),
     Key(
         [mod, "shift"],
         "l",
         lazy.layout.shuffle_right(),
-        # lazy.layout.move_right().when(layout=["treetab"]),
-        # desc="Move window to the right/move tab right in treetab"
+        lazy.layout.move_right().when(layout=["treetab"]),
+        desc="Move window to the right/move tab right in treetab",
     ),
     Key(
         [mod, "shift"],
         "j",
         lazy.layout.shuffle_down(),
-        # lazy.layout.section_down().when(layout=["treetab"]),
-        # desc="Move window down/move down a section in treetab"
+        lazy.layout.section_down().when(layout=["treetab"]),
+        desc="Move window down/move down a section in treetab",
     ),
     Key(
         [mod, "shift"],
         "k",
         lazy.layout.shuffle_up(),
-        # lazy.layout.section_up().when(layout=["treetab"]),
-        # desc="Move window downup/move up a section in treetab"
+        lazy.layout.section_up().when(layout=["treetab"]),
+        desc="Move window downup/move up a section in treetab",
     ),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -249,7 +250,12 @@ keys = [
         desc="Toggle between split and unsplit sides of stack",
     ),
     # # Treetab prompt
-    # Key([mod, "shift"], "a", add_treetab_section, desc='Prompt to add new section in treetab'),
+    Key(
+        [mod, "shift"],
+        "a",
+        add_treetab_section,
+        desc="Prompt to add new section in treetab",
+    ),
     # Grow/shrink windows left/right.
     # This is mainly for the 'monadtall' and 'monadwide' layouts
     # although it does also work in the 'bsp' and 'columns' layouts.
@@ -434,27 +440,27 @@ layouts = [
     layout.MonadTall(**layout_theme),
     layout.MonadWide(**layout_theme),
     # layout.Columns(**layout_theme),
-    # layout.TreeTab(
-    #      font = "Ubuntu Bold",
-    #      fontsize = 11,
-    #      border_width = 0,
-    #      bg_color = colors[0],
-    #      active_bg = colors[8],
-    #      active_fg = colors[2],
-    #      inactive_bg = colors[1],
-    #      inactive_fg = colors[0],
-    #      padding_left = 8,
-    #      padding_x = 8,
-    #      padding_y = 6,
-    #      sections = ["ONE", "TWO", "THREE"],
-    #      section_fontsize = 10,
-    #      section_fg = colors[7],
-    #      section_top = 15,
-    #      section_bottom = 15,
-    #      level_shift = 8,
-    #      vspace = 3,
-    #      panel_width = 240
-    #      ),
+    layout.TreeTab(
+        font="Ubuntu Bold",
+        fontsize=11,
+        border_width=0,
+        bg_color=colors[0],
+        active_bg=colors[8],
+        active_fg=colors[2],
+        inactive_bg=colors[1],
+        inactive_fg=colors[0],
+        padding_left=8,
+        padding_x=8,
+        padding_y=6,
+        sections=["MASTER"],
+        section_fontsize=10,
+        section_fg=colors[7],
+        section_top=15,
+        section_bottom=15,
+        level_shift=8,
+        vspace=3,
+        panel_width=240,
+    ),
     layout.Floating(**layout_theme),
     # layout.Spiral(**layout_theme)
 ]

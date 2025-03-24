@@ -47,4 +47,4 @@ SETUVAR fish_pager_color_selected_background:\x2d\x2dbackground\x3dbrblack
 SETUVAR fish_pager_color_selected_completion:\x1d
 SETUVAR fish_pager_color_selected_description:\x1d
 SETUVAR fish_pager_color_selected_prefix:\x1d
-SETUVAR fish_user_paths:/home/kevin/\x2elocal/bin\x1e/home/linuxbrew/\x2elinuxbrew/Homebrew/bin\x1e/usr/share/Modules/bin\x3a/usr/local/cuda\x2d11\x2e1/bin\x3a/usr/local/bin\x3a/usr/bin\x3a/bin\x3a/usr/local/sbin\x3a/usr/sbin\x3a/opt/bin\x3a/opt/script\x3a/home/kevin/bin\x3a/home/kevin/\x2elocal/bin
+SETUVAR fish_user_paths:/opt/zig\x2dlinux\x2dx86_64\x2d0\x2e13\x2e0\x1e/opt/google/google\x2dcloud\x2dsdk/bin\x1e/home/linuxbrew/\x2elinuxbrew/bin\x1e/home/kevin/miniconda3/bin/\x1e/home/kevin/\x2elocal/bin/
