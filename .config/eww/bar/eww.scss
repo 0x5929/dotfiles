@@ -65,6 +65,11 @@ tooltip label {
   background-color: #38384d;
   border-radius: 10px;
 }
+.storagebar {
+  color: #89acaa;
+  background-color: #38384d;
+  border-radius: 10px;
+}
 .brightbar trough highlight {
   background-image: linear-gradient(
     to right,
@@ -106,12 +111,17 @@ tooltip label {
   color: #e0b089;
   padding-right: 4px;
 }
+.iconstorage {
+  color: #89acaa;
+  padding-right: 4px;
+}
 .iconbat {
   color: #afbea2;
   padding-right: 4px;
 }
 .iconbat,
-.iconmem {
+.iconmem,
+.iconstorage {
   font-size: 15;
   margin: 10px;
 }
@@ -137,6 +147,11 @@ tooltip label {
   background-color: #0f0f17;
   border-radius: 16px;
   margin: 0px 10px 0px 10px;
+}
+.storage_module {
+  background-color: #0f0f17;
+  border-radius: 16px;
+  margin: 0px 10px 0px 3px;
 }
 
 scale trough {
@@ -265,19 +280,28 @@ calendar:indeterminate {
   margin: 0px 10px 0px 10px;
 }
 .sys_text_bat_sub,
-.sys_text_mem_sub {
+.sys_text_mem_sub,
+.sys_text_storage_sub,
+.sys_text_cpu_sub,
+.sys_text_gpu_sub {
   font-size: 16;
   color: #bbc5d7;
   margin: 5px 0px 0px 25px;
 }
 .sys_text_bat,
-.sys_text_mem {
+.sys_text_mem,
+.sys_text_storage,
+.sys_text_cpu,
+.sys_text_gpu {
   font-size: 21;
   font-weight: bold;
   margin: 14px 0px 0px 25px;
 }
 .sys_icon_bat,
-.sys_icon_mem {
+.sys_icon_mem,
+.sys_icon_storage,
+.sys_icon_cpu,
+.sys_icon_gpu {
   font-size: 30;
   margin: 30px;
 }
@@ -286,6 +310,21 @@ calendar:indeterminate {
 }
 .sys_bat {
   color: #afbea2;
+  background-color: #38384d;
+  border-radius: 10px;
+}
+.sys_cpu {
+  color: #bb616c;
+  background-color: #38384d;
+  border-radius: 10px;
+}
+.sys_gpu {
+  color: #75e6da;
+  background-color: #38384d;
+  border-radius: 10px;
+}
+.sys_storage {
+  color: #89acaa;
   background-color: #38384d;
   border-radius: 10px;
 }
@@ -298,13 +337,41 @@ calendar:indeterminate {
 .sys_text_bat {
   color: #afbea2;
 }
+.sys_icon_cpu,
+.sys_text_cpu {
+  color: #bb616c;
+}
+.sys_icon_gpu,
+.sys_text_gpu {
+  color: #75e6da;
+}
 .sys_icon_mem,
 .sys_text_mem {
   color: #e4c9af;
 }
+.sys_icon_storage,
+.sys_text_storage {
+  color: #89acaa;
+}
+.sys_storage_box {
+  border-radius: 16px;
+  margin: 15px 10px 10px 20px;
+}
 .sys_bat_box {
   border-radius: 16px;
   margin: 15px 10px 10px 20px;
+}
+.sys_cpu_box {
+  border-radius: 16px;
+  margin: 15px 10px 10px 20px;
+}
+.sys_gpu_box {
+  border-radius: 16px;
+  margin: 15px 10px 10px 20px;
+}
+.sys_mem_box {
+  border-radius: 16px;
+  margin: 10px 10px 15px 20px;
 }
 .sys_mem_box {
   border-radius: 16px;

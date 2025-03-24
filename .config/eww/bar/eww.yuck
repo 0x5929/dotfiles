@@ -6,11 +6,16 @@
 (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
 (defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
 (defpoll battery :interval "15s" "./scripts/battery --bat")
-(defpoll battery_status :interval "1m" "./scripts/battery --bat-st")
+(defpoll storage :interval "15s" "./scripts/storage --sto")
+(defpoll cpu :interval "15s" "./scripts/cpu --cpu")
+(defpoll gpu :interval "15s" "./scripts/gpu --gpu")
+(defpoll battery_status :interval "15s" "./scripts/battery --bat-st")
+(defpoll storage_status :interval "15s" "./scripts/storage --sto-st")
+(defpoll cpu_status :interval "15s" "./scripts/cpu --cpu-st")
+(defpoll gpu_status :interval "15s" "./scripts/gpu --gpu-st")
 (defpoll memory :interval "15s" "scripts/memory")
-(defpoll memory_used_mb :interval "2m" "scripts/mem-ad used")
-(defpoll memory_total_mb :interval "2m" "scripts/mem-ad total")
-(defpoll memory_free_mb :interval "2m" "scripts/mem-ad free")
+(defpoll memory_used_mb :interval "15s" "scripts/mem-ad used")
+(defpoll memory_free_mb :interval "15s" "scripts/mem-ad free")
 (defvar vol_reveal false)
 (defvar br_reveal false)
 (defvar music_reveal false)
@@ -79,6 +84,20 @@
                 :class "iconmem"
                 :limit-width 2
                 :tooltip "using ${memory}% ram"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system"
+                :show_truncated false
+                :wrap false
+                ""))))
+
+(defwidget storage []
+		(box :class "storage_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value storage
+                :class "storagebar"
+                :thickness 4
+            (button 
+                :class "iconstorage"
+                :limit-width 2
+                :tooltip "using ${storage}% storage"
                 :onclick "$HOME/.config/eww/bar/scripts/pop system"
                 :show_truncated false
                 :wrap false
@@ -165,6 +184,7 @@
 (wifi)
 (sep)
 (bat)
+(storage)
 (mem)
 (sep)
 (clock_module)))
@@ -233,7 +253,94 @@
                 :limit-width 22
                 :show_truncated false
                 :wrap false)))
-            (label :text "" :class "sys_sep" :halign "center")
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_storage_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value storage
+                :class "sys_storage"
+                :thickness 9
+            (label :text "🖴"
+                :class "sys_icon_storage"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "storage"
+                :halign "start"
+                :class "sys_text_storage"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${storage}%"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${storage_status}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_cpu_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value cpu
+                :class "sys_cpu"
+                :thickness 9
+            (label :text "🀆"
+                :class "sys_icon_cpu"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "cpu"
+                :halign "start"
+                :class "sys_text_cpu"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${cpu}%"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${cpu_status}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_gpu_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value gpu
+                :class "sys_gpu"
+                :thickness 9
+            (label :text "🎟"
+                :class "sys_icon_gpu"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "gpu"
+                :halign "start"
+                :class "sys_text_gpu"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${gpu}%"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${gpu_status}"
+                :halign "start"
+                :class "sys_text_gpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
   (box :class "sys_mem_box" :orientation "h" :space-evenly "false" :halign "start"
       (circular-progress :value memory
                 :class "sys_mem"
@@ -251,13 +358,13 @@
                 :limit-width 9
                 :show_truncated false
                 :wrap false)
-            (label :text "${memory_used_mb} | ${memory_total_mb}mb "
+            (label :text "${memory_used_mb} MB used"
                 :halign "start"
                 :class "sys_text_mem_sub"
                 :limit-width 22
                 :show_truncated false
                 :wrap false)
-            (label :text "${memory_free_mb}mb free"
+            (label :text "${memory_free_mb}MB free"
                 :halign "start"
                 :class "sys_text_mem_sub"
                 :limit-width 22
