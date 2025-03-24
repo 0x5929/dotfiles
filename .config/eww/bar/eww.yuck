@@ -270,7 +270,7 @@
                 :limit-width 9
                 :show_truncated false
                 :wrap false)
-            (label :text "${storage}%"
+            (label :text "${storage}% used"
                 :halign "start"
                 :class "sys_text_bat_sub"
                 :limit-width 22
@@ -299,7 +299,7 @@
                 :limit-width 9
                 :show_truncated false
                 :wrap false)
-            (label :text "${cpu}%"
+            (label :text "${cpu}% used"
                 :halign "start"
                 :class "sys_text_cpu_sub"
                 :limit-width 22
@@ -328,7 +328,7 @@
                 :limit-width 9
                 :show_truncated false
                 :wrap false)
-            (label :text "${gpu}%"
+            (label :text "${gpu}% used"
                 :halign "start"
                 :class "sys_text_bat_sub"
                 :limit-width 22
@@ -358,13 +358,13 @@
                 :limit-width 9
                 :show_truncated false
                 :wrap false)
-            (label :text "${memory_used_mb} MB used"
+            (label :text "${memory_used_mb}mb used"
                 :halign "start"
                 :class "sys_text_mem_sub"
                 :limit-width 22
                 :show_truncated false
                 :wrap false)
-            (label :text "${memory_free_mb}MB free"
+            (label :text "${memory_free_mb}mb free"
                 :halign "start"
                 :class "sys_text_mem_sub"
                 :limit-width 22
