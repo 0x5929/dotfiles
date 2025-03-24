@@ -3,8 +3,10 @@
 SCRIPTS_DIR="$HOME/.config/qtile/scripts/search-hub"
 
 # Define options with icons (using Nerd Font icons)
+# After dash are keyword tags that are also searchable
+# NOTE: Before dash title MUST match title variable or else the script won't run
 options=(
-    "📚 Man Pages - man"
+    "📚 Man Pages - man documentation help"
     "📖 Arch Wiki - arch wiki"
     "📺 YouTube - youtube"
     "🔍 Google - google"
@@ -12,6 +14,7 @@ options=(
     "📝 GitHub - github"
     "📦 Arch Packages - arch packages pacman"
     "🎁 AUR Packages - aur packages yay"
+    "😍 Icons Search - icons symbol emoji"
 )
 
 # Define corresponding scripts
@@ -24,6 +27,7 @@ scripts=(
     "github.sh"
     "archpackages.sh"
     "aurpackages.sh"
+    "icons.sh"
 )
 
 # Define search titles 
@@ -36,6 +40,7 @@ titles=(
     "GitHub"
     "Arch Packages"
     "AUR Packages"
+    "Icons Search"
 )
 
 # Show menu with rofi using the specific configuration
@@ -57,7 +62,7 @@ done
 if [[ $index -ge 0 ]]; then
     script_path="$SCRIPTS_DIR/${scripts[$index]}"
     title="${titles[$index]}"
-    
+
     # Check if the script exists and is executable
     if [[ -x "$script_path" ]]; then
         # Pass the title as an argument to the script
