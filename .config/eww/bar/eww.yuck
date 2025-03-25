@@ -16,8 +16,10 @@
 (defpoll memory :interval "15s" "scripts/memory")
 (defpoll memory_used_mb :interval "15s" "scripts/mem-ad used")
 (defpoll memory_free_mb :interval "15s" "scripts/mem-ad free")
+(defpoll info_kernel :interval "300m" "scripts/info --kernel")
 (defvar vol_reveal false)
 (defvar br_reveal false)
+(defvar info_reveal false)
 (defvar music_reveal false)
 (defvar wifi_rev false)
 (defvar time_rev false)
@@ -140,6 +142,20 @@
 			  :min 0
 			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
 
+(defwidget info []
+  (eventbox :onhover "${eww} update info_reveal=true" :onhoverlost "${eww} update info_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (label :text "⌘" :class "info_icon" :tooltip "info")
+	(revealer :transition "slideleft"
+			  :reveal info_reveal
+			  :duration "350ms"
+        :class "kernel_info"
+    info_kernel
+        ))))
+
+
+
+
 (defwidget bright []
   (eventbox :onhover "${eww} update br_reveal=true" :onhoverlost "${eww} update br_reveal=false"
   (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
@@ -179,6 +195,7 @@
 		 :space-evenly false  
          :halign "end"
 		 :class "left_modules"
+(info)
 (bright)
 (volume)
 (wifi)
