@@ -6,6 +6,13 @@
 (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
 (defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
 (defpoll battery :interval "15s" "./scripts/battery --bat")
+(defpoll updates :interval "15s" "./scripts/info --updates")
+(defpoll current_group :interval "15s" "./scripts/info --current-group")
+(defpoll whoami :interval "15s" "./scripts/info --whoami")
+(defpoll ip_addr :interval "15s" "./scripts/info --ip")
+(defpoll my_groups :interval "15s" "./scripts/info --groups")
+(defpoll window_title :interval "15s" "./scripts/info --window-title")
+(defpoll current_layout :interval "15s" "./scripts/info --current-layout")
 (defpoll storage :interval "15s" "./scripts/storage --sto")
 (defpoll cpu :interval "15s" "./scripts/cpu --cpu")
 (defpoll gpu :interval "15s" "./scripts/gpu --gpu")
@@ -145,13 +152,21 @@
 (defwidget info []
   (eventbox :onhover "${eww} update info_reveal=true" :onhoverlost "${eww} update info_reveal=false"
   (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
-    (label :text "⌘" :class "info_icon" :tooltip "info")
+    (button
+      :class "info_icon"
+      :limit-width 2
+      :tooltip "info"
+      :show_truncated false
+      :onclick "$HOME/.config/eww/bar/scripts/pop system_info"
+      :wrap false
+      "⌘")
+
 	(revealer :transition "slideleft"
 			  :reveal info_reveal
 			  :duration "350ms"
         :class "kernel_info"
-    info_kernel
-        ))))
+      info_kernel
+  ))))
 
 
 
@@ -388,6 +403,86 @@
                 :show_truncated false
                 :wrap false)))))
 
+
+(defwidget system_info []
+  (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
+  (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "Pacman"
+                :halign "start"
+                :class "sys_text_bat"
+                :limit-width 40
+                :show_truncated false
+                :wrap false)
+            (label :text "${updates} Upgradable"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_storage_box" :orientation "h" :space-evenly "false"
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "Qtile"
+                :halign "start"
+                :class "sys_text_storage"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "Workspace: ${current_group}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "Title: ${window_title}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 40
+                :show_truncated false
+                :wrap false)
+            (label :text "Layout: ${current_layout}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+                ))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_cpu_box" :orientation "h" :space-evenly "false"
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "System"
+                :halign "start"
+                :class "sys_text_cpu"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "Kernel: ${info_kernel}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "User: ${whoami}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "Groups: ${my_groups}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 40
+                :show_truncated false
+                :wrap false)
+            (label :text "IP: ${ip_addr}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+                ))))
+
 (defwidget cal []
 	(box :class "cal" :orientation "v"
 	(box :class "cal-in"
@@ -435,7 +530,7 @@
 
 (defwindow audio_ctl
 	:geometry (geometry :x "-20px" 
-						:y "7%" 
+						:y "6%" 
                         :anchor "top right"
 						:width "280px" 
 						:height "60px")
@@ -444,12 +539,19 @@
 
 (defwindow system
 	:geometry (geometry :x "-20px" 
-						:y "7%" 
+						:y "6%" 
                         :anchor "top right"
 						:width "290px" 
 						:height "120px")
 (system))
 
+(defwindow system_info
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "490px" 
+						:height "200px")
+(system_info))
 
 
 ;;  Music

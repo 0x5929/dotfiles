@@ -8,6 +8,10 @@ workspaces() {
     ws4="4"
     ws5="5"
     ws6="6"
+    ws7="7"
+    ws8="8"
+    ws9="9"
+    ws0="0"
 
     icon=""
     
@@ -15,7 +19,7 @@ workspaces() {
     # current_group=$(qtile cmd-obj -o group -f current_group | tr -d '"')
     
     # Process each workspace
-    for ws in "$ws1" "$ws2" "$ws3" "$ws4" "$ws5" "$ws6"; do
+    for ws in "$ws1" "$ws2" "$ws3" "$ws4" "$ws5" "$ws6" "$ws7" "$ws8" "$ws9" "$ws0"; do
         ws_info=$(qtile cmd-obj -o group $ws -f info)
 
         # Check if workspace is occupied
@@ -58,6 +62,18 @@ workspaces() {
         elif [ "$ws" = "$ws6" ]; then
             class6="$class_prefix"
             icon6="$icon"
+        elif [ "$ws" = "$ws7" ]; then
+            class7="$class_prefix"
+            icon7="$icon"
+        elif [ "$ws" = "$ws8" ]; then
+            class8="$class_prefix"
+            icon8="$icon"
+        elif [ "$ws" = "$ws9" ]; then
+            class9="$class_prefix"
+            icon9="$icon"
+        elif [ "$ws" = "$ws0" ]; then
+            class0="$class_prefix"
+            icon0="$icon"
         fi
     done
     
@@ -68,7 +84,11 @@ workspaces() {
         (button :onclick \"qtile cmd-obj -o group $ws3 -f toscreen\" :class \"$class3\" \"$icon3\") \
         (button :onclick \"qtile cmd-obj -o group $ws4 -f toscreen\" :class \"$class4\" \"$icon4\") \
         (button :onclick \"qtile cmd-obj -o group $ws5 -f toscreen\" :class \"$class5\" \"$icon5\") \
-        (button :onclick \"qtile cmd-obj -o group $ws6 -f toscreen\" :class \"$class6\" \"$icon6\"))"
+        (button :onclick \"qtile cmd-obj -o group $ws6 -f toscreen\" :class \"$class6\" \"$icon6\") \
+        (button :onclick \"qtile cmd-obj -o group $ws7 -f toscreen\" :class \"$class7\" \"$icon7\") \
+        (button :onclick \"qtile cmd-obj -o group $ws8 -f toscreen\" :class \"$class8\" \"$icon8\") \
+        (button :onclick \"qtile cmd-obj -o group $ws9 -f toscreen\" :class \"$class9\" \"$icon9\") \
+        (button :onclick \"qtile cmd-obj -o group $ws0 -f toscreen\" :class \"$class0\" \"$icon0\"))"
 }
 
 # # Initial output
