@@ -30,6 +30,14 @@
 (defvar music_reveal false)
 (defvar wifi_rev false)
 (defvar time_rev false)
+
+(defvar vol_reveal_b1 false)
+(defvar br_reveal_b1 false)
+(defvar info_reveal_b1 false)
+(defvar music_reveal_b1 false)
+(defvar wifi_rev_b1 false)
+(defvar time_rev_b1 false)
+
 (deflisten workspace "scripts/workspace")
 
 (defvar eww "/usr/sbin/eww -c $HOME/.config/eww/bar")
@@ -51,6 +59,140 @@
 
 ;; widgets
 
+(defwidget workspaces []
+  (literal :content workspace))
+
+(defwidget music [] 
+  (eventbox :onhover "${eww} update music_reveal=true"
+			  :onhoverlost "${eww} update music_reveal=false"
+		(box :class "module-2" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
+			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
+			(button :class "song" :wrap "true" :onclick "~/.config/eww/bar/scripts/pop music" song)
+	    (revealer :transition "slideright"
+			      :reveal music_reveal
+			      :duration "350ms"
+          (box :vexpand "false" :hexpand "false" :oreintation "h" 
+                    (button :class "song_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
+					(button :class "song_btn_play" :onclick "~/.config/eww/bar/scripts/music_info --toggle" song_status)
+					(button :class "song_btn_next" :onclick "~/.config/eww/bar/scripts/music_info --next" ""))))))
+
+(defwidget music_b1 [] 
+  (eventbox :onhover "${eww} update music_reveal_b1=true"
+			  :onhoverlost "${eww} update music_reveal_b1=false"
+		(box :class "module-2" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
+			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
+			(button :class "song" :wrap "true" :onclick "~/.config/eww/bar/scripts/pop music_b1" song)
+	    (revealer :transition "slideright"
+			      :reveal music_reveal
+			      :duration "350ms"
+          (box :vexpand "false" :hexpand "false" :oreintation "h" 
+                    (button :class "song_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
+					(button :class "song_btn_play" :onclick "~/.config/eww/bar/scripts/music_info --toggle" song_status)
+					(button :class "song_btn_next" :onclick "~/.config/eww/bar/scripts/music_info --next" ""))))))
+
+
+(defwidget info []
+  (eventbox :onhover "${eww} update info_reveal=true" :onhoverlost "${eww} update info_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (button
+      :class "info_icon"
+      :limit-width 2
+      :tooltip "info"
+      :show_truncated false
+      :onclick "$HOME/.config/eww/bar/scripts/pop system_info"
+      :wrap false
+      "⌘")
+
+	(revealer :transition "slideleft"
+			  :reveal info_reveal
+			  :duration "350ms"
+        :class "kernel_info"
+      info_kernel
+  ))))
+
+(defwidget info_b1 []
+  (eventbox :onhover "${eww} update info_reveal_b1=true" :onhoverlost "${eww} update info_reveal_b1=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (button
+      :class "info_icon"
+      :limit-width 2
+      :tooltip "info"
+      :show_truncated false
+      :onclick "$HOME/.config/eww/bar/scripts/pop system_info_b1"
+      :wrap false
+      "⌘")
+
+	(revealer :transition "slideleft"
+			  :reveal info_reveal_b1
+			  :duration "350ms"
+        :class "kernel_info"
+      info_kernel
+  ))))
+
+(defwidget bright []
+  (eventbox :onhover "${eww} update br_reveal=true" :onhoverlost "${eww} update br_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (label :text "" :class "bright_icon" :tooltip "brightness")
+	(revealer :transition "slideleft"
+			  :reveal br_reveal
+			  :duration "350ms"
+	(scale    :class "brightbar"
+			  :value brightness_percent
+			  :orientation "h"
+			  :tooltip "${brightness_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "brightnessctl set {}%" )))))
+
+(defwidget bright_b1 []
+  (eventbox :onhover "${eww} update br_reveal_b1=true" :onhoverlost "${eww} update br_reveal_b1=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (label :text "" :class "bright_icon" :tooltip "brightness")
+	(revealer :transition "slideleft"
+			  :reveal br_reveal_b1
+			  :duration "350ms"
+	(scale
+        :class "brightbar"
+			  :value brightness_percent
+			  :orientation "h"
+			  :tooltip "${brightness_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "brightnessctl set {}%" )))))
+
+(defwidget volume []
+  (eventbox :onhover "${eww} update vol_reveal=true"
+			  :onhoverlost "${eww} update vol_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+	(button   :onclick "scripts/pop audio"   :class "volume_icon" "")
+	(revealer :transition "slideleft"
+			  :reveal vol_reveal
+			  :duration "350ms"
+	(scale    :class "volbar"
+			  :value volume_percent
+			  :orientation "h"
+			  :tooltip "${volume_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
+
+(defwidget volume_b1 []
+  (eventbox :onhover "${eww} update vol_reveal_b1=true"
+			  :onhoverlost "${eww} update vol_reveal_b1=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+	(button   :onclick "scripts/pop audio_b1"   :class "volume_icon" "")
+	(revealer :transition "slideleft"
+			  :reveal vol_reveal_b1
+			  :duration "350ms"
+	(scale
+        :class "volbar"
+			  :value volume_percent
+			  :orientation "h"
+			  :tooltip "${volume_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
+
 (defwidget wifi [] 
   (eventbox :onhover "${eww} update wifi_rev=true"
 			  :onhoverlost "${eww} update wifi_rev=false"
@@ -64,9 +206,18 @@
 			  :orientation "h"
 			  )))))
 
-
-(defwidget workspaces []
-  (literal :content workspace))
+(defwidget wifi_b1 [] 
+  (eventbox :onhover "${eww} update wifi_rev_b1=true"
+			  :onhoverlost "${eww} update wifi_rev_b1=false"
+		(box :vexpand "false" :hexpand "false" :space-evenly "false"
+				(button :class "module-wif" :onclick "~/.config/eww/bar/scripts/wifi --ed" :wrap "false" :limit-width 12 :style "color: ${COL_WLAN};" WLAN_ICON)
+	(revealer :transition "slideright"
+			  :reveal wifi_rev_b1
+			  :duration "350ms"
+	(label    :class "module_essid"
+			  :text ESSID_WLAN
+			  :orientation "h"
+			  )))))
 
 
 (defwidget bat []
@@ -83,6 +234,19 @@
                 :wrap false
                 ""))))
 
+(defwidget bat_b1 []
+		(box :class "bat_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value battery
+                :class "batbar"
+                :thickness 4
+            (button 
+                :class "iconbat"
+                :limit-width 2
+                :tooltip "battery on ${battery}%"
+                :show_truncated false
+                :onclick "$HOME/.config/eww/bar/scripts/pop system_b1"
+                :wrap false
+                ""))))
 
 (defwidget mem []
 		(box :class "mem_module" :vexpand "false" :hexpand "false" 
@@ -98,6 +262,21 @@
                 :wrap false
                 ""))))
 
+(defwidget mem_b1 []
+		(box :class "mem_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value memory
+                :class "membar"
+                :thickness 4
+            (button 
+                :class "iconmem"
+                :limit-width 2
+                :tooltip "using ${memory}% ram"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system_b1"
+                :show_truncated false
+                :wrap false
+                ""))))
+
+
 (defwidget storage []
 		(box :class "storage_module" :vexpand "false" :hexpand "false" 
             (circular-progress :value storage
@@ -112,6 +291,19 @@
                 :wrap false
                 ""))))
 
+(defwidget storage_b1 []
+		(box :class "storage_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value storage
+                :class "storagebar"
+                :thickness 4
+            (button 
+                :class "iconstorage"
+                :limit-width 2
+                :tooltip "using ${storage}% storage"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system_b1"
+                :show_truncated false
+                :wrap false
+                ""))))
 
 
 (defwidget sep []
@@ -133,141 +325,23 @@
         )
   ))))
   
-(defwidget volume []
-  (eventbox :onhover "${eww} update vol_reveal=true"
-			  :onhoverlost "${eww} update vol_reveal=false"
-  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
-	(button   :onclick "scripts/pop audio"   :class "volume_icon" "")
-	(revealer :transition "slideleft"
-			  :reveal vol_reveal
+(defwidget clock_module_b1 []
+  (eventbox :onhover "${eww} update time_rev_b1=true"
+			  :onhoverlost "${eww} update time_rev_b1=false"
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing "3" 
+      (label :text clock_time :class "clock_time_class" )
+      (label :text "" :class "clock_time_sep" )
+      (label :text clock_minute :class "clock_minute_class")
+	  (revealer :transition "slideleft"
+			  :reveal time_rev_b1
 			  :duration "350ms"
-	(scale    :class "volbar"
-			  :value volume_percent
-			  :orientation "h"
-			  :tooltip "${volume_percent}%"
-			  :max 100
-			  :min 0
-			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
-
-(defwidget info []
-  (eventbox :onhover "${eww} update info_reveal=true" :onhoverlost "${eww} update info_reveal=false"
-  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
-    (button
-      :class "info_icon"
-      :limit-width 2
-      :tooltip "info"
-      :show_truncated false
-      :onclick "$HOME/.config/eww/bar/scripts/pop system_info"
-      :wrap false
-      "⌘")
-
-	(revealer :transition "slideleft"
-			  :reveal info_reveal
-			  :duration "350ms"
-        :class "kernel_info"
-      info_kernel
+      (button :class "clock_date_class"
+             :onclick "$HOME/.config/eww/bar/scripts/pop calendar_b1" clock_date
+        )
   ))))
 
-
-
-
-(defwidget bright []
-  (eventbox :onhover "${eww} update br_reveal=true" :onhoverlost "${eww} update br_reveal=false"
-  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
-    (label :text "" :class "bright_icon" :tooltip "brightness")
-	(revealer :transition "slideleft"
-			  :reveal br_reveal
-			  :duration "350ms"
-	(scale    :class "brightbar"
-			  :value brightness_percent
-			  :orientation "h"
-			  :tooltip "${brightness_percent}%"
-			  :max 100
-			  :min 0
-			  :onchange "brightnessctl set {}%" )))))
-
-
-
-	;;  Music 
-(defwidget music [] 
-  (eventbox :onhover "${eww} update music_reveal=true"
-			  :onhoverlost "${eww} update music_reveal=false"
-		(box :class "module-2" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
-			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
-			(button :class "song" :wrap "true" :onclick "~/.config/eww/bar/scripts/pop music" song)
-	    (revealer :transition "slideright"
-			      :reveal music_reveal
-			      :duration "350ms"
-          (box :vexpand "false" :hexpand "false" :oreintation "h" 
-                    (button :class "song_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
-					(button :class "song_btn_play" :onclick "~/.config/eww/bar/scripts/music_info --toggle" song_status)
-					(button :class "song_btn_next" :onclick "~/.config/eww/bar/scripts/music_info --next" ""))))))
-
-
-
-(defwidget left []
-	(box :orientation "h" 
-		 :space-evenly false  
-         :halign "end"
-		 :class "left_modules"
-(info)
-(bright)
-(volume)
-(wifi)
-(sep)
-(bat)
-(storage)
-(mem)
-(sep)
-(clock_module)))
-
-
-(defwidget right []
-	(box :orientation "h" 
-		 :space-evenly false  
-         :halign "start"
-		 :class "right_modules"
-(workspaces)))
-
-
-(defwidget center []
-	(box :orientation "h" 
-		 :space-evenly false  
-         :halign "center"
-		 :class "center_modules"
-(music)))
-
-(defwidget bar_1 []
-  (box :class "bar_class"
-       :orientation "h"
-  (right)
-  (center)
-  (left)
-    ))
-
-(defwindow bar
-          :monitor 0
-          :geometry (geometry :x "0%"
-                       :y "9px"
-                       :width "98%"
-                       :height "30px"
-                       :anchor "top center")
-          :stacking "fg"
-          :windowtype "dock"
-  (bar_1))
-
-
-(defwindow bar_top_monitor
-          :monitor 1
-          :geometry (geometry :x "0%"
-                       :y "9px"
-                       :width "98%"
-                       :height "30px"
-                       :anchor "top center")
-          :stacking "fg"
-          :windowtype "dock"
-  (bar_1))
   
+;; Popup/other widgets
 (defwidget system []
   (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
   (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
@@ -416,6 +490,23 @@
                 :show_truncated false
                 :wrap false)))))
 
+(defwindow system
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "290px" 
+						:height "120px")
+(system))
+
+(defwindow system_b1
+  :monitor 1
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "290px" 
+						:height "120px")
+(system))
 
 (defwidget system_info []
   (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
@@ -496,6 +587,24 @@
                 :wrap false)
                 ))))
 
+(defwindow system_info
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "490px" 
+						:height "200px")
+(system_info))
+
+(defwindow system_info_b1
+  :monitor 1
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "490px" 
+						:height "200px")
+(system_info))
+
 (defwidget cal []
 	(box :class "cal" :orientation "v"
 	(box :class "cal-in"
@@ -504,6 +613,16 @@
 			  :year calendar_year))))
 
 (defwindow calendar
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "7%" 
+                        :anchor "top right"
+						:width "270px" 
+						:height "60px")
+(cal))
+
+(defwindow calendar_b1
+  :monitor 1
 	:geometry (geometry :x "-20px" 
 						:y "7%" 
                         :anchor "top right"
@@ -542,6 +661,16 @@
 			  :min 0))))))
 
 (defwindow audio_ctl
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "280px" 
+						:height "60px")
+(audio))
+
+(defwindow audio_ctl_b1
+  :monitor 1
 	:geometry (geometry :x "-20px" 
 						:y "6%" 
                         :anchor "top right"
@@ -550,24 +679,7 @@
 (audio))
 
 
-(defwindow system
-	:geometry (geometry :x "-20px" 
-						:y "6%" 
-                        :anchor "top right"
-						:width "290px" 
-						:height "120px")
-(system))
 
-(defwindow system_info
-	:geometry (geometry :x "-20px" 
-						:y "6%" 
-                        :anchor "top right"
-						:width "490px" 
-						:height "200px")
-(system_info))
-
-
-;;  Music
 (defwidget music_pop []
 		(box :class "music_pop" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false"
 			(box :class "music_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
@@ -582,8 +694,114 @@
 					(scale :onscroll "mpc -q seek {}" :min 0 :active "true" :max 100 :value current_status)))))
 
 
-;;  music
-		(defwindow music_win :stacking "fg" :focusable "false" :screen 1
-			    :geometry (geometry :x "0" :y "7%" :width 428 :height 104 :anchor "top center")
-			     				(music_pop))
+(defwindow music_win :stacking "fg" :focusable "false" :screen 1
+      :monitor 0
+      :geometry (geometry :x "0" :y "7%" :width 428 :height 104 :anchor "top center")
+              (music_pop))
 
+(defwindow music_win_b1 :stacking "fg" :focusable "false" :screen 1
+      :monitor 1
+      :geometry (geometry :x "0" :y "7%" :width 428 :height 104 :anchor "top center")
+              (music_pop))
+
+;; WRAPPER WIDGETS AND BAR DEFINITIONS
+
+(defwidget left []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "left_modules"
+(info)
+(bright)
+(volume)
+(wifi)
+(sep)
+(bat)
+(storage)
+(mem)
+(sep)
+(clock_module)))
+
+(defwidget left_b1 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "left_modules"
+(info_b1)
+(bright_b1)
+(volume_b1)
+(wifi_b1)
+(sep)
+(bat_b1)
+(storage_b1)
+(mem_b1)
+(sep)
+(clock_module_b1)))
+
+
+(defwidget right []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "start"
+		 :class "right_modules"
+(workspaces)))
+
+(defwidget right_b1 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "start"
+		 :class "right_modules"
+(workspaces)))
+
+(defwidget center []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "center"
+		 :class "center_modules"
+(music)))
+
+(defwidget center_b1 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "center"
+		 :class "center_modules"
+(music_b1)))
+
+(defwidget bar_0 []
+  (box :class "bar_class"
+       :orientation "h"
+  (right)
+  (center)
+  (left)
+    ))
+
+(defwidget bar_1 []
+  (box :class "bar_class"
+       :orientation "h"
+  (right_b1)
+  (center_b1)
+  (left_b1)
+    ))
+
+(defwindow bar
+          :monitor 0
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_0))
+
+
+(defwindow bar_top_monitor
+          :monitor 1
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_1))
