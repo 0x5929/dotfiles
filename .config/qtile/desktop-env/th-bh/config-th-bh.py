@@ -644,7 +644,7 @@ cursor_warp = False
 
 @hook.subscribe.startup_once
 def autostart():
-    autostartscript = "~/.config/qtile/scripts/autostart.sh"
+    autostartscript = "~/.config/qtile/desktop-env/th-bh/autostart.sh"
     home = os.path.expanduser(autostartscript)
     subprocess.Popen([
         home
