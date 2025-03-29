@@ -246,6 +246,19 @@
     ))
 
 (defwindow bar
+          :monitor 0
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_1))
+
+
+(defwindow bar_top_monitor
+          :monitor 1
           :geometry (geometry :x "0%"
                        :y "9px"
                        :width "98%"

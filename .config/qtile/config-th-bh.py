@@ -98,6 +98,10 @@ wl_input_rules = None
 wmname = "LG3D"
 auto_fullscreen = False
 
+# screens
+primary_screen = 0
+top_screen = 1
+
 
 ########################################
 ##     GROUPS/WORKSPACE DEFINITION    ##
@@ -109,70 +113,70 @@ group_configs = [
         "match_group": "2",
         "label": "1:1",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "2",
         "match_group": "1",
         "label": "2:2",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "3",
         "match_group": "4",
         "label": "1:3",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "4",
         "match_group": "3",
         "label": "2:4",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "5",
         "match_group": "6",
         "label": "1:5",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "6",
         "match_group": "5",
         "label": "2:6",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "7",
         "match_group": "8",
         "label": "1:7",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "8",
         "match_group": "7",
         "label": "2:8",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "9",
         "match_group": "0",
         "label": "1:9",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "0",
         "match_group": "9",
         "label": "2:0",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
 ]
 
