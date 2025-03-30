@@ -25,7 +25,7 @@ picom -b
 xfce4-power-manager &
 
 # launch top bar
-/home/kevin/.config/eww/bar/launch_bar_startup_th_bh
+/home/kevin/.config/eww/bar/launch_bar_startup_th_bh_rv
 
 # launch daemon for eww dashboard
 eww --config /home/kevin/.config/eww/dashboard daemon

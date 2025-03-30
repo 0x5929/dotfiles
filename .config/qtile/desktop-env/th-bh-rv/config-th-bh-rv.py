@@ -341,8 +341,73 @@ def go_to_group_and_move_window(name):
 
 
 def go_to_last_group(qtile):
-    screen = qtile.screens.index(qtile.current_screen)
-    qtile.current_screen.set_group(qtile.current_screen.previous_group)
+    # previous group
+    previous_group = qtile.current_screen.previous_group.name
+
+    if previous_group in screen_one_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(primary_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to top screen
+        qtile.focus_screen(top_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(right_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(primary_screen)
+    elif previous_group in screen_two_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(top_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to bottom (primary) screen
+        qtile.focus_screen(primary_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(right_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(top_screen)
+
+    elif previous_group in screen_three_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(right_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to bottom (primary) screen
+        qtile.focus_screen(primary_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(top_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(right_screen)
 
 
 ######################
