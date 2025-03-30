@@ -749,14 +749,7 @@
 		 :space-evenly false  
          :halign "start"
 		 :class "right_modules"
-(workspaces_9)))
-
-(defwidget right_b1 []
-	(box :orientation "h" 
-		 :space-evenly false  
-         :halign "start"
-		 :class "right_modules"
-(workspaces_9)))
+(workspaces)))
 
 (defwidget right_b2 []
 	(box :orientation "h" 
@@ -791,12 +784,28 @@
 (defwidget bar_1 []
   (box :class "bar_class"
        :orientation "h"
-  (right_b1)
+  (right)
   (center_b1)
   (left_b1)
     ))
 
-(defwidget bar_2 []
+(defwidget bar_0_9_ws []
+  (box :class "bar_class"
+       :orientation "h"
+  (right_b2)
+  (center)
+  (left)
+    ))
+
+(defwidget bar_1_9_ws []
+  (box :class "bar_class"
+       :orientation "h"
+  (right_b2)
+  (center_b1)
+  (left_b1)
+    ))
+
+(defwidget bar_2_9_ws []
   (box :class "bar_class"
        :orientation "h"
   (right_b2)
@@ -825,7 +834,30 @@
           :windowtype "dock"
   (bar_1))
 
-(defwindow bar_right_monitor
+(defwindow bar_primary_monitor_9_ws
+          :monitor 0
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_0_9_ws))
+
+
+(defwindow bar_top_monitor_9_ws
+          :monitor 1
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_1_9_ws))
+
+(defwindow bar_right_monitor_9_ws
           :monitor 2
           :geometry (geometry :x "0%"
                        :y "9px"
@@ -834,4 +866,4 @@
                        :anchor "top center")
           :stacking "fg"
           :windowtype "dock"
-  (bar_2))
+  (bar_2_9_ws))
