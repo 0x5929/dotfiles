@@ -1,0 +1,11 @@
+[Unit]
+Description=Set internal speaker profile
+After=pipewire.service
+
+[Service]
+ExecStart=/home/kevin/.config/audio-fix/set-speaker.sh
+Type=oneshot
+
+[Install]
+WantedBy=default.target
+
