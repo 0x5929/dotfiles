@@ -88,7 +88,7 @@
 			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
 			(button :class "song" :wrap "true" :onclick "~/.config/eww/bar/scripts/pop music_b1" song)
 	    (revealer :transition "slideright"
-			      :reveal music_reveal
+			      :reveal music_reveal_b1
 			      :duration "350ms"
           (box :vexpand "false" :hexpand "false" :oreintation "h" 
                     (button :class "song_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
