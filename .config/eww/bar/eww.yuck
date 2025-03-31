@@ -345,6 +345,14 @@
         )
   ))))
 
+(defwidget clock_module_b2 []
+  (eventbox :onhover ""
+			  :onhoverlost ""
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing "3" 
+      (label :text clock_time :class "clock_time_class" )
+      (label :text "" :class "clock_time_sep" )
+      (label :text clock_minute :class "clock_minute_class")
+	  )))
   
 ;; Popup/other widgets
 (defwidget system []
@@ -743,6 +751,12 @@
 (sep)
 (clock_module_b1)))
 
+(defwidget left_b2 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "left_modules"
+(clock_module_b2)))
 
 (defwidget right []
 	(box :orientation "h" 
@@ -809,6 +823,7 @@
   (box :class "bar_class"
        :orientation "h"
   (right_b2)
+  (left_b2)
     ))
 
 (defwindow bar
