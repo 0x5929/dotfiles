@@ -50,8 +50,8 @@ from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
 
-mod = "mod4"  # Sets mod key to SUPER/WINDOWS
-alt = "mod1"  # Sets mod key to SUPER/WINDOWS
+mod = "mod1"  # Sets mod key to SUPER/WINDOWS
+alt = "mod4"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
 myBrowser = "chrome"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
