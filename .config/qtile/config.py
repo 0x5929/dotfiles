@@ -146,9 +146,9 @@ for i, group in enumerate(group_configs):
         )
     )
 
-screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
-screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
-screen_three_groups = [group["name"] for group in group_configs if group["screen"] == 2]
+screen_one_groups = [group["name"] for group in group_configs if group["screen"] == primary_screen]
+screen_two_groups = [group["name"] for group in group_configs if group["screen"] == top_screen]
+screen_three_groups = [group["name"] for group in group_configs if group["screen"] == right_screen]
 
 
 ###########################
