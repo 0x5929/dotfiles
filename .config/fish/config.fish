@@ -18,6 +18,8 @@ if status is-interactive
 
     set -gx PATH /usr/pgsql-12/bin $PATH
     set -gx PATH /opt/nvim-linux64/bin $PATH
+    set -gx PATH /usr/local/go/bin $PATH
+    set -gx LD_LIBRARY_PATH /lib64 $LD_LIBRARY_PATH
     # vim binding
     # fish_vi_key_bindings
     fish_default_key_bindings
