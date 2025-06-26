@@ -30,7 +30,6 @@ import subprocess
 # from qtile_extras.widget import StatusNotifier
 import colors
 import owm
-from layouts.wide_center_stacks import WideCenterStack
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
 from libqtile.config import (
@@ -50,21 +49,112 @@ from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
 
-mod = "mod1"  # Sets mod key to SUPER/WINDOWS
-alt = "mod4"  # Sets mod key to SUPER/WINDOWS
+mod = "mod4"  # Sets mod key to SUPER/WINDOWS
+alt = "mod1"  # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"  # My terminal of choice
 myBrowser = "chrome"  # My browser of choice
 volumeMixer = "pavucontrol"  # volume mixer
+primary_screen = 0
+top_screen = 2
+right_screen = 1
 
 
-# Allows you to input a name when adding treetab section.
-@lazy.layout.function
-def add_treetab_section(layout):
-    prompt = qtile.widgets_map["prompt"]
-    prompt.start_input("Section name: ", layout.cmd_add_section)
+group_configs = [
+    {
+        "name": "1",
+        "match_group_primary": "2",
+        "match_group_secondary": "3",
+        "label": "1:1",
+        "layout": "stack",
+        "screen": primary_screen,
+    },
+    {
+        "name": "2",
+        "match_group_primary": "1",
+        "match_group_secondary": "3",
+        "label": "2:2",
+        "layout": "max",
+        "screen": top_screen,
+    },
+    {
+        "name": "3",
+        "match_group_primary": "1",
+        "match_group_secondary": "2",
+        "label": "3:3",
+        "layout": "max",
+        "screen": right_screen,
+    },
+    {
+        "name": "4",
+        "match_group_primary": "5",
+        "match_group_secondary": "6",
+        "label": "1:4",
+        "layout": "stack",
+        "screen": primary_screen,
+    },
+    {
+        "name": "5",
+        "match_group_primary": "4",
+        "match_group_secondary": "6",
+        "label": "2:5",
+        "layout": "max",
+        "screen": top_screen,
+    },
+    {
+        "name": "6",
+        "match_group_primary": "4",
+        "match_group_secondary": "5",
+        "label": "3:6",
+        "layout": "max",
+        "screen": right_screen,
+    },
+    {
+        "name": "7",
+        "match_group_primary": "8",
+        "match_group_secondary": "9",
+        "label": "1:7",
+        "layout": "stack",
+        "screen": primary_screen,
+    },
+    {
+        "name": "8",
+        "match_group_primary": "7",
+        "match_group_secondary": "9",
+        "label": "2:8",
+        "layout": "max",
+        "screen": top_screen,
+    },
+    {
+        "name": "9",
+        "match_group_primary": "7",
+        "match_group_secondary": "8",
+        "label": "3:9",
+        "layout": "max",
+        "screen": right_screen,
+    },
+]
+
+groups = []
+
+for i, group in enumerate(group_configs):
+    groups.append(
+        Group(
+            name=group["name"],
+            layout=group["layout"].lower(),
+            label=group["label"],
+            screen_affinity=group["screen"],
+        )
+    )
+
+screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
+screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
+screen_three_groups = [group["name"] for group in group_configs if group["screen"] == 2]
 
 
-# A function for hide/show all the windows in a group
+###########################
+##    UTILITY FUNCTIONS  ##
+###########################
+
 @lazy.function
 def minimize_all(qtile):
     for win in qtile.current_group.windows:
@@ -74,90 +164,201 @@ def minimize_all(qtile):
 
 def go_to_group(name):
     def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.groups_map[name].toscreen()
-            return
-
         if name in screen_one_groups:
             # focus screen and go to workgroup
-            qtile.focus_screen(0)
+            qtile.focus_screen(primary_screen)
             qtile.groups_map[name].toscreen()
 
-            # grab name of matching group to second screen
-            qtile.focus_screen(1)
+            # grab name of matching group to top screen
+            qtile.focus_screen(top_screen)
             target_group = next(
                 group for group in group_configs if group["name"] == name
             )
-            qtile.groups_map[target_group["match_group"]].toscreen()
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            # grab name of matching group to right screen
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
 
             # focus back on original screen
-            qtile.focus_screen(0)
+            qtile.focus_screen(primary_screen)
         elif name in screen_two_groups:
             # focus screen and go to workgroup
-            qtile.focus_screen(1)
+            qtile.focus_screen(top_screen)
             qtile.groups_map[name].toscreen()
 
-            # grab name of matching group to second screen
-            qtile.focus_screen(0)
+            # grab name of matching group to bottom (primary) screen
+            qtile.focus_screen(primary_screen)
             target_group = next(
                 group for group in group_configs if group["name"] == name
             )
-            qtile.groups_map[target_group["match_group"]].toscreen()
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            # grab name of matching group to right screen
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
 
             # focus back on original screen
-            qtile.focus_screen(1)
+            qtile.focus_screen(top_screen)
 
+        elif name in screen_three_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(right_screen)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to bottom (primary) screen
+            qtile.focus_screen(primary_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            # grab name of matching group to right screen
+            qtile.focus_screen(top_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(right_screen)
     return _inner
 
 
 def go_to_group_and_move_window(name):
     def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.current_window.togroup(name, switch_group=False)
-            return
-
         if name in screen_one_groups:
             qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(0)
+            qtile.focus_screen(primary_screen)
             qtile.groups_map[name].toscreen()
 
-            qtile.focus_screen(1)
+            qtile.focus_screen(top_screen)
             target_group = next(
                 group for group in group_configs if group["name"] == name
             )
-            qtile.groups_map[target_group["match_group"]].toscreen()
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
 
-            qtile.focus_screen(0)
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            qtile.focus_screen(primary_screen)
         elif name in screen_two_groups:
             qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(1)
+            qtile.focus_screen(top_screen)
             qtile.groups_map[name].toscreen()
 
-            qtile.focus_screen(0)
+            qtile.focus_screen(primary_screen)
             target_group = next(
                 group for group in group_configs if group["name"] == name
             )
-            qtile.groups_map[target_group["match_group"]].toscreen()
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
 
-            qtile.focus_screen(1)
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
 
+            qtile.focus_screen(top_screen)
+
+        elif name in screen_three_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(right_screen)
+            qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(primary_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            qtile.focus_screen(top_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            qtile.focus_screen(right_screen)
     return _inner
 
 
 def go_to_last_group(qtile):
-    qtile.current_screen.set_group(qtile.current_screen.previous_group)
+    # previous group
+    previous_group = qtile.current_screen.previous_group.name
 
-    screen = qtile.screens.index(qtile.current_screen)
+    if previous_group in screen_one_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(primary_screen)
+        qtile.groups_map[previous_group].toscreen()
 
-    if screen == 0:
-        qtile.focus_screen(1)
-        qtile.current_screen.set_group(qtile.current_screen.previous_group)
-        qtile.focus_screen(0)
-    elif screen == 1:
-        qtile.focus_screen(0)
-        qtile.current_screen.set_group(qtile.current_screen.previous_group)
-        qtile.focus_screen(1)
+        # grab previous_group of matching group to top screen
+        qtile.focus_screen(top_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
 
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(right_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(primary_screen)
+    elif previous_group in screen_two_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(top_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to bottom (primary) screen
+        qtile.focus_screen(primary_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(right_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(top_screen)
+
+    elif previous_group in screen_three_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(right_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to bottom (primary) screen
+        qtile.focus_screen(primary_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(top_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(right_screen)
 
 # A list of available commands that can be bound to keys can be found
 # at https://docs.qtile.org/en/latest/manual/config/lazy.html
@@ -292,8 +493,24 @@ keys = [
         desc="Toggle hide/show all windows on current group",
     ),
     # Switch focus of monitors
-    Key([mod], "period", lazy.next_screen(), desc="Move focus to next monitor"),
-    Key([mod], "comma", lazy.prev_screen(), desc="Move focus to prev monitor"),
+        Key(
+        [mod],
+        "period",
+        lazy.to_screen(top_screen),
+        desc="Move focus to next monitor",
+    ),
+    Key(
+        [mod],
+        "comma",
+        lazy.to_screen(primary_screen),
+        desc="Move focus to prev monitor",
+    ),
+    Key(
+        [mod],
+        "slash",
+        lazy.to_screen(right_screen),
+        desc="Move focus to right monitor",
+    ),
     # Scratchpads
     Key(
         [mod],
@@ -303,62 +520,62 @@ keys = [
     ),
 ]
 
-groups = []
-group_configs = [
-    {"name": "1", "match_group": "2", "label": "1:1", "layout": "stack", "screen": 0},
-    {
-        "name": "2",
-        "match_group": "1",
-        "label": "2:2",
-        "layout": "monadwide",
-        "screen": 1,
-    },
-    {"name": "3", "match_group": "4", "label": "1:3", "layout": "stack", "screen": 0},
-    {
-        "name": "4",
-        "match_group": "3",
-        "label": "2:4",
-        "layout": "monadwide",
-        "screen": 1,
-    },
-    {"name": "5", "match_group": "6", "label": "1:5", "layout": "stack", "screen": 0},
-    {
-        "name": "6",
-        "match_group": "5",
-        "label": "2:6",
-        "layout": "monadwide",
-        "screen": 1,
-    },
-    {"name": "7", "match_group": "8", "label": "1:7", "layout": "stack", "screen": 0},
-    {
-        "name": "8",
-        "match_group": "7",
-        "label": "2:8",
-        "layout": "monadwide",
-        "screen": 1,
-    },
-    {"name": "9", "match_group": "0", "label": "1:9", "layout": "stack", "screen": 0},
-    {
-        "name": "0",
-        "match_group": "9",
-        "label": "2:0",
-        "layout": "monadwide",
-        "screen": 1,
-    },
-]
-
-screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
-screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
-
-for i, group in enumerate(group_configs):
-    groups.append(
-        Group(
-            name=group["name"],
-            layout=group["layout"].lower(),
-            label=group["label"],
-            screen_affinity=group["screen"],
-        )
-    )
+# groups = []
+# group_configs = [
+#     {"name": "1", "match_group": "2", "label": "1:1", "layout": "stack", "screen": 0},
+#     {
+#         "name": "2",
+#         "match_group": "1",
+#         "label": "2:2",
+#         "layout": "monadwide",
+#         "screen": 1,
+#     },
+#     {"name": "3", "match_group": "4", "label": "1:3", "layout": "stack", "screen": 0},
+#     {
+#         "name": "4",
+#         "match_group": "3",
+#         "label": "2:4",
+#         "layout": "monadwide",
+#         "screen": 1,
+#     },
+#     {"name": "5", "match_group": "6", "label": "1:5", "layout": "stack", "screen": 0},
+#     {
+#         "name": "6",
+#         "match_group": "5",
+#         "label": "2:6",
+#         "layout": "monadwide",
+#         "screen": 1,
+#     },
+#     {"name": "7", "match_group": "8", "label": "1:7", "layout": "stack", "screen": 0},
+#     {
+#         "name": "8",
+#         "match_group": "7",
+#         "label": "2:8",
+#         "layout": "monadwide",
+#         "screen": 1,
+#     },
+#     {"name": "9", "match_group": "0", "label": "1:9", "layout": "stack", "screen": 0},
+#     {
+#         "name": "0",
+#         "match_group": "9",
+#         "label": "2:0",
+#         "layout": "monadwide",
+#         "screen": 1,
+#     },
+# ]
+#
+# screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
+# screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
+#
+# for i, group in enumerate(group_configs):
+#     groups.append(
+#         Group(
+#             name=group["name"],
+#             layout=group["layout"].lower(),
+#             label=group["label"],
+#             screen_affinity=group["screen"],
+#         )
+#     )
 
 
 for i in groups:
@@ -427,7 +644,6 @@ layout_theme = {
 
 layouts = [
     # layout.Bsp(**layout_theme),
-    WideCenterStack(**layout_theme),
     layout.Stack(**layout_theme, num_stacks=2),
     layout.RatioTile(**layout_theme),
     layout.Zoomy(**layout_theme, property_big="1.0", columnwidth=850),
@@ -498,7 +714,7 @@ def init_widgets_list():
             this_screen_border=colors[4],
             other_current_screen_border=colors[7],
             other_screen_border=colors[4],
-            visible_groups=["1", "3", "5", "7", "9"],
+            visible_groups=["1", "4","7"],
         ),
         widget.TextBox(
             text="|", font="Ubuntu Mono", foreground=colors[1], padding=2, fontsize=14
@@ -715,6 +931,37 @@ def init_widgets_screen1():
     widgets_screen1 = init_widgets_list()
     return widgets_screen1
 
+def init_widgets_screen3():
+    # top screen
+    exclude_indices = [
+        # 30, # spacer
+        31,
+    ]
+
+    filtered_widget_screen3 = [
+        i for j, i in enumerate(init_widgets_list()) if j not in exclude_indices
+    ]
+    groupbox_screen3 = widget.GroupBox(
+        fontsize=11,
+        margin_y=3,
+        margin_x=4,
+        padding_y=2,
+        padding_x=3,
+        borderwidth=3,
+        active=colors[8],
+        inactive=colors[1],
+        rounded=False,
+        highlight_color=colors[2],
+        highlight_method="line",
+        this_current_screen_border=colors[7],
+        this_screen_border=colors[4],
+        other_current_screen_border=colors[7],
+        other_screen_border=colors[4],
+        visible_groups=["2", "5", "8"],
+    )
+    filtered_widget_screen3[2] = groupbox_screen3
+    return filtered_widget_screen3
+
 
 # All other monitors' bars will display only workspace info
 def init_widgets_screen2():
@@ -765,7 +1012,7 @@ def init_widgets_screen2():
         this_screen_border=colors[4],
         other_current_screen_border=colors[7],
         other_screen_border=colors[4],
-        visible_groups=["2", "4", "6", "8", "0"],
+        visible_groups=["3", "6", "9"],
     )
     filtered_widget_screen2[1] = groupbox_screen2
     return filtered_widget_screen2
@@ -779,6 +1026,7 @@ def init_screens():
     return [
         Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26)),
         Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=26)),
+        Screen(top=bar.Bar(widgets=init_widgets_screen3(), size=26)),
     ]
 
 
@@ -787,6 +1035,7 @@ if __name__ in ["config", "__main__"]:
     widgets_list = init_widgets_list()
     widgets_screen1 = init_widgets_screen1()
     widgets_screen2 = init_widgets_screen2()
+    widgets_screen3 = init_widgets_screen3()
 
 # Drag floating layouts.
 mouse = [
@@ -859,6 +1108,7 @@ def autostart():
             "/dev/null",
             "&",
         ],
+        ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
         ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
         ["feh", "--bg-max", "/home/kevin/Pictures/Wallpapers/wallpaper.jpg"],
         ["/home/kevin/.local/bin/init_screensaver"],
