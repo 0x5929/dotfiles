@@ -224,7 +224,7 @@ def go_to_last_group(qtile):
 ######################
 
 keys = [
-    # program bidnings
+    # program bindings
 
     Key(
         [mod],
@@ -311,6 +311,11 @@ keys = [
     ),
 
     # widnow management
+    Key(
+        [mod, "control"], "b",
+        lazy.spawn('sh -c "/usr/sbin/eww daemon >/dev/null 2>&1 || true; /usr/sbin/eww -c /home/kevin/.config/eww/bar open --toggle bar"'),
+        desc="Toggle Eww bar on primary monitor",
+    ),
     Key(
         [mod],
         "s",

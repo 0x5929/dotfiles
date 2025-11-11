@@ -54,3 +54,4 @@ if status is-interactive
 
     cat ~/.cache/wal/sequences
 end
+alias fixpad="sudo /usr/local/sbin/fix-syna32e2.sh"
