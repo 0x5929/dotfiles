@@ -47,7 +47,7 @@ from libqtile.lazy import lazy
 mod = "mod4"
 alt = "mod1"
 myTerm = "alacritty"
-myBrowser = "firefox" 
+myBrowser = "chrome" 
 volumeMixer = "pavucontrol"
 textEditor = "featherpad"
 calculator = "gnome-calculator"
@@ -114,7 +114,7 @@ group_configs = [
         "match_group_primary": "2",
         "match_group_secondary": "3",
         "label": "1:1",
-        "layout": "max",
+        "layout": "stack",
         "screen": primary_screen,
     },
     {
@@ -146,7 +146,7 @@ group_configs = [
         "match_group_primary": "4",
         "match_group_secondary": "6",
         "label": "1:5",
-        "layout": "max",
+        "layout": "stack",
         "screen": primary_screen,
     },
     {
@@ -162,7 +162,7 @@ group_configs = [
         "match_group_primary": "8",
         "match_group_secondary": "9",
         "label": "1:7",
-        "layout": "max",
+        "layout": "stack",
         "screen": primary_screen,
     },
     {
@@ -195,9 +195,9 @@ for i, group in enumerate(group_configs):
         )
     )
 
-screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
-screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
-screen_three_groups = [group["name"] for group in group_configs if group["screen"] == 2]
+screen_one_groups = [group["name"] for group in group_configs if group["screen"] == primary_screen]
+screen_two_groups = [group["name"] for group in group_configs if group["screen"] == top_screen]
+screen_three_groups = [group["name"] for group in group_configs if group["screen"] == right_screen]
 
 
 ###########################
@@ -453,12 +453,12 @@ keys = [
         lazy.spawn(home + "/.config/qtile/scripts/search-hub/hub.sh"),
         desc="launch rofi-hub",
     ),
-    Key(
-        [mod, "shift"],
-        "d",
-        lazy.spawn("/home/kevin/.config/eww/dashboard/launch_dashboard"),
-        desc="launch eww-dashboard",
-    ),
+    # Key(
+    #     [mod, "shift"],
+    #     "d",
+    #     lazy.spawn("/home/kevin/.config/eww/dashboard/launch_dashboard"),
+    #     desc="launch eww-dashboard",
+    # ),
     Key(
         [mod],
         "b",
@@ -692,7 +692,7 @@ groups.append(
         [
             DropDown("pad", textEditor, x = 0, y= 0.1, height=0.9, width=0.3),
             DropDown("calc", calculator, x = 0.8, y= 0.2, height=0.4, width=0.2),
-            DropDown("term", myTerm, x=0, y= 0.5, height=0.5, width=1),
+            DropDown("term", myTerm, x=0.15, y= 0.5, height=0.5, width=0.7),
         ],
     ),
 )

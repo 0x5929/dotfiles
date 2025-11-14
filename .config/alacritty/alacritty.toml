@@ -72,7 +72,7 @@ LC_CTYPE = "en_US.UTF-8"
 TERM = "alacritty"
 
 [font]
-size = 13.0
+size = 22.0
 
 [font.normal]
 family = "UbuntuMono Nerd Font"
