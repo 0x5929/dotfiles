@@ -50,7 +50,7 @@ if status is-interactive
         bind '$' bind_dollar
     end
     function fish_greeting
-      pokemon-colorscripts -r -s
+      pokemon-colorscripts -r -s -b
     end
 
     cat ~/.cache/wal/sequences
