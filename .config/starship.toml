@@ -16,12 +16,18 @@ style = "underline yellow"
 [gcloud]
 disabled = true
 
+[kubernetes]
+disabled = false
+
 [git_status]
-ahead = ">"
-behind = "<"
-diverged = "<>"
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
 renamed = "r"
-deleted = "x"
+modified = '📝'
+staged = '[++\($count\)](green)'
+deleted = "✘"
+up_to_date = ""
 
 [aws]
 symbol = "  "
@@ -48,7 +54,7 @@ symbol = "cmake "
 symbol = "daml "
 
 [dart]
-symbol = "dart "
+symbol = "🎯 "
 
 [deno]
 symbol = "deno "
@@ -57,10 +63,10 @@ symbol = "deno "
 symbol = ".NET "
 
 [directory]
-read_only = " ro"
+read_only = " 🔒"
 
 [docker_context]
-symbol = "docker "
+symbol = "🐳 "
 
 [elixir]
 symbol = "exs "
@@ -69,10 +75,10 @@ symbol = "exs "
 symbol = "elm "
 
 [git_branch]
-symbol = "git "
+symbol = " "
 
 [golang]
-symbol = "go "
+symbol = "🐹 "
 
 [guix_shell]
 symbol = "guix "
@@ -81,25 +87,31 @@ symbol = "guix "
 symbol = "hg "
 
 [java]
-symbol = "java "
+symbol = "☕ "
 
 [julia]
 symbol = "jl "
+
+[helm]
+symbol = "⎈ "
+
+[hostname]
+ssh_symbol = "🌐"
 
 [kotlin]
 symbol = "kt "
 
 [lua]
-symbol = "lua "
+symbol = "🌙 "
 
 [nodejs]
-symbol = "nodejs "
+symbol = "  "
 
 [memory_usage]
-symbol = "memory "
+symbol = "🐏 "
 
 [meson]
-symbol = "meson "
+symbol = "⬢ "
 
 [nim]
 symbol = "nim "
@@ -152,13 +164,13 @@ Unknown = "unk "
 Windows = "win "
 
 [package]
-symbol = "pkg "
+symbol = "📦 "
 
 [perl]
-symbol = "pl "
+symbol = "🐪 "
 
 [php]
-symbol = "php "
+symbol = "🐘 "
 
 [pulumi]
 symbol = "pulumi "
@@ -167,16 +179,16 @@ symbol = "pulumi "
 symbol = "purs "
 
 [python]
-symbol = "py "
+symbol = "🐍 "
 
 [raku]
 symbol = "raku "
 
 [ruby]
-symbol = "rb "
+symbol = "💎 "
 
 [rust]
-symbol = "rs "
+symbol = "🦀 "
 
 [scala]
 symbol = "scala "
@@ -185,10 +197,10 @@ symbol = "scala "
 symbol = "spack "
 
 [sudo]
-symbol = "sudo "
+symbol = "🧙 "
 
 [swift]
-symbol = "swift "
+symbol = "🐦 "
 
 [terraform]
 symbol = "terraform "
