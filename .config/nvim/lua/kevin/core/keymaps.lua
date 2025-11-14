@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
 
-local keymap = vim.keymap -- for conciseness
+local keymap = vim.keymap
 
 ---------------------
 -- General Keymaps -------------------
@@ -24,4 +24,3 @@ keymap.set("n", "<A-w>", "<cmd>tabclose<CR>", { desc = "Close current tab" }) --
 keymap.set("n", "<A-n>", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
 keymap.set("n", "<A-p>", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
 keymap.set("n", "<A-o>", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
-

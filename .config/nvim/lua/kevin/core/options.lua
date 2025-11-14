@@ -1,9 +1,10 @@
 -- for conciseness
 local opt = vim.opt
 local cmd = vim.cmd
+local api = vim.api
 
 -- command color
-cmd('hi MsgArea guifg=#44fcfc')
+cmd("hi MsgArea guifg=#44fcfc")
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
@@ -46,4 +47,3 @@ opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
 
 opt.redrawtime = 10000
-

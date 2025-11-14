@@ -1,10 +1,12 @@
+continuation_prompt = '▶▶ '
+
 [character]
 success_symbol = "[>](bold green)"
 error_symbol = "[x](bold red)"
 vimcmd_symbol = "[<](bold green)"
 
 [git_commit]
-tag_symbol = " tag "
+tag_symbol = " 🏷 "
 
 [time]
 format = " [$time]($style) "
@@ -20,9 +22,9 @@ disabled = true
 disabled = false
 
 [git_status]
-ahead = "⇡"
-behind = "⇣"
-diverged = "⇕"
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
 renamed = "r"
 modified = '📝'
 staged = '[++\($count\)](green)'
@@ -32,8 +34,8 @@ up_to_date = ""
 [aws]
 symbol = "  "
 
-# [bun]
-# symbol = "bun "
+[bun]
+symbol = "bun "
 
 [c]
 symbol = "C "
