@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Qtile - HOME
+Comment=Qtile Window Manager (H Home Monitor Setup)
+Exec=/home/kevin/.config/qtile/desktop-env/home/h.sh
+Type=Application

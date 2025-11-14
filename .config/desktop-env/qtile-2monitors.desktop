@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Qtile - TH-BH
+Comment=Qtile Window Manager (TH-BH Monitor Setup)
+Exec=/home/kevin/.config/qtile/desktop-env/th-bh/th-bh.sh
+Type=Application
