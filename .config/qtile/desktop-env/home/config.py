@@ -108,70 +108,70 @@ group_configs = [
         "name": "1",
         "match_group": "2",
         "label": "1:1",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0
     },
     {
         "name": "2",
         "match_group": "1",
         "label": "2:2",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0,
     },
     {
         "name": "3",
         "match_group": "4",
         "label": "1:3",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0
     },
     {
         "name": "4",
         "match_group": "3",
         "label": "2:4",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0,
     },
     {
         "name": "5",
         "match_group": "6",
         "label": "1:5",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0
     },
     {
         "name": "6",
         "match_group": "5",
         "label": "2:6",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0,
     },
     {
         "name": "7",
         "match_group": "8",
         "label": "1:7",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0
     },
     {
         "name": "8",
         "match_group": "7",
         "label": "2:8",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0,
     },
     {
         "name": "9",
         "match_group": "0",
         "label": "1:9",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0
     },
     {
         "name": "0",
         "match_group": "9",
         "label": "2:0",
-        "layout": "max",
+        "layout": "stack",
         "screen": 0,
     },
 ]
@@ -309,6 +309,7 @@ keys = [
         lazy.group["scratchpad"].dropdown_toggle("calc"),
         desc="dropdown scratchpad calculator",
     ),
+
     # widnow management
     Key(
         [mod, "control"], "b",

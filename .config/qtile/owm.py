@@ -121,7 +121,7 @@ try:
     BaseClass = base.ThreadPoolText
     NewWidgetBase = True
 except AttributeError:
-    BaseClass = base.ThreadedPollText # pylint: disable=no-member
+    BaseClass = base.ThreadPoolText
     NewWidgetBase = False
 
 class OpenWeatherMap(BaseClass, base.PaddingMixin, base.MarginMixin):

@@ -98,6 +98,11 @@ wl_input_rules = None
 wmname = "LG3D"
 auto_fullscreen = False
 
+# screens
+primary_screen = 0
+top_screen = 1
+right_screen = 2
+
 
 ########################################
 ##     GROUPS/WORKSPACE DEFINITION    ##
@@ -106,73 +111,75 @@ auto_fullscreen = False
 group_configs = [
     {
         "name": "1",
-        "match_group": "2",
+        "match_group_primary": "2",
+        "match_group_secondary": "3",
         "label": "1:1",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "2",
-        "match_group": "1",
+        "match_group_primary": "1",
+        "match_group_secondary": "3",
         "label": "2:2",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "3",
-        "match_group": "4",
+        "match_group_primary": "1",
+        "match_group_secondary": "2",
         "label": "1:3",
         "layout": "max",
-        "screen": 0
+        "screen": right_screen,
     },
     {
         "name": "4",
-        "match_group": "3",
+        "match_group_primary": "5",
+        "match_group_secondary": "6",
         "label": "2:4",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "5",
-        "match_group": "6",
+        "match_group_primary": "4",
+        "match_group_secondary": "6",
         "label": "1:5",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "6",
-        "match_group": "5",
+        "match_group_primary": "4",
+        "match_group_secondary": "5",
         "label": "2:6",
         "layout": "max",
-        "screen": 0,
+        "screen": right_screen,
     },
     {
         "name": "7",
-        "match_group": "8",
+        "match_group_primary": "8",
+        "match_group_secondary": "9",
         "label": "1:7",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "8",
-        "match_group": "7",
+        "match_group_primary": "7",
+        "match_group_secondary": "9",
         "label": "2:8",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "9",
-        "match_group": "0",
+        "match_group_primary": "7",
+        "match_group_secondary": "8",
         "label": "1:9",
         "layout": "max",
-        "screen": 0
-    },
-    {
-        "name": "0",
-        "match_group": "9",
-        "label": "2:0",
-        "layout": "max",
-        "screen": 0,
+        "screen": right_screen,
     },
 ]
 
@@ -188,6 +195,10 @@ for i, group in enumerate(group_configs):
         )
     )
 
+screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
+screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
+screen_three_groups = [group["name"] for group in group_configs if group["screen"] == 2]
+
 
 ###########################
 ##    UTILITY FUNCTIONS  ##
@@ -202,21 +213,201 @@ def minimize_all(qtile):
 
 def go_to_group(name):
     def _inner(qtile):
-        qtile.groups_map[name].toscreen()
-        return
+        if name in screen_one_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(primary_screen)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to top screen
+            qtile.focus_screen(top_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            # grab name of matching group to right screen
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(primary_screen)
+        elif name in screen_two_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(top_screen)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to bottom (primary) screen
+            qtile.focus_screen(primary_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            # grab name of matching group to right screen
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(top_screen)
+
+        elif name in screen_three_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(right_screen)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to bottom (primary) screen
+            qtile.focus_screen(primary_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            # grab name of matching group to right screen
+            qtile.focus_screen(top_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(right_screen)
     return _inner
 
 
 def go_to_group_and_move_window(name):
     def _inner(qtile):
-        qtile.current_window.togroup(name, switch_group=False)
-        return
+        if name in screen_one_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(primary_screen)
+            qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(top_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            qtile.focus_screen(primary_screen)
+        elif name in screen_two_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(top_screen)
+            qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(primary_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            qtile.focus_screen(right_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            qtile.focus_screen(top_screen)
+
+        elif name in screen_three_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(right_screen)
+            qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(primary_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+            qtile.focus_screen(top_screen)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+            qtile.focus_screen(right_screen)
     return _inner
 
 
 def go_to_last_group(qtile):
-    screen = qtile.screens.index(qtile.current_screen)
-    qtile.current_screen.set_group(qtile.current_screen.previous_group)
+    # previous group
+    previous_group = qtile.current_screen.previous_group.name
+
+    if previous_group in screen_one_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(primary_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to top screen
+        qtile.focus_screen(top_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(right_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(primary_screen)
+    elif previous_group in screen_two_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(top_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to bottom (primary) screen
+        qtile.focus_screen(primary_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(right_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(top_screen)
+
+    elif previous_group in screen_three_groups:
+        # focus screen and go to workgroup
+        qtile.focus_screen(right_screen)
+        qtile.groups_map[previous_group].toscreen()
+
+        # grab previous_group of matching group to bottom (primary) screen
+        qtile.focus_screen(primary_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_primary"]].toscreen()
+
+        # grab previous_group of matching group to right screen
+        qtile.focus_screen(top_screen)
+        target_group = next(
+            group for group in group_configs if group["name"] == previous_group
+        )
+        qtile.groups_map[target_group["match_group_secondary"]].toscreen()
+
+        # focus back on original screen
+        qtile.focus_screen(right_screen)
 
 
 ######################
@@ -224,7 +415,7 @@ def go_to_last_group(qtile):
 ######################
 
 keys = [
-    # program bindings
+    # program bidnings
 
     Key(
         [mod],
@@ -309,12 +500,8 @@ keys = [
         lazy.group["scratchpad"].dropdown_toggle("calc"),
         desc="dropdown scratchpad calculator",
     ),
+
     # widnow management
-    Key(
-        [mod, "control"], "b",
-        lazy.spawn('sh -c "/usr/sbin/eww daemon >/dev/null 2>&1 || true; /usr/sbin/eww -c /home/kevin/.config/eww/bar open --toggle bar"'),
-        desc="Toggle Eww bar on primary monitor",
-    ),
     Key(
         [mod],
         "s",
@@ -409,14 +596,20 @@ keys = [
     Key(
         [mod],
         "period",
-        lazy.next_screen(),
+        lazy.to_screen(top_screen),
         desc="Move focus to next monitor",
     ),
     Key(
         [mod],
         "comma",
-        lazy.prev_screen(),
+        lazy.to_screen(primary_screen),
         desc="Move focus to prev monitor",
+    ),
+    Key(
+        [mod],
+        "slash",
+        lazy.to_screen(right_screen),
+        desc="Move focus to right monitor",
     ),
 
     # system bindings
@@ -527,6 +720,8 @@ layouts = [
 def init_screens():
     return [
         Screen(),
+        Screen(),
+        Screen(),
     ]
 
 
@@ -591,7 +786,7 @@ cursor_warp = False
 
 @hook.subscribe.startup_once
 def autostart():
-    autostartscript = "~/.config/qtile/scripts/autostart.sh"
+    autostartscript = "~/.config/qtile/desktop-env/th-bh-rv/autostart.sh"
     home = os.path.expanduser(autostartscript)
     subprocess.Popen([
         home

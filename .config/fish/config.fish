@@ -5,39 +5,54 @@ if status is-interactive
   
     # aliases
     alias vim=nvim
+    alias open=xdg-open
+    alias pycharm=pycharm-professional
+    alias xclip="xclip -selection clipboard"
+    alias chrome="google-chrome-stable"
     alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
+
 
     # initialize environments
     #status --is-interactive; and ~/.rbenv/bin/rbenv init - fish | source
 
-    # export environment variables
-    set -g -x POSTGRES_DATABASE_USERNAME kevin
-    set -g -x POSTGRES_DATABASE_PASSWORD jordan45
     set -g -x GMAIL_APP_USER 'first.object.oriented@gmail.com'
     set -g -x GMAIL_APP_PW xnnyalrrkjazhmbl
 
-    set -gx PATH /usr/pgsql-12/bin $PATH
-    set -gx PATH /opt/nvim-linux64/bin $PATH
-    set -gx PATH /usr/local/go/bin $PATH
-    set -gx LD_LIBRARY_PATH /lib64 $LD_LIBRARY_PATH
+    #set -gx PATH /usr/pgsql-12/bin $PATH
+    #set -gx PATH /opt/nvim-linux64/bin $PATH
     # vim binding
     # fish_vi_key_bindings
+    starship init fish | source
     fish_default_key_bindings
 
-    # init pyenv
-    # pyenv init - | source
-end
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f /home/kevin/miniconda3/bin/conda
-    eval /home/kevin/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-else
-    if test -f "/home/kevin/miniconda3/etc/fish/conf.d/conda.fish"
-        . "/home/kevin/miniconda3/etc/fish/conf.d/conda.fish"
-    else
-        set -x PATH "/home/kevin/miniconda3/bin" $PATH
+    function bind_bang
+        switch (commandline -t)[-1]
+            case "!"
+                commandline -t -- $history[1]
+                commandline -f repaint
+            case "*"
+                commandline -i !
+        end
     end
-end
-# <<< conda initialize <<<
 
+    function bind_dollar
+        switch (commandline -t)[-1]
+            case "!"
+                commandline -f backward-delete-char history-token-search-backward
+            case "*"
+                commandline -i '$'
+        end
+    end
+
+    function fish_user_key_bindings
+        bind ! bind_bang
+        bind '$' bind_dollar
+    end
+    function fish_greeting
+      pokemon-colorscripts -r -s
+    end
+
+    cat ~/.cache/wal/sequences
+end
+alias fixpad="sudo /usr/local/sbin/fix-syna32e2.sh"

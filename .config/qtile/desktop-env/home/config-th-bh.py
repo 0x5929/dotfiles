@@ -98,6 +98,10 @@ wl_input_rules = None
 wmname = "LG3D"
 auto_fullscreen = False
 
+# screens
+primary_screen = 0
+top_screen = 1
+
 
 ########################################
 ##     GROUPS/WORKSPACE DEFINITION    ##
@@ -109,70 +113,70 @@ group_configs = [
         "match_group": "2",
         "label": "1:1",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "2",
         "match_group": "1",
         "label": "2:2",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "3",
         "match_group": "4",
         "label": "1:3",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "4",
         "match_group": "3",
         "label": "2:4",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "5",
         "match_group": "6",
         "label": "1:5",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "6",
         "match_group": "5",
         "label": "2:6",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "7",
         "match_group": "8",
         "label": "1:7",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "8",
         "match_group": "7",
         "label": "2:8",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
     {
         "name": "9",
         "match_group": "0",
         "label": "1:9",
         "layout": "max",
-        "screen": 0
+        "screen": primary_screen,
     },
     {
         "name": "0",
         "match_group": "9",
         "label": "2:0",
         "layout": "max",
-        "screen": 0,
+        "screen": top_screen,
     },
 ]
 
@@ -188,6 +192,9 @@ for i, group in enumerate(group_configs):
         )
     )
 
+screen_one_groups = [group["name"] for group in group_configs if group["screen"] == 0]
+screen_two_groups = [group["name"] for group in group_configs if group["screen"] == 1]
+
 
 ###########################
 ##    UTILITY FUNCTIONS  ##
@@ -202,15 +209,64 @@ def minimize_all(qtile):
 
 def go_to_group(name):
     def _inner(qtile):
-        qtile.groups_map[name].toscreen()
-        return
+        if name in screen_one_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to second screen
+            qtile.focus_screen(1)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(0)
+        elif name in screen_two_groups:
+            # focus screen and go to workgroup
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+            # grab name of matching group to second screen
+            qtile.focus_screen(0)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            # focus back on original screen
+            qtile.focus_screen(1)
+
     return _inner
 
 
 def go_to_group_and_move_window(name):
     def _inner(qtile):
-        qtile.current_window.togroup(name, switch_group=False)
-        return
+        if name in screen_one_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(1)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            qtile.focus_screen(0)
+        elif name in screen_two_groups:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+            qtile.focus_screen(0)
+            target_group = next(
+                group for group in group_configs if group["name"] == name
+            )
+            qtile.groups_map[target_group["match_group"]].toscreen()
+
+            qtile.focus_screen(1)
     return _inner
 
 
@@ -224,7 +280,7 @@ def go_to_last_group(qtile):
 ######################
 
 keys = [
-    # program bindings
+    # program bidnings
 
     Key(
         [mod],
@@ -309,12 +365,8 @@ keys = [
         lazy.group["scratchpad"].dropdown_toggle("calc"),
         desc="dropdown scratchpad calculator",
     ),
+
     # widnow management
-    Key(
-        [mod, "control"], "b",
-        lazy.spawn('sh -c "/usr/sbin/eww daemon >/dev/null 2>&1 || true; /usr/sbin/eww -c /home/kevin/.config/eww/bar open --toggle bar"'),
-        desc="Toggle Eww bar on primary monitor",
-    ),
     Key(
         [mod],
         "s",
@@ -527,6 +579,7 @@ layouts = [
 def init_screens():
     return [
         Screen(),
+        Screen(),
     ]
 
 
@@ -591,7 +644,7 @@ cursor_warp = False
 
 @hook.subscribe.startup_once
 def autostart():
-    autostartscript = "~/.config/qtile/scripts/autostart.sh"
+    autostartscript = "~/.config/qtile/desktop-env/home/autostart.sh"
     home = os.path.expanduser(autostartscript)
     subprocess.Popen([
         home
