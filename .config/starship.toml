@@ -1,15 +1,25 @@
+right_format = """
+$time
+"""
+
 continuation_prompt = '▶▶ '
 
 [character]
-success_symbol = "[>](bold green)"
-error_symbol = "[x](bold red)"
-vimcmd_symbol = "[<](bold green)"
+success_symbol = "[ ](bold green)"
+error_symbol = "[ ](bold red)"
+vimcmd_symbol = "[ ](bold green)"
+vimcmd_replace_one_symbol = "[ ](bold purple)"
+vimcmd_replace_symbol = "[ ](bold purple)"
+vimcmd_visual_symbol = "[ ](bold yellow)"
 
 [git_commit]
 tag_symbol = " 🏷 "
 
+[git_metrics]
+disabled = false
+
 [time]
-format = "[ $time]($style) "
+format = "[󱑆 $time]($style) "
 time_format = "[%T %b %d, %Y on %A]"
 disabled = false
 utc_time_offset = "-8"
@@ -20,6 +30,7 @@ disabled = true
 
 [kubernetes]
 disabled = false
+symbol = "󱃾 "
 
 [git_status]
 ahead = '⇡${count}'
@@ -35,16 +46,19 @@ up_to_date = ""
 symbol = "  "
 
 [bun]
-symbol = "bun "
+symbol = "🥟 "
 
 [c]
-symbol = "C "
+symbol = " "
+
+[cpp]
+symbol = " "
 
 [cobol]
 symbol = "cobol "
 
 [conda]
-symbol = "conda "
+symbol = "🅒 "
 
 [crystal]
 symbol = "cr "
@@ -53,16 +67,16 @@ symbol = "cr "
 symbol = "cmake "
 
 [daml]
-symbol = "daml "
+symbol = "'Λ "
 
 [dart]
 symbol = "🎯 "
 
 [deno]
-symbol = "deno "
+symbol = "🦕 "
 
 [dotnet]
-symbol = ".NET "
+symbol = " "
 
 [directory]
 read_only = " 🔒"
@@ -129,42 +143,58 @@ symbol = "ml "
 symbol = "opa "
 
 [os.symbols]
-Alpine = "alp "
-Amazon = "amz "
-Android = "andr "
-Arch = "rch "
-CentOS = "cent "
-Debian = "deb "
-DragonFly = "dfbsd "
-Emscripten = "emsc "
-EndeavourOS = "ndev "
-Fedora = "🎩  "
-FreeBSD = "fbsd "
-Garuda = "garu "
-Gentoo = "gent "
-HardenedBSD = "hbsd "
-Illumos = "lum "
-Linux = "lnx "
-Macos = "mac "
-Manjaro = "mjo "
-Mariner = "mrn "
-MidnightBSD = "mid "
-Mint = "mint "
-NetBSD = "nbsd "
-NixOS = "nix "
-OpenBSD = "obsd "
-openSUSE = "osuse "
-OracleLinux = "orac "
-Pop = "pop "
-Raspbian = "rasp "
-Redhat = "rhl "
-RedHatEnterprise = "rhel "
-Redox = "redox "
-Solus = "sol "
-SUSE = "suse "
-Ubuntu = "ubnt "
-Unknown = "unk "
-Windows = "win "
+AIX = "➿ "
+Alpaquita = "🔔 "
+AlmaLinux = "💠 "
+Alpine = "🏔️ "
+Amazon = "🙂 "
+Android = "🤖 "
+AOSC = "🐱 "
+Arch = "🎗️ "
+Artix = "🎗️ "
+Bluefin = "🐟 "
+CachyOS = "🎗️ "
+CentOS = "💠 "
+Debian = "🌀 "
+DragonFly = "🐉 "
+Emscripten = "🔗 "
+EndeavourOS = "🚀 "
+Fedora = "🎩 "
+FreeBSD = "😈 "
+Garuda = "🦅 "
+Gentoo = "🗜️ "
+HardenedBSD = "🛡️ "
+Illumos = "🐦 "
+Kali = "🐉 "
+Linux = "🐧 "
+Mabox = "📦 "
+Macos = "🍎 "
+Manjaro = "🥭 "
+Mariner = "🌊 "
+MidnightBSD = "🌘 "
+Mint = "🌿 "
+NetBSD = "🚩 "
+NixOS = "❄️ "
+Nobara = "🎩 "
+OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
+openSUSE = "🦎 "
+OracleLinux = "🦴 "
+Pop = "🍭 "
+Raspbian = "🍓 "
+Redhat = "🎩 "
+RedHatEnterprise = "🎩 "
+RockyLinux = "💠 "
+Redox = "🧪 "
+Solus = "⛵ "
+SUSE = "🦎 "
+Ubuntu = "🎯 "
+Ultramarine = "🔷 "
+Unknown = "❓ "
+Uos = "🐲 "
+Void = " "
+Windows = "🪟 "
 
 [package]
 symbol = "📦 "
@@ -182,13 +212,13 @@ symbol = "pulumi "
 symbol = "purs "
 
 [python]
-symbol = "🐍 "
+symbol = "󰌠 "
 
 [raku]
 symbol = "raku "
 
 [ruby]
-symbol = "💎 "
+symbol = " "
 
 [rust]
 symbol = "🦀 "
@@ -206,7 +236,10 @@ symbol = "🧙 "
 symbol = "🐦 "
 
 [terraform]
-symbol = "terraform "
+symbol = "💠 "
 
 [zig]
 symbol = "zig "
+
+[jobs]
+symbol = "✦ "
