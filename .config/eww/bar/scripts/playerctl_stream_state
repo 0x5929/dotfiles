@@ -1,19 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-print_state() {
-  local has_players="$1"  # true / false (unquoted in JSON)
-  local icon="$2"
-  local title="$3"
-  local status_icon="$4"
-
-  printf '{"has_players":%s,"icon":"%s","title":"%s","status_icon":"%s"}\n' \
-    "$has_players" "$icon" "$title" "$status_icon"
-}
-
 print_no_player() {
   # "no media" state
-  print_state false "󰓎" "" ""
+  printf '{"icon":"󰓎","title":"","status_icon":""}\n'
 }
 
 map_icon() {
@@ -53,7 +43,7 @@ while true; do
       full_title="$base"
     fi
 
-    # Escape quotes for JSON
+    # Escaping for JSON
     full_title_escaped="${full_title//\"/\\\"}"
 
     # Status icon
@@ -62,8 +52,8 @@ while true; do
       Paused|Stopped|*) status_icon="" ;;
     esac
 
-    # Has players = true here
-    print_state true "$icon" "$full_title_escaped" "$status_icon"
+    printf '{"icon":"%s","title":"%s","status_icon":"%s"}\n' \
+      "$icon" "$full_title_escaped" "$status_icon"
   done
 
   # If we fell out of the inner loop (player quit / error), try again

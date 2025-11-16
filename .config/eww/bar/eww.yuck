@@ -83,40 +83,60 @@
 ;; === Media player widget ===
 
 (defvar media_reveal false)
-(deflisten media_icon "~/.config/eww/bar/scripts/playerctl_stream")
-(defpoll   media_title       :interval "2s" "~/.config/eww/bar/scripts/playerctl_title")
-(defpoll   media_status_icon :interval "1s" "~/.config/eww/bar/scripts/playerctl_status_icon")
 
+;; Single JSON stream with all state
+(deflisten media_state
+  :initial "{\"has_players\":false,\"icon\":\"󰓎\",\"title\":\"\",\"status_icon\":\"\"}"
+  "bash $HOME/.config/eww/bar/scripts/playerctl_stream")
 
 (defwidget media_players_widget []
   (eventbox
     :onhover     "${eww} update media_reveal=true"
     :onhoverlost "${eww} update media_reveal=false"
+
     (box :class "module-2 media_module"
          :orientation "h"
          :space-evenly "false"
          :vexpand "false"
          :hexpand "false"
 
-      ;; Always-visible icon for "which player type"
-      (label :class "media_icon"
-             :text  media_icon)
+      ;; LEFT: main media icon (or “no media” icon)
+      (button
+        :class {media_state.has_players
+                 ? "media_icon"
+                 : "media_icon media_icon_none"}
+        :tooltip {media_state.has_players
+                   ? media_state.title
+                   : "No media players"}
+        :onclick "$HOME/.config/eww/bar/scripts/playerctl_toggle"
+        (label
+          :text {media_state.has_players
+                  ? media_state.icon
+                  : "󰓎"}))
 
-      ;; Hover-revealed: [ play/pause button ] [ title ]
+      ;; RIGHT: revealed on hover – status + title
       (revealer :transition "slideleft"
                 :reveal    media_reveal
                 :duration  "250ms"
-        (box :orientation "h" :spacing 6
+        (box :orientation "h"
+             :spacing 6
+             :vexpand "false"
+             :hexpand "false"
+
           (button :class "media_play_btn"
-                  :onclick "~/.config/eww/bar/scripts/playerctl_toggle"
-            (label :text media_status_icon))
+                  :onclick "$HOME/.config/eww/bar/scripts/playerctl_toggle"
+            (label :text {media_state.has_players
+                            ? media_state.status_icon
+                            : ""}))
 
           (label :class "media_title"
                  :limit-width 30
                  :show_truncated true
                  :wrap false
-                 :text media_title)))))
-)
+                 :text {media_state.has_players
+                          ? media_state.title
+                          : "no media players"}))))))
+
 
 ; ====================================================
 
@@ -958,3 +978,4 @@
           :stacking "fg"
           :windowtype "dock"
   (bar_2_9_ws))
+
