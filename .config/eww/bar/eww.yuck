@@ -59,26 +59,27 @@
 (defpoll calendar_year :interval "20h" "date '+%Y'")
 
 ;; def vars
-;; (defvar workspaces [])
+(defvar qtile_ws_state "[]")
+
 
 ;; widgets
+(defwidget qtile_workspaces_dots []
+  (box :class "workspaces"
+    ;; NOTE: the {} – this is important
+    (for ws in {qtile_ws_state}
+      (button
+        :class { ws.focused
+                 ? (ws.has_windows
+                    ? "ws-dot ws-current ws-occupied"
+                    : "ws-dot ws-current ws-empty")
+                 : (ws.has_windows
+                    ? "ws-dot ws-occupied"
+                    : "ws-dot ws-empty") }
+        :onclick "qtile cmd-obj -o group {ws.name} -f toscreen"
+        (label :text { ws.has_windows ? " " : " " }))))
+)
 
-;; (defwidget workspaces-widget []
-;;   (box :class "workspaces"
-;;     (for ws in {workspaces}
-;;       (button
-;;         :class {ws.focused
-;;                 ? (ws.has_windows
-;;                    ? "ws-dot ws-current ws-occupied"
-;;                    : "ws-dot ws-current ws-empty")
-;;                 : (ws.has_windows
-;;                    ? "ws-dot ws-occupied"
-;;                    : "ws-dot ws-empty")}
-;;         ;; Clicking a dot sends you to that workspace in Qtile
-;;         :onclick "qtile cmd-obj -o group {ws.name} -f toscreen"
-;;         (label
-;;           :text {ws.has_windows ? "  " : "  "})))))
-;;
+
 
 (defwidget workspaces []
   (literal :content workspace))
@@ -792,6 +793,13 @@
 		 :class "right_modules"
 (workspaces_9)))
 
+(defwidget qtile_right []
+  (box :orientation "h"
+       :space-evenly false
+       :halign "start"
+       :class "right_modules"
+    (qtile_workspaces_dots)
+    ))
 
 (defwidget center []
 	(box :orientation "h" 
@@ -826,7 +834,7 @@
 (defwidget bar_0_9_ws []
   (box :class "bar_class"
        :orientation "h"
-  (right_b2)
+  (qtile_right)
   (center)
   (left)
     ))
@@ -834,7 +842,7 @@
 (defwidget bar_1_9_ws []
   (box :class "bar_class"
        :orientation "h"
-  (right_b2)
+  (qtile_right)
   (center_b1)
   (left_b1)
     ))
@@ -842,7 +850,7 @@
 (defwidget bar_2_9_ws []
   (box :class "bar_class"
        :orientation "h"
-  (right_b2)
+  (qtile_right)
   (left_b2)
     ))
 

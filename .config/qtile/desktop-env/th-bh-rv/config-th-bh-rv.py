@@ -785,6 +785,13 @@ cursor_warp = False
 ########################
 ##   HOOKS  ##
 ########################
+EWW_BIN = "/usr/bin/eww"
+EWW_CONFIG_DIR = os.path.expanduser("~/.config/eww/bar")
+
+EWW_BIN = "/usr/bin/eww"
+EWW_CONFIG_DIR = os.path.expanduser("~/.config/eww/bar")
+
+
 def push_workspaces_to_eww(qtile):
     groups = []
 
@@ -809,21 +816,47 @@ def push_workspaces_to_eww(qtile):
 
     try:
         subprocess.Popen(
-            ["eww", "update", f"workspaces={json_str}"],
+            [EWW_BIN, "-c", EWW_CONFIG_DIR, "update", f"qtile_ws_state={json_str}"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
     except Exception as e:
         log.error("Error calling eww update: %s", e)
 
+def push_workspaces_to_eww(qtile):
+    groups = []
+
+    for g in qtile.groups:
+        win_list = getattr(g, "windows", None)
+        if win_list is None:
+            win_list = getattr(g, "clients", [])
+        has_windows = len(win_list) > 0
+
+        groups.append(
+            {
+                "name": g.name,
+                "label": g.label or g.name,
+                "screen": g.screen.index if g.screen else None,
+                "focused": qtile.current_group == g,
+                "has_windows": has_windows,
+            }
+        )
+
+    json_str = json.dumps(groups)
+    log.info("Pushing workspaces to eww: %s", json_str)
+
+    try:
+        subprocess.Popen(
+            [EWW_BIN, "-c", EWW_CONFIG_DIR, "update", f"qtile_ws_state={json_str}"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception as e:
+        log.error("Error calling eww update: %s", e)
 
 @hook.subscribe.startup_once
 def autostart():
-    autostartscript = "~/.config/qtile/desktop-env/th-bh-rv/autostart.sh"
-    home = os.path.expanduser(autostartscript)
-    subprocess.Popen([
-        home
-    ])
+    startup()
 
 
 @hook.subscribe.startup_complete
