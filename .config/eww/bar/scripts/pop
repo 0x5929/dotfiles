@@ -1,0 +1,216 @@
+#!/bin/bash
+
+calendar() {
+LOCK_FILE="$HOME/.cache/eww-calendar.lock"
+EWW_BIN="/usr/bin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open calendar
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system system_b1 music_win music_win_b1 audio_ctl audio_ctl_b1 system_info system_info_b1
+    touch "$LOCK_FILE"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close calendar
+    rm "$LOCK_FILE" && echo "closed"
+fi
+}
+
+calendar_b1() {
+LOCK_FILE="$HOME/.cache/eww-calendar.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open calendar_b1
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system system_b1 music_win music_win_b1 audio_ctl audio_ctl_b1 system_info system_info_b1
+    touch "$LOCK_FILE"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close calendar_b1
+    rm "$LOCK_FILE" && echo "closed"
+fi
+}
+
+
+system() {
+LOCK_FILE_MEM="$HOME/.cache/eww-system.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open system 
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_MEM" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close calendar calendar_b1 music_win music_win_b1 audio_ctl audio_ctl_b1  system_info system_info_b1
+    touch "$LOCK_FILE_MEM"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system 
+    rm "$LOCK_FILE_MEM" && echo "closed"
+fi
+}
+
+system_b1() {
+LOCK_FILE_MEM="$HOME/.cache/eww-system.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+  ${EWW_BIN} -c $HOME/.config/eww/bar open system_b1
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_MEM" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close calendar calendar_b1 music_win music_win_b1 audio_ctl audio_ctl_b1  system_info system_info_b1
+    touch "$LOCK_FILE_MEM"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system_b1
+    rm "$LOCK_FILE_MEM" && echo "closed"
+fi
+}
+system_info() {
+LOCK_FILE_MEM="$HOME/.cache/eww-system-info.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open system_info 
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_MEM" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close calendar calendar_b1 music_win music_win_b1 audio_ctl audio_ctl_b1 system system_b1
+    touch "$LOCK_FILE_MEM"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system_info 
+    rm "$LOCK_FILE_MEM" && echo "closed"
+fi
+}
+
+system_info_b1() {
+LOCK_FILE_MEM="$HOME/.cache/eww-system-info.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+  ${EWW_BIN} -c $HOME/.config/eww/bar open system_info_b1 
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_MEM" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close calendar calendar_b1 music_win music_win_b1 audio_ctl audio_ctl_b1 system system_b1
+    touch "$LOCK_FILE_MEM"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system_info_b1 
+    rm "$LOCK_FILE_MEM" && echo "closed"
+fi
+}
+
+music() {
+LOCK_FILE_SONG="$HOME/.cache/eww-song.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open music_win 
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_SONG" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system system_b1 system_info system_info_b1 calendar calendar_b1 audio_ctl audio_ctl_b1
+    touch "$LOCK_FILE_SONG"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close music_win
+    rm "$LOCK_FILE_SONG" && echo "closed"
+fi
+}
+music_b1() {
+LOCK_FILE_SONG="$HOME/.cache/eww-song.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open music_win_b1
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_SONG" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system system_b1 system_info system_info_b1 calendar calendar_b1 audio_ctl audio_ctl_b1
+    touch "$LOCK_FILE_SONG"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close music_win_b1
+    rm "$LOCK_FILE_SONG" && echo "closed"
+fi
+}
+
+
+
+audio() {
+LOCK_FILE_AUDIO="$HOME/.cache/eww-audio.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open audio_ctl 
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_AUDIO" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system system_b1 calendar calendar_b1 music_win music_win_b1 system_info system_info_b1
+    touch "$LOCK_FILE_AUDIO"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close audio_ctl
+    rm "$LOCK_FILE_AUDIO" && echo "closed"
+fi
+
+pavucontrol
+}
+
+audio_b1() {
+LOCK_FILE_AUDIO="$HOME/.cache/eww-audio.lock"
+EWW_BIN="/usr/sbin/eww"
+
+run() {
+    ${EWW_BIN} -c $HOME/.config/eww/bar open audio_ctl_b1
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_AUDIO" ]]; then
+    ${EWW_BIN} -c $HOME/.config/eww/bar close system system_b1 calendar calendar_b1 music_win music_win_b1 system_info system_info_b1
+    touch "$LOCK_FILE_AUDIO"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/.config/eww/bar close audio_ctl_b1
+    rm "$LOCK_FILE_AUDIO" && echo "closed"
+fi
+}
+
+if [ "$1" = "calendar" ]; then
+calendar
+elif [ "$1" = "calendar_b1" ]; then
+calendar_b1
+elif [ "$1" = "system" ]; then
+system
+elif [ "$1" = "system_b1" ]; then
+system_b1
+elif [ "$1" = "system_info" ]; then
+system_info
+elif [ "$1" = "system_info_b1" ]; then
+system_info_b1
+elif [ "$1" = "music" ]; then
+music
+elif [ "$1" = "music_b1" ]; then
+music_b1
+elif [ "$1" = "audio" ]; then
+audio
+elif [ "$1" = "audio_b1" ]; then
+audio_b1
+fi

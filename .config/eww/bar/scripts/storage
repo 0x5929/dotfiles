@@ -1,0 +1,24 @@
+#!/bin/bash
+
+storage() {
+  # Get total and available space in bytes
+  read total available <<< $(df -B1 / | awk 'NR==2 {print $2, $4}')
+
+  # Calculate used percentage: (used = total - available)
+  used=$(( total - available ))
+  percentage=$(( used * 100 / total ))
+
+  echo "$percentage"
+}
+storage_stat() {
+  # AVAILABLE_SPACE=$(df / | awk 'NR==2 {print $4}')
+  AVAILABLE_SPACE=$(df -h / | awk 'NR==2 {print $4}' | sed 's/G/gb/g')
+  echo "$AVAILABLE_SPACE" free
+}
+
+if [[ "$1" == "--sto" ]]; then
+	storage
+elif [[ "$1" == "--sto-st" ]]; then
+	storage_stat
+fi
+

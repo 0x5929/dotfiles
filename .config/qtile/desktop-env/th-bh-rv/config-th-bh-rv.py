@@ -22,6 +22,7 @@ import json
 import time
 import colors
 import subprocess
+import logging
 from pathlib import Path
 from libqtile import bar, extension, hook, layout, qtile
 from libqtile import widget as widget
@@ -42,6 +43,7 @@ from libqtile.lazy import lazy
 #####################
 ##   GLOBAL VARS   ##
 #####################
+log = logging.getLogger(__name__)
 
 # binds
 mod = "mod4"
@@ -781,8 +783,39 @@ bring_front_click = False
 cursor_warp = False
 
 ########################
-##   STARTUP SCRIPTS  ##
+##   HOOKS  ##
 ########################
+def push_workspaces_to_eww(qtile):
+    groups = []
+
+    for g in qtile.groups:
+        win_list = getattr(g, "windows", None)
+        if win_list is None:
+            win_list = getattr(g, "clients", [])
+        has_windows = len(win_list) > 0
+
+        groups.append(
+            {
+                "name": g.name,
+                "label": g.label or g.name,
+                "screen": g.screen.index if g.screen else None,
+                "focused": qtile.current_group == g,
+                "has_windows": has_windows,
+            }
+        )
+
+    json_str = json.dumps(groups)
+    log.info("Pushing workspaces to eww: %s", json_str)
+
+    try:
+        subprocess.Popen(
+            ["eww", "update", f"workspaces={json_str}"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception as e:
+        log.error("Error calling eww update: %s", e)
+
 
 @hook.subscribe.startup_once
 def autostart():
@@ -791,6 +824,19 @@ def autostart():
     subprocess.Popen([
         home
     ])
+
+
+@hook.subscribe.startup_complete
+def _push_eww_workspaces_on_startup():
+    push_workspaces_to_eww(qtile)
+
+
+@hook.subscribe.setgroup
+@hook.subscribe.client_managed
+@hook.subscribe.client_killed
+def _update_eww_workspaces_on_change(*_args, **_kwargs):
+    push_workspaces_to_eww(qtile)
+
 
 if __name__ in ["config", "__main__"]:
     screens = init_screens()

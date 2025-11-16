@@ -1,0 +1,904 @@
+;; Variables
+(defpoll clock_time :interval "5m" "date +\%I")
+(defpoll clock_minute :interval "5s" "date +\%M")
+(defpoll clock_date :interval "10h" "date '+%m/%d'")
+(defpoll volume_percent :interval "3s" :initial "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1" "sleep 1 && pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1")
+(defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
+(defpoll battery :interval "15s" "./scripts/battery --bat")
+(defpoll updates :interval "15s" "./scripts/info --updates")
+(defpoll current_group :interval "15s" "./scripts/info --current-group")
+(defpoll whoami :interval "15s" "./scripts/info --whoami")
+(defpoll ip_addr :interval "15s" "./scripts/info --ip")
+(defpoll my_groups :interval "15s" "./scripts/info --groups")
+(defpoll window_title :interval "15s" "./scripts/info --window-title")
+(defpoll current_layout :interval "15s" "./scripts/info --current-layout")
+(defpoll storage :interval "15s" "./scripts/storage --sto")
+(defpoll cpu :interval "15s" "./scripts/cpu --cpu")
+(defpoll gpu :interval "15s" "./scripts/gpu --gpu")
+(defpoll battery_status :interval "15s" "./scripts/battery --bat-st")
+(defpoll storage_status :interval "15s" "./scripts/storage --sto-st")
+(defpoll cpu_status :interval "15s" "./scripts/cpu --cpu-st")
+(defpoll gpu_status :interval "15s" "./scripts/gpu --gpu-st")
+(defpoll memory :interval "15s" "scripts/memory")
+(defpoll memory_used_mb :interval "15s" "scripts/mem-ad used")
+(defpoll memory_free_mb :interval "15s" "scripts/mem-ad free")
+(defpoll info_kernel :interval "300m" "scripts/info --kernel")
+(defvar vol_reveal false)
+(defvar br_reveal false)
+(defvar info_reveal false)
+(defvar music_reveal false)
+(defvar wifi_rev false)
+(defvar time_rev false)
+
+(defvar vol_reveal_b1 false)
+(defvar br_reveal_b1 false)
+(defvar info_reveal_b1 false)
+(defvar music_reveal_b1 false)
+(defvar wifi_rev_b1 false)
+(defvar time_rev_b1 false)
+
+(deflisten workspace "scripts/workspace")
+(deflisten workspace_9 "scripts/workspace_9")
+
+(defvar eww "/usr/bin/eww -c $HOME/.config/eww/bar")
+
+
+(defpoll COL_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --COL")
+(defpoll ESSID_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --ESSID")
+(defpoll WLAN_ICON :interval "1m" "~/.config/eww/bar/scripts/wifi --ICON")
+
+
+(defpoll song :interval "2s"  "~/.config/eww/bar/scripts/music_info --song")
+(defpoll song_artist :interval "2s"  "~/.config/eww/bar/scripts/music_info --artist")
+(defpoll current_status :interval "1s"  "~/.config/eww/bar/scripts/music_info --time")
+(defpoll song_status :interval "2s"  "~/.config/eww/bar/scripts/music_info --status")
+(defpoll cover_art :interval "2s"  "~/.config/eww/bar/scripts/music_info --cover")
+
+(defpoll calendar_day :interval "20h" "date '+%d'")
+(defpoll calendar_year :interval "20h" "date '+%Y'")
+
+;; def vars
+;; (defvar workspaces [])
+
+;; widgets
+
+;; (defwidget workspaces-widget []
+;;   (box :class "workspaces"
+;;     (for ws in {workspaces}
+;;       (button
+;;         :class {ws.focused
+;;                 ? (ws.has_windows
+;;                    ? "ws-dot ws-current ws-occupied"
+;;                    : "ws-dot ws-current ws-empty")
+;;                 : (ws.has_windows
+;;                    ? "ws-dot ws-occupied"
+;;                    : "ws-dot ws-empty")}
+;;         ;; Clicking a dot sends you to that workspace in Qtile
+;;         :onclick "qtile cmd-obj -o group {ws.name} -f toscreen"
+;;         (label
+;;           :text {ws.has_windows ? "  " : "  "})))))
+;;
+
+(defwidget workspaces []
+  (literal :content workspace))
+
+(defwidget workspaces_9 []
+  (literal :content workspace_9))
+
+
+(defwidget music [] 
+  (eventbox :onhover "${eww} update music_reveal=true"
+			  :onhoverlost "${eww} update music_reveal=false"
+		(box :class "module-2" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
+			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
+			(button :class "song" :wrap "true" :onclick "~/.config/eww/bar/scripts/pop music" song)
+	    (revealer :transition "slideright"
+			      :reveal music_reveal
+			      :duration "350ms"
+          (box :vexpand "false" :hexpand "false" :oreintation "h" 
+                    (button :class "song_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
+					(button :class "song_btn_play" :onclick "~/.config/eww/bar/scripts/music_info --toggle" song_status)
+					(button :class "song_btn_next" :onclick "~/.config/eww/bar/scripts/music_info --next" ""))))))
+
+(defwidget music_b1 [] 
+  (eventbox :onhover "${eww} update music_reveal_b1=true"
+			  :onhoverlost "${eww} update music_reveal_b1=false"
+		(box :class "module-2" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false" 
+			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
+			(button :class "song" :wrap "true" :onclick "~/.config/eww/bar/scripts/pop music_b1" song)
+	    (revealer :transition "slideright"
+			      :reveal music_reveal_b1
+			      :duration "350ms"
+          (box :vexpand "false" :hexpand "false" :oreintation "h" 
+                    (button :class "song_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
+					(button :class "song_btn_play" :onclick "~/.config/eww/bar/scripts/music_info --toggle" song_status)
+					(button :class "song_btn_next" :onclick "~/.config/eww/bar/scripts/music_info --next" ""))))))
+
+
+(defwidget info []
+  (eventbox :onhover "${eww} update info_reveal=true" :onhoverlost "${eww} update info_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (button
+      :class "info_icon"
+      :limit-width 2
+      :tooltip "info"
+      :show_truncated false
+      :onclick "$HOME/.config/eww/bar/scripts/pop system_info"
+      :wrap false
+      "⌘")
+
+	(revealer :transition "slideleft"
+			  :reveal info_reveal
+			  :duration "350ms"
+        :class "kernel_info"
+      info_kernel
+  ))))
+
+(defwidget info_b1 []
+  (eventbox :onhover "${eww} update info_reveal_b1=true" :onhoverlost "${eww} update info_reveal_b1=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (button
+      :class "info_icon"
+      :limit-width 2
+      :tooltip "info"
+      :show_truncated false
+      :onclick "$HOME/.config/eww/bar/scripts/pop system_info_b1"
+      :wrap false
+      "⌘")
+
+	(revealer :transition "slideleft"
+			  :reveal info_reveal_b1
+			  :duration "350ms"
+        :class "kernel_info"
+      info_kernel
+  ))))
+
+(defwidget bright []
+  (eventbox :onhover "${eww} update br_reveal=true" :onhoverlost "${eww} update br_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (label :text "🔆" :class "bright_icon" :tooltip "brightness")
+	(revealer :transition "slideleft"
+			  :reveal br_reveal
+			  :duration "350ms"
+	(scale    :class "brightbar"
+			  :value brightness_percent
+			  :orientation "h"
+			  :tooltip "${brightness_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "brightnessctl set {}%" )))))
+
+(defwidget bright_b1 []
+  (eventbox :onhover "${eww} update br_reveal_b1=true" :onhoverlost "${eww} update br_reveal_b1=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+    (label :text "🔆" :class "bright_icon" :tooltip "brightness")
+	(revealer :transition "slideleft"
+			  :reveal br_reveal_b1
+			  :duration "350ms"
+	(scale
+        :class "brightbar"
+			  :value brightness_percent
+			  :orientation "h"
+			  :tooltip "${brightness_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "brightnessctl set {}%" )))))
+
+(defwidget volume []
+  (eventbox :onhover "${eww} update vol_reveal=true"
+			  :onhoverlost "${eww} update vol_reveal=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+	(button   :onclick "scripts/pop audio"   :class "volume_icon" "")
+	(revealer :transition "slideleft"
+			  :reveal vol_reveal
+			  :duration "350ms"
+	(scale    :class "volbar"
+			  :value volume_percent
+			  :orientation "h"
+			  :tooltip "${volume_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
+
+(defwidget volume_b1 []
+  (eventbox :onhover "${eww} update vol_reveal_b1=true"
+			  :onhoverlost "${eww} update vol_reveal_b1=false"
+  (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3" 
+	(button   :onclick "scripts/pop audio_b1"   :class "volume_icon" "")
+	(revealer :transition "slideleft"
+			  :reveal vol_reveal_b1
+			  :duration "350ms"
+	(scale
+        :class "volbar"
+			  :value volume_percent
+			  :orientation "h"
+			  :tooltip "${volume_percent}%"
+			  :max 100
+			  :min 0
+			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
+
+(defwidget wifi [] 
+  (eventbox :onhover "${eww} update wifi_rev=true"
+			  :onhoverlost "${eww} update wifi_rev=false"
+		(box :vexpand "false" :hexpand "false" :space-evenly "false"
+				(button :class "module-wif" :onclick "~/.config/eww/bar/scripts/wifi --ed" :wrap "false" :limit-width 12 :style "color: ${COL_WLAN};" WLAN_ICON)
+	(revealer :transition "slideright"
+			  :reveal wifi_rev
+			  :duration "350ms"
+	(label    :class "module_essid"
+			  :text ESSID_WLAN
+			  :orientation "h"
+			  )))))
+
+(defwidget wifi_b1 [] 
+  (eventbox :onhover "${eww} update wifi_rev_b1=true"
+			  :onhoverlost "${eww} update wifi_rev_b1=false"
+		(box :vexpand "false" :hexpand "false" :space-evenly "false"
+				(button :class "module-wif" :onclick "~/.config/eww/bar/scripts/wifi --ed" :wrap "false" :limit-width 12 :style "color: ${COL_WLAN};" WLAN_ICON)
+	(revealer :transition "slideright"
+			  :reveal wifi_rev_b1
+			  :duration "350ms"
+	(label    :class "module_essid"
+			  :text ESSID_WLAN
+			  :orientation "h"
+			  )))))
+
+
+(defwidget bat []
+		(box :class "bat_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value battery
+                :class "batbar"
+                :thickness 4
+            (button 
+                :class "iconbat"
+                :limit-width 2
+                :tooltip "battery on ${battery}%"
+                :show_truncated false
+                :onclick "$HOME/.config/eww/bar/scripts/pop system"
+                :wrap false
+                ""))))
+
+(defwidget bat_b1 []
+		(box :class "bat_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value battery
+                :class "batbar"
+                :thickness 4
+            (button 
+                :class "iconbat"
+                :limit-width 2
+                :tooltip "battery on ${battery}%"
+                :show_truncated false
+                :onclick "$HOME/.config/eww/bar/scripts/pop system_b1"
+                :wrap false
+                ""))))
+
+(defwidget mem []
+		(box :class "mem_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value memory
+                :class "membar"
+                :thickness 4
+            (button 
+                :class "iconmem"
+                :limit-width 2
+                :tooltip "using ${memory}% ram"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system"
+                :show_truncated false
+                :wrap false
+                ""))))
+
+(defwidget mem_b1 []
+		(box :class "mem_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value memory
+                :class "membar"
+                :thickness 4
+            (button 
+                :class "iconmem"
+                :limit-width 2
+                :tooltip "using ${memory}% ram"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system_b1"
+                :show_truncated false
+                :wrap false
+                ""))))
+
+
+(defwidget storage []
+		(box :class "storage_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value storage
+                :class "storagebar"
+                :thickness 4
+            (button 
+                :class "iconstorage"
+                :limit-width 2
+                :tooltip "using ${storage}% storage"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system"
+                :show_truncated false
+                :wrap false
+                ""))))
+
+(defwidget storage_b1 []
+		(box :class "storage_module" :vexpand "false" :hexpand "false" 
+            (circular-progress :value storage
+                :class "storagebar"
+                :thickness 4
+            (button 
+                :class "iconstorage"
+                :limit-width 2
+                :tooltip "using ${storage}% storage"
+                :onclick "$HOME/.config/eww/bar/scripts/pop system_b1"
+                :show_truncated false
+                :wrap false
+                ""))))
+
+
+(defwidget sep []
+  (box :class "module-2" :vexpand "false" :hexpand "false"
+    (label :class "separ" :text "|")))
+
+(defwidget clock_module []
+  (eventbox :onhover "${eww} update time_rev=true"
+			  :onhoverlost "${eww} update time_rev=false"
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing "3" 
+      (label :text clock_time :class "clock_time_class" )
+      (label :text ":" :class "clock_time_sep" )
+      (label :text clock_minute :class "clock_minute_class")
+	  (revealer :transition "slideleft"
+			  :reveal time_rev
+			  :duration "350ms"
+      (button :class "clock_date_class"
+             :onclick "$HOME/.config/eww/bar/scripts/pop calendar" clock_date
+        )
+  ))))
+  
+(defwidget clock_module_b1 []
+  (eventbox :onhover "${eww} update time_rev_b1=true"
+			  :onhoverlost "${eww} update time_rev_b1=false"
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing "3" 
+      (label :text clock_time :class "clock_time_class" )
+      (label :text ":" :class "clock_time_sep" )
+      (label :text clock_minute :class "clock_minute_class")
+	  (revealer :transition "slideleft"
+			  :reveal time_rev_b1
+			  :duration "350ms"
+      (button :class "clock_date_class"
+             :onclick "$HOME/.config/eww/bar/scripts/pop calendar_b1" clock_date
+        )
+  ))))
+
+(defwidget clock_module_b2 []
+  (eventbox :onhover ""
+			  :onhoverlost ""
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing "3" 
+      (label :text clock_time :class "clock_time_class" )
+      (label :text ":" :class "clock_time_sep" )
+      (label :text clock_minute :class "clock_minute_class")
+	  )))
+  
+;; Popup/other widgets
+(defwidget system []
+  (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
+  (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value battery
+                :class "sys_bat"
+                :thickness 9
+            (label :text "🔋"
+                :class "sys_icon_bat"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "battery"
+                :halign "start"
+                :class "sys_text_bat"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${battery}%"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${battery_status}"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_storage_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value storage
+                :class "sys_storage"
+                :thickness 9
+            (label :text "🖴"
+                :class "sys_icon_storage"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "storage"
+                :halign "start"
+                :class "sys_text_storage"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${storage}% used"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${storage_status}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_cpu_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value cpu
+                :class "sys_cpu"
+                :thickness 9
+            (label :text "🀆"
+                :class "sys_icon_cpu"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "cpu"
+                :halign "start"
+                :class "sys_text_cpu"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${cpu}% used"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${cpu_status}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_gpu_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value gpu
+                :class "sys_gpu"
+                :thickness 9
+            (label :text "🎟"
+                :class "sys_icon_gpu"
+                :limit-width 2
+                :show_truncated false
+                :wrap false))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "gpu"
+                :halign "start"
+                :class "sys_text_gpu"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${gpu}% used"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${gpu_status}"
+                :halign "start"
+                :class "sys_text_gpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_mem_box" :orientation "h" :space-evenly "false" :halign "start"
+      (circular-progress :value memory
+                :class "sys_mem"
+                :thickness 9
+            (label :text ""
+                :class "sys_icon_mem"
+                :limit-width 2
+                :show_truncated false
+                :wrap false
+                :angle 0.0))
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "memory"
+                :halign "start"
+                :class "sys_text_mem"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "${memory_used_mb}mb used"
+                :halign "start"
+                :class "sys_text_mem_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "${memory_free_mb}mb free"
+                :halign "start"
+                :class "sys_text_mem_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))))
+
+(defwindow system
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "290px" 
+						:height "120px")
+(system))
+
+(defwindow system_b1
+  :monitor 1
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "290px" 
+						:height "120px")
+(system))
+
+(defwidget system_info []
+  (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
+  (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "Pacman"
+                :halign "start"
+                :class "sys_text_bat"
+                :limit-width 40
+                :show_truncated false
+                :wrap false)
+            (label :text "${updates} Upgradable"
+                :halign "start"
+                :class "sys_text_bat_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_storage_box" :orientation "h" :space-evenly "false"
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "Qtile"
+                :halign "start"
+                :class "sys_text_storage"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "Workspace: ${current_group}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "Title: ${window_title}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 40
+                :show_truncated false
+                :wrap false)
+            (label :text "Layout: ${current_layout}"
+                :halign "start"
+                :class "sys_text_storage_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+                ))
+            (label :text "" :class "sys_sep" :halign "center")
+  (box :class "sys_cpu_box" :orientation "h" :space-evenly "false"
+            (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+            (label :text "System"
+                :halign "start"
+                :class "sys_text_cpu"
+                :limit-width 9
+                :show_truncated false
+                :wrap false)
+            (label :text "Kernel: ${info_kernel}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "User: ${whoami}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+            (label :text "Groups: ${my_groups}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 40
+                :show_truncated false
+                :wrap false)
+            (label :text "IP: ${ip_addr}"
+                :halign "start"
+                :class "sys_text_cpu_sub"
+                :limit-width 22
+                :show_truncated false
+                :wrap false)
+                ))))
+
+(defwindow system_info
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "490px" 
+						:height "200px")
+(system_info))
+
+(defwindow system_info_b1
+  :monitor 1
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "490px" 
+						:height "200px")
+(system_info))
+
+(defwidget cal []
+	(box :class "cal" :orientation "v"
+	(box :class "cal-in"
+	(calendar :class "cal" 
+			  :day calendar_day 
+			  :year calendar_year))))
+
+(defwindow calendar
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "7%" 
+                        :anchor "top right"
+						:width "270px" 
+						:height "60px")
+(cal))
+
+(defwindow calendar_b1
+  :monitor 1
+	:geometry (geometry :x "-20px" 
+						:y "7%" 
+                        :anchor "top right"
+						:width "270px" 
+						:height "60px")
+(cal))
+
+
+
+(defwidget audio []
+	(box :class "audio-box" :orientation "v" :space-evenly "false" :vexpand "false" :hexpand "false"
+	(box :halign "v" :space-evenly "false" :hexpand "false" :vexpand "false"
+	(box :class "speaker_icon" :orientation "v")
+	(box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
+    (label :class "speaker_text" :text "speaker" :valign "center" :halign "left" )
+	(box :class "speaker_bar" :halign "center" :vexpand "false" :hexpand "false"
+	(scale    :value volume_percent
+              :space-evenly "false"
+			  :orientation "h"
+			  :onchange "pactl -- set-sink-volume 0 {}%" 
+              :tooltip "volume on ${volume_percent}%"
+			  :max 100
+			  :min 0))))
+            (label :text "" :class "audio_sep" :halign "center")
+	(box :halign "v" :space-evenly "false" :hexpand "false" :vexpand "false"
+	(box :class "mic_icon" :orientation "v")
+	(box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
+    (label :class "mic_text" :text "mic" :valign "center" :halign "left" )
+	(box :class "mic_bar" :halign "center" :vexpand "false" :hexpand "false"
+	(scale    :value mic_percent
+              :space-evenly "false"
+			  :orientation "h"
+              :tooltip "mic on ${mic_percent}%"
+			  :onchange "amixer -D pulse sset Capture {}%" 
+			  :max 100
+			  :min 0))))))
+
+(defwindow audio_ctl
+  :monitor 0
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "280px" 
+						:height "60px")
+(audio))
+
+(defwindow audio_ctl_b1
+  :monitor 1
+	:geometry (geometry :x "-20px" 
+						:y "6%" 
+                        :anchor "top right"
+						:width "280px" 
+						:height "60px")
+(audio))
+
+
+
+(defwidget music_pop []
+		(box :class "music_pop" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false"
+			(box :class "music_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
+			(box :orientation "v" :spacing 20 :space-evenly "false" :vexpand "false" :hexpand "false"
+				(label :halign "center" :class "music" :wrap "true" :limit-width 13 :text song)
+				(label :halign "center" :class "music_artist" :wrap "true" :limit-width 15 :text song_artist)
+				(box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+					(button :class "music_btn_prev" :onclick "~/.config/eww/bar/scripts/music_info --prev" "")
+					(button :class "music_btn_play" :onclick "~/.config/eww/bar/scripts/music_info --toggle" song_status)
+					(button :class "music_btn_next" :onclick "~/.config/eww/bar/scripts/music_info --next" ""))
+				(box :class "music_bar" :halign "center" :vexpand "false" :hexpand "false" :space-evenly "false"
+					(scale :onscroll "mpc -q seek {}" :min 0 :active "true" :max 100 :value current_status)))))
+
+
+(defwindow music_win :stacking "fg" :focusable "false" :screen 1
+      :monitor 0
+      :geometry (geometry :x "0" :y "7%" :width 428 :height 104 :anchor "top center")
+              (music_pop))
+
+(defwindow music_win_b1 :stacking "fg" :focusable "false" :screen 1
+      :monitor 1
+      :geometry (geometry :x "0" :y "7%" :width 428 :height 104 :anchor "top center")
+              (music_pop))
+
+;; WRAPPER WIDGETS AND BAR DEFINITIONS
+
+(defwidget left []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "left_modules"
+(info)
+;; (bright)
+(volume)
+(wifi)
+(sep)
+;; (bat)
+(storage)
+(mem)
+(sep)
+(clock_module)))
+
+(defwidget left_b1 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "left_modules"
+(info_b1)
+;; (bright_b1)
+(volume_b1)
+(wifi_b1)
+(sep)
+(bat_b1)
+(storage_b1)
+(mem_b1)
+(sep)
+(clock_module_b1)))
+
+(defwidget left_b2 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "end"
+		 :class "left_modules"
+(clock_module_b2)))
+
+;; (defwidget right []
+;; 	(box :orientation "h" 
+;; 		 :space-evenly false  
+;;          :halign "start"
+;; 		 :class "right_modules"
+;; (workspaces)))
+
+(defwidget right_b2 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "start"
+		 :class "right_modules"
+(workspaces_9)))
+
+
+(defwidget center []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "center"
+		 :class "center_modules"
+(music)))
+
+(defwidget center_b1 []
+	(box :orientation "h" 
+		 :space-evenly false  
+         :halign "center"
+		 :class "center_modules"
+(music_b1)))
+
+(defwidget bar_0 []
+  (box :class "bar_class"
+       :orientation "h"
+  (right)
+  (center)
+  (left)
+    ))
+
+(defwidget bar_1 []
+  (box :class "bar_class"
+       :orientation "h"
+  (right)
+  (center_b1)
+  (left_b1)
+    ))
+
+(defwidget bar_0_9_ws []
+  (box :class "bar_class"
+       :orientation "h"
+  (right_b2)
+  (center)
+  (left)
+    ))
+
+(defwidget bar_1_9_ws []
+  (box :class "bar_class"
+       :orientation "h"
+  (right_b2)
+  (center_b1)
+  (left_b1)
+    ))
+
+(defwidget bar_2_9_ws []
+  (box :class "bar_class"
+       :orientation "h"
+  (right_b2)
+  (left_b2)
+    ))
+
+(defwindow bar
+          :monitor 0
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_0))
+
+
+(defwindow bar_top_monitor
+          :monitor 1
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_1))
+
+(defwindow bar_primary_monitor_9_ws
+          :monitor 0
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_0_9_ws))
+
+
+(defwindow bar_top_monitor_9_ws
+          :monitor 1
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_1_9_ws))
+
+(defwindow bar_right_monitor_9_ws
+          :monitor 2
+          :geometry (geometry :x "0%"
+                       :y "9px"
+                       :width "98%"
+                       :height "30px"
+                       :anchor "top center")
+          :stacking "fg"
+          :windowtype "dock"
+  (bar_2_9_ws))

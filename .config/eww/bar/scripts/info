@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Arch + Qtile 0.33.x
+# Robust info helper for EWW. Avoids eval, uses stable cmd-obj JSON.
+
+set -euo pipefail
+
+qt() { qtile cmd-obj "$@" 2>/dev/null || true; }
+
+kernel() {
+  uname -r
+}
+
+updates() {
+  dnf list updates -q | grep -Ec 'updates'
+}
+
+# Current workspace on the focused screen.
+# NOTE: On 0.33, `-o group -f info` returns the *current* group of the focused screen.
+current_group() {
+  qt -o group -f info | jq -r '.name // ""'
+}
+
+# Focused window title; empty when no client.
+window_title() {
+  qt -o window -f info | jq -r '.name // ""'
+}
+
+# Current layout name for the focused group.
+current_layout() {
+  qt -o group -f info | jq -r '.layout // ""'
+}
+
+# Primary IPv4 address.
+ip_addr() {
+  ip -o -4 addr show up scope global \
+    | awk '{print $4}' | cut -d/ -f1 | head -n1
+}
+
+case "${1-}" in
+  --kernel)          kernel ;;
+  --updates)         updates ;;
+  --current-group)   current_group ;;
+  --window-title)    window_title ;;
+  --current-layout)  current_layout ;;
+  --whoami)          id -un ;;
+  --groups)          id -Gn ;;
+  --ip)              ip_addr ;;
+  *)                 exit 0 ;;
+esac
+

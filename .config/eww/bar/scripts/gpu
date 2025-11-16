@@ -1,0 +1,23 @@
+#!/bin/bash
+
+gpu() {
+  # GPU usage query
+  gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits -i 0)
+
+  echo "$gpu_usage"
+}
+gpu_stat() {
+  #!/bin/bash
+
+  # Get temperature of GPU 0 using nvidia-smi
+  gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits -i 0)
+
+  echo "$gpu_temp"℃ average
+}
+
+if [[ "$1" == "--gpu" ]]; then
+	gpu
+elif [[ "$1" == "--gpu-st" ]]; then
+	gpu_stat
+fi
+

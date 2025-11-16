@@ -1,0 +1,45 @@
+#!/bin/bash
+set -euo pipefail
+
+workspaces() {
+  ws=(1 2 3 4 5 6 7 8 9 0)
+  current_group="$(qtile cmd-obj -o screen -f info | jq -r '.group')"
+
+  echo -n "(box :class \"works\" :orientation \"h\" :spacing 6 :space-evenly \"false\""
+
+  for w in "${ws[@]}"; do
+    info="$(qtile cmd-obj -o group "$w" -f info)"
+    occupied="$(jq -r '.windows | length > 0' <<<"$info")"
+    visible="$(jq -r '.screen != null' <<<"$info")"
+    focused=$([ "$current_group" = "$w" ] && echo true || echo false)
+
+    # precedence: focused+occupied > focused > visible > occupied > empty
+    cls="empty"
+    ico=""
+
+    if [ "$focused" = "true" ] && [ "$occupied" = "true" ]; then
+      cls="occupied-focused"; ico=""
+    elif [ "$focused" = "true" ]; then
+      cls="focused"; ico=""
+    elif [ "$visible" = "true" ] && [ "$occupied" = "true" ]; then
+      # on another screen and has windows → style like occupied
+      cls="occupied"; ico=""
+    elif [ "$occupied" = "true" ]; then
+      cls="occupied"; ico=""
+    else
+      cls="empty"; ico=""
+    fi
+
+    # fixed-width wrapper to prevent glyph bleed and ensure even spacing
+    echo -n " (box :class \"ws\" :orientation \"h\" :space-evenly \"false\" \
+(button :onclick \"qtile cmd-obj -o group $w -f toscreen\" :class \"$cls\" \"$ico\"))"
+  done
+
+  echo ")"
+}
+
+while true; do
+  workspaces
+  sleep 0.5
+done
+

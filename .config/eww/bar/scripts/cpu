@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cpu() {
+  # Get CPU idle percentage from top, then subtract from 100 to get usage
+  cpu_idle=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}')
+  cpu_usage=$(printf "%.0f\n" "$(echo "100 - $cpu_idle" | bc)")
+
+  echo "$cpu_usage"
+}
+cpu_stat() {
+  raw_temp=$(cat /sys/class/thermal/thermal_zone0/temp)
+  cpu_temp=$((raw_temp / 1000))
+
+  echo "$cpu_temp"℃ average
+}
+
+if [[ "$1" == "--cpu" ]]; then
+	cpu
+elif [[ "$1" == "--cpu-st" ]]; then
+	cpu_stat
+fi
+
