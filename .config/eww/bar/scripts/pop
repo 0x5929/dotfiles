@@ -107,6 +107,25 @@ audio_b1() {
     system system_b1 calendar calendar_b1 music_win music_win_b1 system_info system_info_b1
 }
 
+weather() {
+  toggle_single \
+    "$HOME/.cache/eww-weather.lock" \
+    "weather_win" \
+    system system_b1 system_info system_info_b1 \
+    calendar calendar_b1 music_win music_win_b1 \
+    audio_ctl audio_ctl_b1
+}
+
+weather_b1() {
+  toggle_single \
+    "$HOME/.cache/eww-weather.lock" \
+    "weather_win_b1" \
+    system system_b1 system_info system_info_b1 \
+    calendar calendar_b1 music_win music_win_b1 \
+    audio_ctl audio_ctl_b1
+}
+
+
 case "${1-}" in
   calendar)        calendar ;;
   calendar_b1)     calendar_b1 ;;
@@ -118,6 +137,8 @@ case "${1-}" in
   music_b1)        music_b1 ;;
   audio)           audio ;;
   audio_b1)        audio_b1 ;;
+  weather)         weather ;;
+  weather_b1)      weather_b1 ;;
   *)               exit 0 ;;
 esac
 

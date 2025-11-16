@@ -5,8 +5,8 @@ set -euo pipefail
 REMOTE_CTX_SUBSTR="remote-gtec-chat"
 
 # Icons – swap if your font disagrees
-AWS_ICON_DISCONNECTED=" "
-AWS_ICON_CONNECTED="󰅟 "
+AWS_ICON_DISCONNECTED=""
+AWS_ICON_CONNECTED="󰅟"
 
 aws_logged_in() {
   if ! command -v aws >/dev/null 2>&1; then

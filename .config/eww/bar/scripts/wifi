@@ -9,7 +9,7 @@ if [ $status ] ; then
     col="#575268"
 
 else
-    icon=""
+    icon=" "
     text="${essid}"
     col="#a1bdce"
 fi

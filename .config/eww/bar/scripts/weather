@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LOCATION="Rosemead"
+BASE_URL="https://wttr.in/${LOCATION}"
+
+# Single-line, parseable data from wttr
+# Format: "<temp>|<condition>|<humidity>|<wind>"
+# On failure, prints "N/A"
+fetch_simple() {
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "N/A"
+    return
+  fi
+
+  # %t = temperature, %C = condition, %h = humidity, %w = wind
+  local out
+  out="$(curl -fsS "${BASE_URL}?format=%t|%C|%h|%w" 2>/dev/null || true)"
+
+  # Guard against empty / HTML error pages
+  if [[ -z "$out" || "$out" == *"<html"* ]]; then
+    echo "N/A"
+  else
+    echo "$out"
+  fi
+}
+
+# Full multi-line wttr output (ASCII art, etc.)
+# We strip ANSI color codes so it looks clean in eww.
+fetch_full() {
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "N/A"
+    return
+  fi
+
+  # ?0 -> no "Follow" etc; we still get the forecast block
+  local out
+  out="$(curl -fsS "${BASE_URL}?0" 2>/dev/null || true)"
+
+  if [[ -z "$out" || "$out" == *"<html"* ]]; then
+    echo "N/A"
+    return
+  fi
+
+  # Strip ANSI color codes
+  echo "$out" | sed -r 's/\x1b\[[0-9;]*m//g'
+}
+
+get_icon() {
+  # Basic day/night based on local time
+  local hour
+  hour="$(date +%H)"
+
+  local base_icon
+  if (( hour >= 6 && hour < 18 )); then
+    base_icon=" "   # sun-ish
+  else
+    base_icon=" "   # moon-ish
+  fi
+
+  local line
+  line="$(fetch_simple)"
+
+  if [[ "$line" == "N/A" ]]; then
+    echo ""       # warning icon if we can’t fetch
+    return
+  fi
+
+  echo "$base_icon"
+}
+
+get_temp() {
+  local line
+  line="$(fetch_simple)"
+
+  if [[ "$line" == "N/A" ]]; then
+    echo "N/A"
+    return
+  fi
+
+  IFS="|" read -r temp cond hum wind <<<"$line"
+  echo "${temp:-N/A}"
+}
+
+get_summary() {
+  local line
+  line="$(fetch_simple)"
+
+  if [[ "$line" == "N/A" ]]; then
+    echo "N/A"
+    return
+  fi
+
+  IFS="|" read -r temp cond hum wind <<<"$line"
+  echo "Temp: ${temp:-N/A} | ${cond:-N/A} | Humidity: ${hum:-N/A} | Wind: ${wind:-N/A}"
+}
+
+get_full() {
+  local full
+  full="$(fetch_full)"
+
+  if [[ -z "$full" ]]; then
+    echo "N/A"
+  else
+    echo "$full"
+  fi
+}
+
+case "${1-}" in
+  --icon)
+    get_icon
+    ;;
+  --temp)
+    get_temp
+    ;;
+  --summary)
+    get_summary
+    ;;
+  --full)
+    get_full
+    ;;
+  *)
+    echo "usage: $0 [--icon|--temp|--summary|--full]" >&2
+    exit 1
+    ;;
+esac
+
