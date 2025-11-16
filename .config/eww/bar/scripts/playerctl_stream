@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/eww_playerctl_selected"
+mkdir -p "$(dirname "$STATE_FILE")"
+
 print_state() {
-  local has_players="$1"  # true / false (unquoted in JSON)
+  local has_players="$1"  # true/false (unquoted in JSON)
   local icon="$2"
   local title="$3"
   local status_icon="$4"
@@ -27,47 +30,80 @@ map_icon() {
   esac
 }
 
+get_selected_player() {
+  # 1) If user has manually selected a player and it still exists, use that
+  if [[ -f "$STATE_FILE" ]]; then
+    local sel
+    sel="$(<"$STATE_FILE")"
+    if [[ -n "$sel" ]] && playerctl -p "$sel" status >/dev/null 2>&1; then
+      printf '%s\n' "$sel"
+      return 0
+    fi
+  fi
+
+  # 2) Prefer a player that is currently Playing
+  local playing
+  playing="$(playerctl -a metadata --format '{{playerName}} {{status}}' 2>/dev/null \
+             | awk '$2=="Playing"{print $1; exit}' || true)"
+  if [[ -n "${playing:-}" ]]; then
+    printf '%s\n' "$playing"
+    return 0
+  fi
+
+  # 3) Fallback: first available player
+  playerctl -l 2>/dev/null | head -n 1 || true
+}
+
 while true; do
-  # If no players, output "no player" periodically and keep trying
-  if ! playerctl -l >/dev/null 2>&1; then
+  players="$(playerctl -l 2>/dev/null || true)"
+  if [[ -z "$players" ]]; then
     print_no_player
     sleep 2
     continue
   fi
 
-  # Follow *all* players; last one that fires wins (usually the one you’re actually using)
-  playerctl --follow metadata --format '{{playerName}}|{{status}}|{{title}}|{{artist}}' 2>/dev/null | \
-  while IFS='|' read -r playerName status title artist; do
-    # If the command dies, break and restart outer loop
-    [ -z "${playerName:-}" ] && break
+  selected="$(get_selected_player || true)"
+  if [[ -z "${selected:-}" ]]; then
+    print_no_player
+    sleep 2
+    continue
+  fi
 
-    base="${playerName%%.*}"
-    icon="$(map_icon "$base")"
+  # Query metadata once per loop for the currently selected player
+  metadata="$(playerctl -p "$selected" metadata \
+               --format '{{playerName}}|{{status}}|{{title}}|{{artist}}' 2>/dev/null || true)"
 
-    # Build title string
-    if [[ -n "$artist" && -n "$title" ]]; then
-      full_title="$artist - $title"
-    elif [[ -n "$title" ]]; then
-      full_title="$title"
-    else
-      full_title="$base"
-    fi
+  if [[ -z "$metadata" ]]; then
+    print_no_player
+    sleep 1
+    continue
+  fi
 
-    # Escape quotes for JSON
-    full_title_escaped="${full_title//\"/\\\"}"
+  IFS='|' read -r playerName status title artist <<<"$metadata"
 
-    # Status icon
-    case "$status" in
-      Playing) status_icon="" ;;  # show pause when playing
-      Paused|Stopped|*) status_icon="" ;;
-    esac
+  base="${playerName%%.*}"
+  icon="$(map_icon "$base")"
 
-    # Has players = true here
-    print_state true "$icon" "$full_title_escaped" "$status_icon"
-  done
+  # Build title string
+  if [[ -n "$artist" && -n "$title" ]]; then
+    full_title="$artist - $title"
+  elif [[ -n "$title" ]]; then
+    full_title="$title"
+  else
+    full_title="$base"
+  fi
 
-  # If we fell out of the inner loop (player quit / error), try again
-  print_no_player
+  # Escape quotes for JSON
+  full_title_escaped="${full_title//\"/\\\"}"
+
+  # Status icon
+  case "$status" in
+    Playing) status_icon="" ;;  # show pause when playing
+    Paused|Stopped|*) status_icon="" ;;
+  esac
+
+  print_state true "$icon" "$full_title_escaped" "$status_icon"
+
   sleep 1
 done
 

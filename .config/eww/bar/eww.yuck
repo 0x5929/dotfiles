@@ -100,7 +100,7 @@
          :vexpand "false"
          :hexpand "false"
 
-      ;; LEFT: main media icon (or “no media” icon)
+      ;; ICON BUTTON – cycles players
       (button
         :class {media_state.has_players
                  ? "media_icon"
@@ -108,13 +108,13 @@
         :tooltip {media_state.has_players
                    ? media_state.title
                    : "No media players"}
-        :onclick "$HOME/.config/eww/bar/scripts/playerctl_toggle"
+        :onclick "$HOME/.config/eww/bar/scripts/playerctl_cycle_player"
         (label
           :text {media_state.has_players
                   ? media_state.icon
                   : "󰓎"}))
 
-      ;; RIGHT: revealed on hover – status + title
+      ;; PLAY/PAUSE – affects selected player
       (revealer :transition "slideleft"
                 :reveal    media_reveal
                 :duration  "250ms"

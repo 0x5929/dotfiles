@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-players="$(playerctl -l 2>/dev/null || true)"
-[[ -z "$players" ]] && exit 0
+STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/eww_playerctl_selected"
 
-# Same priority logic as in playerctl_stream
-best=""
-while read -r p; do
-  [[ -z "$p" ]] && continue
-  score=0
-  case "$p" in
-    spotify) score=3 ;;
-    vlc) score=2 ;;
-    firefox|chromium|chrome|brave|vivaldi|opera|edge) score=1 ;;
-    *) score=0 ;;
-  esac
-  printf '%s %s\n' "$score" "$p"
-done <<< "$players" | sort -nr | head -n1 | {
-  read -r _ best || true
-  if [[ -n "${best:-}" ]]; then
-    playerctl -p "$best" play-pause
+get_selected_player() {
+  if [[ -f "$STATE_FILE" ]]; then
+    local sel
+    sel="$(<"$STATE_FILE")"
+    if [[ -n "$sel" ]] && playerctl -p "$sel" status >/dev/null 2>&1; then
+      printf '%s\n' "$sel"
+      return 0
+    fi
   fi
+
+  # fallback: first player
+  playerctl -l 2>/dev/null | head -n 1 || true
 }
+
+player="$(get_selected_player || true)"
+
+if [[ -n "${player:-}" ]]; then
+  playerctl -p "$player" play-pause
+else
+  # last fallback: all players (old behavior)
+  playerctl play-pause || true
+fi
 
