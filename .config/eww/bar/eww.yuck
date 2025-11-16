@@ -676,7 +676,7 @@
       (circular-progress :value memory
                 :class "sys_mem"
                 :thickness 9
-            (label :text ""
+            (label :text " "
                 :class "sys_icon_mem"
                 :limit-width 2
                 :show_truncated false
