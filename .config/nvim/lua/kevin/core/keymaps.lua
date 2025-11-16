@@ -10,7 +10,7 @@ keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
 -- search
 keymap.set("n", "<C-f>", "/\\c", { desc = "Clear search highlights" })
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+keymap.set("n", "<leader>nl", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- replace
 -- keymap.set("x", "<leader>r", ":s///gc<Left><Left><Left>", {

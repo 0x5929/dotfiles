@@ -1,6 +1,4 @@
 ;; Variables
-(defpoll clock_time :interval "5m" "date +\%I")
-(defpoll clock_minute :interval "5s" "date +\%M")
 (defpoll clock_date :interval "10h" "date '+%m/%d'")
 (defpoll volume_percent :interval "3s" :initial "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1" "sleep 1 && pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1")
 (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
@@ -167,7 +165,7 @@
                 :reveal aws_rev
                 :duration "250ms"
         (label :class "aws_cluster_label"
-               :limit-width 50
+               :limit-width 150
                :show_truncated false
                :wrap false
                :text aws_cluster)))))
@@ -513,6 +511,18 @@
 (defwidget sep []
   (box :class "module-2" :vexpand "false" :hexpand "false"
     (label :class "separ" :text "|")))
+
+; -------- TIME -------------------------------------
+
+;; Hour stream
+(deflisten clock_time
+  :initial "00"
+  "while true; do date +%I; sleep 1; done")
+
+;; Minute stream
+(deflisten clock_minute
+  :initial "00"
+  "while true; do date +%M; sleep 1; done")
 
 (defwidget clock_module []
   (eventbox :onhover "${eww} update time_rev=true"
