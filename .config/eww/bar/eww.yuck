@@ -140,6 +140,39 @@
 
 ; ====================================================
 
+; ===== AWS widget =============
+(defpoll aws_icon    :interval "15s" "~/.config/eww/bar/scripts/aws_status --icon")
+(defpoll aws_cluster :interval "15s" "~/.config/eww/bar/scripts/aws_status --cluster")
+(defpoll aws_status  :interval "30s" "~/.config/eww/bar/scripts/aws_status --status")
+
+(defvar aws_rev false)
+
+(defwidget aws_indicator []
+  (eventbox
+    :onhover "${eww} update aws_rev=true"
+    :onhoverlost "${eww} update aws_rev=false"
+    (box :class "module-2" :orientation "h" :space-evenly "false" :spacing "3"
+      ;; Cloud icon
+      (label
+        :class { aws_status == "connected"
+                 ? "aws_icon aws_icon_connected"
+                 : "aws_icon aws_icon_disconnected" }
+        :text aws_icon
+        :tooltip { aws_status == "connected"
+                   ? "AWS: connected"
+                   : "AWS: disconnected" })
+
+      ;; Reveal cluster/context on hover
+      (revealer :transition "slideleft"
+                :reveal aws_rev
+                :duration "250ms"
+        (label :class "aws_cluster_label"
+               :limit-width 150
+               :show_truncated false
+               :wrap false
+               :text aws_cluster)))))
+
+; =========================================
 
 
 (defwidget workspaces []
@@ -188,7 +221,7 @@
       :show_truncated false
       :onclick "$HOME/.config/eww/bar/scripts/pop system_info"
       :wrap false
-      "⌘")
+      "⌘" )
 
 	(revealer :transition "slideleft"
 			  :reveal info_reveal
@@ -807,6 +840,7 @@
          :halign "end"
 		 :class "left_modules"
 (info)
+(aws_indicator)
 ;; (bright)
 (volume)
 (wifi)
@@ -823,6 +857,7 @@
          :halign "end"
 		 :class "left_modules"
 (info_b1)
+(aws_indicator)
 ;; (bright_b1)
 (volume_b1)
 (wifi_b1)

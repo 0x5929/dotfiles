@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Adjust this to match your remote EKS context name or a substring of it
+REMOTE_CTX_SUBSTR="remote-gtec-chat"
+
+# Icons – swap if your font disagrees
+AWS_ICON_DISCONNECTED=" "
+AWS_ICON_CONNECTED="󰅟 "
+
+aws_logged_in() {
+  if ! command -v aws >/dev/null 2>&1; then
+    echo 0
+    return
+  fi
+
+  # If this returns 0, creds (SSO or otherwise) are valid
+  if aws sts get-caller-identity --no-cli-pager >/dev/null 2>&1; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+current_context() {
+  if ! command -v kubectl >/dev/null 2>&1; then
+    echo ""
+    return
+  fi
+
+  kubectl config current-context 2>/dev/null || echo ""
+}
+
+is_remote_context() {
+  local ctx
+  ctx="$(current_context)"
+  if [[ -n "$ctx" && "$ctx" == *"$REMOTE_CTX_SUBSTR"* ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+connected() {
+  local aws_ok k8s_ok
+  aws_ok="$(aws_logged_in)"
+  k8s_ok="$(is_remote_context)"
+
+  if [[ "$aws_ok" -eq 1 && "$k8s_ok" -eq 1 ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+case "${1-}" in
+  --icon)
+    if [[ "$(connected)" -eq 1 ]]; then
+      printf '%s\n' "$AWS_ICON_CONNECTED"
+    else
+      printf '%s\n' "$AWS_ICON_DISCONNECTED"
+    fi
+    ;;
+
+  --cluster)
+    ctx="$(current_context)"
+    if [[ -n "$ctx" ]]; then
+      printf '%s\n' "$ctx"
+    else
+      printf 'no kube context'
+    fi
+    ;;
+
+  --status)
+    if [[ "$(connected)" -eq 1 ]]; then
+      echo "connected"
+    else
+      echo "disconnected"
+    fi
+    ;;
+
+  *)
+    echo "usage: $0 [--icon|--cluster|--status]" >&2
+    exit 1
+    ;;
+esac
+

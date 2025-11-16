@@ -597,3 +597,22 @@ calendar:indeterminate {
   color: #bfc9db;
   margin: 0 4px 0 2px;
 }
+
+.aws_icon {
+  font-size: 18px;
+  padding: 0 4px;
+}
+
+.aws_icon_connected {
+  color: #ffb86c; // warm "remote" color
+}
+
+.aws_icon_disconnected {
+  color: #6272a4; // muted
+}
+
+.aws_cluster_label {
+  font-size: 14px;
+  color: #6272a4;
+  margin-right: 3px;
+}
