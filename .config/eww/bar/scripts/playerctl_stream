@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Choose an icon for the "best" player.
+# Priority: spotify > vlc > browser (chrome/firefox/brave/etc) > anything else.
+choose_icon() {
+  local icon="󰓎"   # default: no media players
+  local players
+  players="$(playerctl -l 2>/dev/null | sed '/^$/d' || true)"
+
+  # No players at all
+  if [[ -z "$players" ]]; then
+    printf '%s\n' "$icon"
+    return
+  fi
+
+  # Pick "best" player by simple scoring
+  # We normalize "chromium.instance2215010" -> "chromium" for classification
+  while read -r p; do
+    [[ -z "$p" ]] && continue
+    local base="${p%%.*}"   # strip everything after first dot
+    local score=0
+    case "$base" in
+      spotify) score=3 ;;
+      vlc) score=2 ;;
+      firefox|chromium|google-chrome|chrome|brave|vivaldi|opera|microsoft-edge)
+        score=1 ;;
+      *) score=0 ;;
+    esac
+    # score, base-name, full player name
+    printf '%s %s %s\n' "$score" "$base" "$p"
+  done <<< "$players" \
+    | sort -nr \
+    | head -n1 \
+    | {
+        local s base best
+        read -r s base best || true
+        if [[ -n "${best:-}" ]]; then
+          case "$base" in
+            spotify) icon="" ;;   # Spotify
+            vlc)     icon="󰕼" ;;   # VLC
+            firefox|chromium|google-chrome|chrome|brave|vivaldi|opera|microsoft-edge)
+              icon="󰖟" ;;          # browser-ish
+            *)       icon="󰝚" ;;   # generic player
+          esac
+        fi
+        printf '%s\n' "$icon"
+      }
+}
+
+# Initial value
+choose_icon
+
+# Then follow playerctl events and update on each one
+playerctl --all-players metadata --format '{{playerName}} {{status}}' --follow 2>/dev/null \
+  | while read -r _; do
+      choose_icon
+    done
+

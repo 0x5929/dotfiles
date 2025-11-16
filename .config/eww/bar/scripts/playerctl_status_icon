@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+players="$(playerctl -l 2>/dev/null | sed '/^$/d' || true)"
+[[ -z "$players" ]] && { echo ""; exit 0; }  # default
+
+best=""
+while read -r p; do
+  [[ -z "$p" ]] && continue
+  base="${p%%.*}"
+  score=0
+  case "$base" in
+    spotify) score=3 ;;
+    vlc) score=2 ;;
+    firefox|chromium|google-chrome|chrome|brave|vivaldi|opera|microsoft-edge)
+      score=1 ;;
+    *) score=0 ;;
+  esac
+  printf '%s %s\n' "$score" "$p"
+done <<< "$players" \
+  | sort -nr \
+  | head -n1 \
+  | {
+      read -r _ best || true
+      if [[ -z "${best:-}" ]]; then
+        echo ""
+        exit 0
+      fi
+
+      status="$(playerctl -p "$best" status 2>/dev/null || true)"
+      case "$status" in
+        Playing) echo "" ;;  # show pause icon when it's playing
+        Paused|Stopped|"") echo "" ;;
+      esac
+    }
+

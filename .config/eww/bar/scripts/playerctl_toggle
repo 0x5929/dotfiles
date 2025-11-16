@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+players="$(playerctl -l 2>/dev/null || true)"
+[[ -z "$players" ]] && exit 0
+
+# Same priority logic as in playerctl_stream
+best=""
+while read -r p; do
+  [[ -z "$p" ]] && continue
+  score=0
+  case "$p" in
+    spotify) score=3 ;;
+    vlc) score=2 ;;
+    firefox|chromium|chrome|brave|vivaldi|opera|edge) score=1 ;;
+    *) score=0 ;;
+  esac
+  printf '%s %s\n' "$score" "$p"
+done <<< "$players" | sort -nr | head -n1 | {
+  read -r _ best || true
+  if [[ -n "${best:-}" ]]; then
+    playerctl -p "$best" play-pause
+  fi
+}
+

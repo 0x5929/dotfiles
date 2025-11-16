@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+players="$(playerctl -l 2>/dev/null | sed '/^$/d' || true)"
+[[ -z "$players" ]] && { echo ""; exit 0; }
+
+# Choose best player (same scoring as before)
+best=""
+while read -r p; do
+  [[ -z "$p" ]] && continue
+  base="${p%%.*}"
+  score=0
+  case "$base" in
+    spotify) score=3 ;;
+    vlc) score=2 ;;
+    firefox|chromium|google-chrome|chrome|brave|vivaldi|opera|microsoft-edge)
+      score=1 ;;
+    *) score=0 ;;
+  esac
+  printf '%s %s\n' "$score" "$p"
+done <<< "$players" \
+  | sort -nr \
+  | head -n1 \
+  | {
+      read -r _ best || true
+      if [[ -z "${best:-}" ]]; then
+        echo ""
+        exit 0
+      fi
+
+      title="$(playerctl -p "$best" metadata --format '{{title}}' 2>/dev/null || true)"
+      artist="$(playerctl -p "$best" metadata --format '{{artist}}' 2>/dev/null || true)"
+
+      if [[ -n "$artist" && -n "$title" ]]; then
+        echo "$artist - $title"
+      elif [[ -n "$title" ]]; then
+        echo "$title"
+      else
+        # Fallback: show player name
+        echo "$best"
+      fi
+    }
+

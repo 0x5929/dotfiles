@@ -58,6 +58,7 @@
 (defpoll calendar_day :interval "20h" "date '+%d'")
 (defpoll calendar_year :interval "20h" "date '+%Y'")
 
+
 ;; def vars
 (defvar qtile_ws_state "[]")
 
@@ -78,6 +79,46 @@
         :onclick "qtile cmd-obj -o group {ws.name} -f toscreen"
         (label :text { ws.has_windows ? " " : " " }))))
 )
+
+;; === Media player widget ===
+
+(defvar media_reveal false)
+(deflisten media_icon "~/.config/eww/bar/scripts/playerctl_stream")
+(defpoll   media_title       :interval "2s" "~/.config/eww/bar/scripts/playerctl_title")
+(defpoll   media_status_icon :interval "1s" "~/.config/eww/bar/scripts/playerctl_status_icon")
+
+
+(defwidget media_players_widget []
+  (eventbox
+    :onhover     "${eww} update media_reveal=true"
+    :onhoverlost "${eww} update media_reveal=false"
+    (box :class "module-2 media_module"
+         :orientation "h"
+         :space-evenly "false"
+         :vexpand "false"
+         :hexpand "false"
+
+      ;; Always-visible icon for "which player type"
+      (label :class "media_icon"
+             :text  media_icon)
+
+      ;; Hover-revealed: [ play/pause button ] [ title ]
+      (revealer :transition "slideleft"
+                :reveal    media_reveal
+                :duration  "250ms"
+        (box :orientation "h" :spacing 6
+          (button :class "media_play_btn"
+                  :onclick "~/.config/eww/bar/scripts/playerctl_toggle"
+            (label :text media_status_icon))
+
+          (label :class "media_title"
+                 :limit-width 30
+                 :show_truncated true
+                 :wrap false
+                 :text media_title)))))
+)
+
+; ====================================================
 
 
 
@@ -801,25 +842,32 @@
     (qtile_workspaces_dots)
     ))
 
+(defwidget center_media []
+  (box :orientation "h"
+       :space-evenly "false"
+       :halign "center"
+       :class "center_modules"
+    (media_players_widget)))
+
 (defwidget center []
 	(box :orientation "h" 
 		 :space-evenly false  
          :halign "center"
 		 :class "center_modules"
-(music)))
+(media_players_widget)))
 
 (defwidget center_b1 []
 	(box :orientation "h" 
 		 :space-evenly false  
          :halign "center"
 		 :class "center_modules"
-(music_b1)))
+(center_media)))
 
 (defwidget bar_0 []
   (box :class "bar_class"
        :orientation "h"
   (right)
-  (center)
+  (center_b1)
   (left)
     ))
 
@@ -835,7 +883,7 @@
   (box :class "bar_class"
        :orientation "h"
   (qtile_right)
-  (center)
+  (center_media)
   (left)
     ))
 
