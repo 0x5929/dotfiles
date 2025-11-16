@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Arch + Qtile 0.33.x
+# Fedora + Qtile 0.33.x
 # Robust info helper for EWW. Avoids eval, uses stable cmd-obj JSON.
 
 set -euo pipefail
@@ -10,27 +10,50 @@ kernel() {
   uname -r
 }
 
+# Count available updates on Fedora using dnf.
 updates() {
-  dnf list updates -q | grep -Ec 'updates'
+  local rc=0
+  local out
+
+  # dnf check-update:
+  #   0   = no updates
+  #   100 = updates available
+  #   other = error
+  out=$(dnf -q check-update 2>/dev/null || rc=$?)
+
+  if [ "$rc" -ne 0 ] && [ "$rc" -ne 100 ]; then
+    echo 0
+    return
+  fi
+
+  # Count lines that look like:
+  #   package.arch   version   repo
+  # and ignore headers / blank lines
+  echo "$out" | awk '
+    /^[[:space:]]*$/ { next }                    # blank
+    /^Last metadata expiration check/ { next }   # dnf header
+    /^Obsoleting Packages/ { exit }              # section separator
+    /^[[:alnum:]][^[:space:]]+[[:space:]]+[0-9]/ { n++ }  # pkg lines
+    END { print n+0 }
+  '
 }
 
-# Current workspace on the focused screen.
-# NOTE: On 0.33, `-o group -f info` returns the *current* group of the focused screen.
+# Current workspace on the focused screen
 current_group() {
   qt -o group -f info | jq -r '.name // ""'
 }
 
-# Focused window title; empty when no client.
+# Focused window title; empty when no client
 window_title() {
   qt -o window -f info | jq -r '.name // ""'
 }
 
-# Current layout name for the focused group.
+# Current layout name for the focused group
 current_layout() {
   qt -o group -f info | jq -r '.layout // ""'
 }
 
-# Primary IPv4 address.
+# Primary IPv4 address
 ip_addr() {
   ip -o -4 addr show up scope global \
     | awk '{print $4}' | cut -d/ -f1 | head -n1

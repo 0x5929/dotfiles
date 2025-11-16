@@ -607,7 +607,7 @@
   (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
   (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
             (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
-            (label :text "Pacman"
+            (label :text "DNF"
                 :halign "start"
                 :class "sys_text_bat"
                 :limit-width 40
