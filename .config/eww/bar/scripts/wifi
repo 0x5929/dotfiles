@@ -1,28 +1,123 @@
 #!/bin/bash
 
-status=$(nmcli g | grep -oE "disconnected")
-essid=$(nmcli c | grep eno1 | awk '{print ($1)}')
+# --- connection status / ESSID / icon / color ------------------------------
 
-if [ $status ] ; then
-    icon="✘"
-    text=""
-    col="#575268"
+state=$(nmcli -t -f STATE g)
+# Active connection name (ESSID/profile)
+essid=$(nmcli -t -f NAME,DEVICE connection show --active | head -n1 | cut -d: -f1)
 
-else
+# Active network device (wifi or ethernet)
+iface=$(nmcli -t -f DEVICE,STATE d | awk -F: '$2=="connected"{print $1; exit}')
+
+if [ "$state" = "connected" ] && [ -n "$iface" ]; then
     icon=" "
     text="${essid}"
     col="#a1bdce"
+else
+    icon="✘ "
+    text=""
+    col="#575268"
 fi
 
+# --- net speed helpers ------------------------------------------------------
 
+speed_file="/tmp/eww-net-${iface}"
 
-if [[ "$1" == "--COL" ]]; then
-    echo $col	
-elif [[ "$1" == "--ESSID" ]]; then
-	echo $text
-elif [[ "$1" == "--ICON" ]]; then
-	echo $icon
-elif [[ "$1" == "--ed" ]]; then
-  nm-connection-editor &
-fi
+human_speed() {
+    # bytes/sec -> human-readable string
+    local bytes=$1
+
+    if [ "$bytes" -ge 1073741824 ]; then         # >= 1 GiB
+        awk -v b="$bytes" 'BEGIN{printf "%.1fGiB/s", b/1073741824}'
+    elif [ "$bytes" -ge 1048576 ]; then          # >= 1 MiB
+        awk -v b="$bytes" 'BEGIN{printf "%.1fMiB/s", b/1048576}'
+    elif [ "$bytes" -ge 1024 ]; then             # >= 1 KiB
+        awk -v b="$bytes" 'BEGIN{printf "%.1fKiB/s", b/1024}'
+    else
+        printf "%dB/s" "$bytes"
+    fi
+}
+
+get_speed() {
+    # if no iface or disconnected, just print nothing
+    if [ -z "$iface" ] || [ "$state" != "connected" ]; then
+        echo ""
+        return
+    fi
+
+    local rx tx now
+    local prev_now prev_rx prev_tx
+    local dt drx dtx in_bps out_bps
+
+    # read current byte counters
+    if ! rx=$(<"/sys/class/net/$iface/statistics/rx_bytes") 2>/dev/null; then
+        echo ""
+        return
+    fi
+    if ! tx=$(<"/sys/class/net/$iface/statistics/tx_bytes") 2>/dev/null; then
+        echo ""
+        return
+    fi
+
+    now=$(date +%s)
+
+    if [ -r "$speed_file" ]; then
+        read -r prev_now prev_rx prev_tx < "$speed_file"
+
+        dt=$(( now - prev_now ))
+        if [ "$dt" -le 0 ]; then
+            # avoid div-by-zero, just store new values and bail
+            printf '%s %s %s\n' "$now" "$rx" "$tx" > "$speed_file"
+            echo ""
+            return
+        fi
+
+        drx=$(( rx - prev_rx ))
+        dtx=$(( tx - prev_tx ))
+
+        # handle wrap-around (just clamp to 0)
+        [ "$drx" -lt 0 ] && drx=0
+        [ "$dtx" -lt 0 ] && dtx=0
+
+        in_bps=$(( drx / dt ))
+        out_bps=$(( dtx / dt ))
+
+        local in_h out_h
+        in_h=$(human_speed "$in_bps")
+        out_h=$(human_speed "$out_bps")
+
+        # ↓ incoming / ↑ outgoing
+        echo "↓${in_h} ↑${out_h}"
+    else
+        # first run: no previous data
+        echo ""
+    fi
+
+    # store current snapshot for next call
+    printf '%s %s %s\n' "$now" "$rx" "$tx" > "$speed_file"
+}
+
+# --- CLI --------------------------------------------------------------------
+
+case "$1" in
+    --COL)
+        echo "$col"
+        ;;
+    --ESSID)
+        echo "$text"
+        ;;
+    --ICON)
+        echo "$icon"
+        ;;
+    --SPEED)
+        get_speed
+        ;;
+    --ed)
+        nm-connection-editor &
+        ;;
+    *)
+        # default: maybe print a compact summary if you ever call it bare
+        echo "$icon$text"
+        ;;
+esac
 

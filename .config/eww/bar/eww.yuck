@@ -42,9 +42,6 @@
 (defvar eww "/usr/bin/eww -c $HOME/.config/eww/bar")
 
 
-(defpoll COL_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --COL")
-(defpoll ESSID_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --ESSID")
-(defpoll WLAN_ICON :interval "1m" "~/.config/eww/bar/scripts/wifi --ICON")
 
 
 (defpoll song :interval "2s"  "~/.config/eww/bar/scripts/music_info --song")
@@ -395,6 +392,12 @@
 			  :min 0
 			  :onchange "pactl -- set-sink-volume @DEFAULT_SINK@ {}%" )))))
 
+; ------------------------ WIFI / NETWORK ---------------------------
+(defpoll COL_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --COL")
+(defpoll ESSID_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --ESSID")
+(defpoll WLAN_ICON :interval "1m" "~/.config/eww/bar/scripts/wifi --ICON")
+(defpoll NET_SPEED  :interval "2s" "~/.config/eww/bar/scripts/wifi --SPEED")
+
 (defwidget wifi [] 
   (eventbox :onhover "${eww} update wifi_rev=true"
 			  :onhoverlost "${eww} update wifi_rev=false"
@@ -404,7 +407,7 @@
 			  :reveal wifi_rev
 			  :duration "350ms"
 	(label    :class "module_essid"
-			  :text ESSID_WLAN
+			  :text "${ESSID_WLAN}: ${NET_SPEED}"
 			  :orientation "h"
 			  )))))
 
@@ -417,9 +420,11 @@
 			  :reveal wifi_rev_b1
 			  :duration "350ms"
 	(label    :class "module_essid"
-			  :text ESSID_WLAN
+			  :text "${ESSID_WLAN}: ${NET_SPEED}"
 			  :orientation "h"
 			  )))))
+
+; ------------------------------------------------
 
 
 (defwidget bat []

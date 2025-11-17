@@ -29,7 +29,7 @@ style = "yellow"
 disabled = true
 
 [kubernetes]
-disabled = false
+disabled = true
 symbol = "󱃾 "
 
 [git_status]
