@@ -8,6 +8,8 @@ if status is-interactive
     alias open=xdg-open
     # alias pycharm=pycharm-professional
     alias xclip="xclip -selection clipboard"
+    alias pk="pokemon-colorscripts -s -r --no-title"
+    alias pkb="pokemon-colorscripts -s -b -r --no-title"
     alias chrome="google-chrome-stable"
     alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 

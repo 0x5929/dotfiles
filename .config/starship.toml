@@ -1,3 +1,4 @@
+format = '$shell$all'
 right_format = """
 $time
 """
@@ -136,6 +137,10 @@ symbol = "nim "
 [nix_shell]
 symbol = "nix "
 
+[shell]
+disabled = false
+fish_indicator = " "
+
 [ocaml]
 symbol = "ml "
 
@@ -230,7 +235,8 @@ symbol = "scala "
 symbol = "spack "
 
 [sudo]
-symbol = "🧙 "
+disabled = false
+symbol = "󰒃 "
 
 [swift]
 symbol = "🐦 "
