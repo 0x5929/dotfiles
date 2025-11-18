@@ -1,4 +1,4 @@
-format = '$shell$all'
+format = '$os$shell$all'
 right_format = """
 $time
 """
@@ -139,13 +139,16 @@ symbol = "nix "
 
 [shell]
 disabled = false
-fish_indicator = " "
+fish_indicator = "  "
 
 [ocaml]
 symbol = "ml "
 
 [opa]
 symbol = "opa "
+
+[os]
+disabled = false
 
 [os.symbols]
 AIX = "➿ "
@@ -155,7 +158,7 @@ Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
 AOSC = "🐱 "
-Arch = "🎗️ "
+Arch = "󰣇 "
 Artix = "🎗️ "
 Bluefin = "🐟 "
 CachyOS = "🎗️ "
@@ -164,7 +167,7 @@ Debian = "🌀 "
 DragonFly = "🐉 "
 Emscripten = "🔗 "
 EndeavourOS = "🚀 "
-Fedora = "🎩 "
+Fedora = " "
 FreeBSD = "😈 "
 Garuda = "🦅 "
 Gentoo = "🗜️ "
@@ -194,7 +197,7 @@ RockyLinux = "💠 "
 Redox = "🧪 "
 Solus = "⛵ "
 SUSE = "🦎 "
-Ubuntu = "🎯 "
+Ubuntu = " "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
