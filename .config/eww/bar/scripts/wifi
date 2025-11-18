@@ -10,7 +10,7 @@ essid=$(nmcli -t -f NAME,DEVICE connection show --active | head -n1 | cut -d: -f
 iface=$(nmcli -t -f DEVICE,STATE d | awk -F: '$2=="connected"{print $1; exit}')
 
 if [ "$state" = "connected" ] && [ -n "$iface" ]; then
-    icon=" "
+    icon=""
     text="${essid}"
     col="#a1bdce"
 else
