@@ -1,0 +1,12 @@
+name: SYS
+root: /home/kevin/vpn
+
+windows:
+  - 0:
+      # Exact tmux layout for 3 panes
+      # <prefix>: tmux display-message -p "#{window_layout}"
+      layout: "35e8,241x45,0,0{152x45,0,0,66,88x45,153,0[88x20,153,0,67,88x24,153,21,68]}"
+      panes:
+        - clear && cd /home/kevin/vpn && clear && fastfetch
+        - clear && cd /home/kevin/vpn && clear && unimatrix
+        - clear && cd /home/kevin/vpn && clear && pokemon-colorscripts -rn dugtrio -s --no-title

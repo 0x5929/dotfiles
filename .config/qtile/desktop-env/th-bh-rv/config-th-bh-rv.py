@@ -417,7 +417,7 @@ def go_to_last_group(qtile):
 ######################
 
 keys = [
-    # program bidnings
+    # program bindings
 
     Key(
         [mod],
@@ -481,7 +481,7 @@ keys = [
     Key(
         [mod, "control"],
         "m",
-        lazy.spawn(myTerm + " -e cmatrix -C cyan"),
+        lazy.spawn(myTerm + " -e unimatrix"),
         desc="Matrix",
     ),
     Key(
@@ -501,6 +501,12 @@ keys = [
         "c",
         lazy.group["scratchpad"].dropdown_toggle("calc"),
         desc="dropdown scratchpad calculator",
+    ),
+    Key(
+        ["control", mod],
+        "g",
+        lazy.spawn(myTerm + " -e " + home + "/.config/qtile/desktop-env/th-bh-rv/dev-session.sh"),
+        desc="Start full dev environment (docker, minikube, tmux, IDE, browser)",
     ),
 
     # widnow management
