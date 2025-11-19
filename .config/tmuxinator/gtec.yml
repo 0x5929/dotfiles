@@ -5,30 +5,29 @@ windows:
   - editor:
       layout: even-vertical
       panes:
-        - >
-          cd /home/kevin/Work/a24/gtec2.5/rqb_svc;
-          and pycharm . &
+        - |
+          cd /home/kevin/Work/a24/gtec2.5/rqb_svc
+          pycharm . &
 
   - system:
       layout: even-vertical
       panes:
-        - >
-          echo "Run docker DB here"
-          # docker run --rm
-          # -e POSTGRES_USER=local_rqb_svc
-          # -e POSTGRES_PASSWORD=docker
-          # -e POSTGRES_DB=local_rqb_svc
-          # --tmpfs /var/lib/postgresql/data
-          # -p 5432:5432
-          # postgres:17
-        - >
-          cd /home/kevin/Work/a24/gtec2.5/rqb_svc;
-          and source /home/kevin/.cache/pypoetry/virtualenvs/rqb-svc--xV9a4_5-py3.13/bin/activate.fish
+        - |
+          docker run --rm \
+            -e POSTGRES_USER=local_rqb_svc \
+            -e POSTGRES_PASSWORD=docker \
+            -e POSTGRES_DB=local_rqb_svc \
+            --tmpfs /var/lib/postgresql/data \
+            -p 5432:5432 \
+            postgres:17
+        - |
+          cd /home/kevin/Work/a24/gtec2.5/rqb_svc
+          source /home/kevin/.cache/pypoetry/virtualenvs/rqb-svc--xV9a4_5-py3.13/bin/activate.fish
 
   - cluster:
       layout: even-horizontal
       panes:
-        - >
-          cd /home/kevin/Work/a24/gtec2.5;
-          and echo "RUN > python deployment/local/tilt_creds.py kren-session"
-        - chrome  --profile-directory="Profile 9" &
+        - |
+          cd /home/kevin/Work/a24/gtec2.5
+          python deployment/local/tilt_creds.py kren-session
+        - chrome --profile-directory="Profile 9" &
