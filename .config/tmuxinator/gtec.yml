@@ -1,26 +1,26 @@
-name: GT
+name: 󰵮
 root: /home/kevin/Work/a24/gtec2.5
 
 windows:
-  - editor:
+  - :
       layout: even-vertical
       panes:
         - |
           cd /home/kevin/Work/a24/gtec2.5/guideline_svc
           pycharm . &
 
-  - system:
-      layout: even-vertical
-      panes:
-        - ~/.config/dev/scripts/gtec-standalone-docker.sh
-        - |
-          cd /home/kevin/Work/a24/gtec2.5/rqb_svc
-          source /home/kevin/.cache/pypoetry/virtualenvs/rqb-svc--xV9a4_5-py3.13/bin/activate.fish
-
-  - cluster:
+  - :
       layout: even-horizontal
       panes:
         - |
           cd /home/kevin/Work/a24/gtec2.5
           python deployment/local/tilt_creds.py kren-session
         - chrome --profile-directory="Profile 9" &
+
+  - 󰡨:
+      layout: even-vertical
+      panes:
+        - ~/.config/dev/scripts/gtec-standalone-docker.sh
+        - |
+          cd /home/kevin/Work/a24/gtec2.5/rqb_svc
+          source /home/kevin/.cache/pypoetry/virtualenvs/rqb-svc--xV9a4_5-py3.13/bin/activate.fish

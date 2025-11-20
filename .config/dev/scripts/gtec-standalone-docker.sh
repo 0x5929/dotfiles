@@ -9,7 +9,7 @@ docker run -d --rm \
 
 
 echo "[!] Confluent network..."
-docker network create kafka-playground > /dev/null
+docker network create kafka-playground 2>/dev/null
 
 echo "[!] Zookeeper container..."
 docker run -d --rm \
