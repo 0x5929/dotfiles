@@ -12,14 +12,7 @@ windows:
   - system:
       layout: even-vertical
       panes:
-        - |
-          docker run --rm \
-            -e POSTGRES_USER=local_rqb_svc \
-            -e POSTGRES_PASSWORD=docker \
-            -e POSTGRES_DB=local_rqb_svc \
-            --tmpfs /var/lib/postgresql/data \
-            -p 5432:5432 \
-            postgres:17
+        - ~/.config/dev/scripts/gtec-standalone-docker.sh
         - |
           cd /home/kevin/Work/a24/gtec2.5/rqb_svc
           source /home/kevin/.cache/pypoetry/virtualenvs/rqb-svc--xV9a4_5-py3.13/bin/activate.fish

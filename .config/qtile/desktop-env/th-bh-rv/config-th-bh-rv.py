@@ -508,6 +508,12 @@ keys = [
         lazy.spawn(myTerm + " -e " + home + "/.config/qtile/desktop-env/th-bh-rv/dev-session.sh"),
         desc="Start full dev environment (docker, minikube, tmux, IDE, browser)",
     ),
+    Key(
+        ["control", mod],
+        "s",
+        lazy.spawn(myTerm + " -e " + home + "/.config/qtile/desktop-env/th-bh-rv/sys-info.sh"),
+        desc="Start full dev environment (docker, minikube, tmux, IDE, browser)",
+    ),
 
     # widnow management
     Key(
