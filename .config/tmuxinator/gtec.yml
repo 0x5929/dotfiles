@@ -6,7 +6,7 @@ windows:
       layout: even-vertical
       panes:
         - |
-          cd /home/kevin/Work/a24/gtec2.5/rqb_svc
+          cd /home/kevin/Work/a24/gtec2.5/guideline_svc
           pycharm . &
 
   - system:
