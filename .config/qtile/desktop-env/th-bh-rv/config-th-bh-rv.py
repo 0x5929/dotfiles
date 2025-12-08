@@ -48,7 +48,7 @@ log = logging.getLogger(__name__)
 # binds
 mod = "mod4"
 alt = "mod1"
-myTerm = "alacritty"
+myTerm = "kitty"
 myBrowser = "chrome" 
 volumeMixer = "pavucontrol"
 textEditor = "featherpad"
