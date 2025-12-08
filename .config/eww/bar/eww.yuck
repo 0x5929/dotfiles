@@ -1030,7 +1030,7 @@
 (defwidget bar_1 []
   (box :class "bar_class"
        :orientation "h"
-  (right)
+  (right_b2)
   (center_b1)
   (left_b1)
     ))
