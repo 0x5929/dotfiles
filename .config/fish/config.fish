@@ -2,7 +2,7 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
     # set global editor to NVIM
     set -gx EDITOR nvim
-  
+
     # aliases
     alias vim=nvim
     alias open=xdg-open
@@ -12,7 +12,6 @@ if status is-interactive
     alias pkb="pokemon-colorscripts -s -b -r --no-title"
     alias chrome="google-chrome-stable"
     alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
-
 
     # initialize environments
     #status --is-interactive; and ~/.rbenv/bin/rbenv init - fish | source
@@ -24,9 +23,10 @@ if status is-interactive
     set -gx PATH /opt/nvim-linux-x86_64/bin $PATH
     # vim binding
     # fish_vi_key_bindings
+    fzf --fish | source
     starship init fish | source
+    zoxide init fish | source
     fish_default_key_bindings
-
 
     function bind_bang
         switch (commandline -t)[-1]
@@ -52,7 +52,7 @@ if status is-interactive
         bind '$' bind_dollar
     end
     function fish_greeting
-      pokemon-colorscripts -r -s -b --no-title
+        pokemon-colorscripts -r -s -b --no-title
     end
 
     cat ~/.cache/wal/sequences
