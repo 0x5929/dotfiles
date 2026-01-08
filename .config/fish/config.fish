@@ -20,10 +20,17 @@ if status is-interactive
     set -g -x GMAIL_APP_PW xnnyalrrkjazhmbl
 
     #set -gx PATH /usr/pgsql-12/bin $PATH
-    set -gx PATH /opt/nvim-linux-x86_64/bin $PATH
+    set -gx PATH /opt/pycharm-2025.3.1//bin $PATH
+    set -gx PATH /home/kevin/.local/bin $PATH
     # vim binding
     # fish_vi_key_bindings
     fzf --fish | source
+
+    if status is-interactive
+        if set -q TERMINAL_EMULATOR; and test "$TERMINAL_EMULATOR" = JetBrains-JediTerm
+            set -gx STARSHIP_CONFIG /dev/null
+        end
+    end
     starship init fish | source
     zoxide init fish | source
     fish_default_key_bindings

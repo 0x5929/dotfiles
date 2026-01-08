@@ -10,32 +10,13 @@ kernel() {
   uname -r
 }
 
-# Count available updates on Fedora using dnf.
 updates() {
-  local rc=0
-  local out
-
-  # dnf check-update:
-  #   0   = no updates
-  #   100 = updates available
-  #   other = error
-  out=$(dnf -q check-update 2>/dev/null || rc=$?)
-
-  if [ "$rc" -ne 0 ] && [ "$rc" -ne 100 ]; then
-    echo 0
-    return
+  if command -v checkupdates >/dev/null 2>&1; then
+    # pacman-contrib
+    checkupdates 2>/dev/null | wc -l | awk '{print $1 " packages"}'
+  else
+    pacman -Qu 2>/dev/null | wc -l | awk '{print $1 " packages"}'
   fi
-
-  # Count lines that look like:
-  #   package.arch   version   repo
-  # and ignore headers / blank lines
-  echo "$out" | awk '
-    /^[[:space:]]*$/ { next }                    # blank
-    /^Last metadata expiration check/ { next }   # dnf header
-    /^Obsoleting Packages/ { exit }              # section separator
-    /^[[:alnum:]][^[:space:]]+[[:space:]]+[0-9]/ { n++ }  # pkg lines
-    END { print n+0 }
-  '
 }
 
 # Current workspace on the focused screen
@@ -55,19 +36,18 @@ current_layout() {
 
 # Primary IPv4 address
 ip_addr() {
-  ip -o -4 addr show up scope global \
-    | awk '{print $4}' | cut -d/ -f1 | head -n1
+  ip -o -4 addr show up scope global |
+    awk '{print $4}' | cut -d/ -f1 | head -n1
 }
 
 case "${1-}" in
-  --kernel)          kernel ;;
-  --updates)         updates ;;
-  --current-group)   current_group ;;
-  --window-title)    window_title ;;
-  --current-layout)  current_layout ;;
-  --whoami)          id -un ;;
-  --groups)          id -Gn ;;
-  --ip)              ip_addr ;;
-  *)                 exit 0 ;;
+--kernel) kernel ;;
+--updates) updates ;;
+--current-group) current_group ;;
+--window-title) window_title ;;
+--current-layout) current_layout ;;
+--whoami) id -un ;;
+--groups) id -Gn ;;
+--ip) ip_addr ;;
+*) exit 0 ;;
 esac
-

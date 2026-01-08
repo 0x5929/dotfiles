@@ -49,33 +49,34 @@ log = logging.getLogger(__name__)
 mod = "mod4"
 alt = "mod1"
 myTerm = "kitty"
-myBrowser = "chrome" 
+myBrowser = "zen-browser"
 volumeMixer = "pavucontrol"
 textEditor = "featherpad"
-calculator = "gnome-calculator"
+calculator = "kcalc"
+tasks = "tasks"
 home = str(Path.home())
 
 # colors
 bg_color = ["#282a36", "#282a36"]
-pywal_colors = os.path.expanduser('~/.cache/wal/colors.json')
+pywal_colors = os.path.expanduser("~/.cache/wal/colors.json")
 colordict = json.load(open(pywal_colors))
 
-Color0=(colordict['colors']['color0'])
-Color1=(colordict['colors']['color1'])
-Color2=(colordict['colors']['color2'])
-Color3=(colordict['colors']['color3'])
-Color4=(colordict['colors']['color4'])
-Color5=(colordict['colors']['color5'])
-Color6=(colordict['colors']['color6'])
-Color7=(colordict['colors']['color7'])
-Color8=(colordict['colors']['color8'])
-Color9=(colordict['colors']['color9'])
-Color10=(colordict['colors']['color10'])
-Color11=(colordict['colors']['color11'])
-Color12=(colordict['colors']['color12'])
-Color13=(colordict['colors']['color13'])
-Color14=(colordict['colors']['color14'])
-Color15=(colordict['colors']['color15'])
+Color0 = colordict["colors"]["color0"]
+Color1 = colordict["colors"]["color1"]
+Color2 = colordict["colors"]["color2"]
+Color3 = colordict["colors"]["color3"]
+Color4 = colordict["colors"]["color4"]
+Color5 = colordict["colors"]["color5"]
+Color6 = colordict["colors"]["color6"]
+Color7 = colordict["colors"]["color7"]
+Color8 = colordict["colors"]["color8"]
+Color9 = colordict["colors"]["color9"]
+Color10 = colordict["colors"]["color10"]
+Color11 = colordict["colors"]["color11"]
+Color12 = colordict["colors"]["color12"]
+Color13 = colordict["colors"]["color13"]
+Color14 = colordict["colors"]["color14"]
+Color15 = colordict["colors"]["color15"]
 
 
 # system
@@ -102,8 +103,8 @@ auto_fullscreen = False
 
 # screens
 primary_screen = 0  # DP-2
-top_screen = 2      # DP-4
-right_screen = 1    # HDMI-0
+top_screen = 1  # DP-4
+right_screen = 2  # HDMI-0
 
 
 ########################################
@@ -197,14 +198,21 @@ for i, group in enumerate(group_configs):
         )
     )
 
-screen_one_groups = [group["name"] for group in group_configs if group["screen"] == primary_screen]
-screen_two_groups = [group["name"] for group in group_configs if group["screen"] == top_screen]
-screen_three_groups = [group["name"] for group in group_configs if group["screen"] == right_screen]
+screen_one_groups = [
+    group["name"] for group in group_configs if group["screen"] == primary_screen
+]
+screen_two_groups = [
+    group["name"] for group in group_configs if group["screen"] == top_screen
+]
+screen_three_groups = [
+    group["name"] for group in group_configs if group["screen"] == right_screen
+]
 
 
 ###########################
 ##    UTILITY FUNCTIONS  ##
 ###########################
+
 
 @lazy.function
 def minimize_all(qtile):
@@ -279,6 +287,7 @@ def go_to_group(name):
 
             # focus back on original screen
             qtile.focus_screen(right_screen)
+
     return _inner
 
 
@@ -339,6 +348,7 @@ def go_to_group_and_move_window(name):
             qtile.groups_map[target_group["match_group_secondary"]].toscreen()
 
             qtile.focus_screen(right_screen)
+
     return _inner
 
 
@@ -418,13 +428,7 @@ def go_to_last_group(qtile):
 
 keys = [
     # program bindings
-
-    Key(
-        [mod],
-        "Return",
-        lazy.spawn(myTerm),
-        desc="Terminal"
-    ),
+    Key([mod], "Return", lazy.spawn(myTerm), desc="Terminal"),
     Key(
         [mod, "shift"],
         "Return",
@@ -467,11 +471,7 @@ keys = [
         lazy.spawn(myBrowser),
         desc="Web browser",
     ),
-    Key(
-        [mod],
-        "e",
-        lazy.spawn(myTerm + " -e ranger"), desc="File explorer"
-    ),
+    Key([mod], "e", lazy.spawn(myTerm + " -e ranger"), desc="File explorer"),
     Key(
         [mod, "shift", "control"],
         "s",
@@ -483,6 +483,12 @@ keys = [
         "m",
         lazy.spawn(myTerm + " -e unimatrix"),
         desc="Matrix",
+    ),
+    Key(
+        [mod],
+        "z",
+        lazy.group["scratchpad"].dropdown_toggle("tasks"),
+        desc="tasks scratchpad",
     ),
     Key(
         [mod],
@@ -505,16 +511,22 @@ keys = [
     Key(
         ["control", mod],
         "g",
-        lazy.spawn(myTerm + " -e " + home + "/.config/qtile/desktop-env/th-bh-rv/dev-session.sh"),
+        lazy.spawn(
+            myTerm
+            + " -e "
+            + home
+            + "/.config/qtile/desktop-env/th-bh-rv/dev-session.sh"
+        ),
         desc="Start full dev environment (docker, minikube, tmux, IDE, browser)",
     ),
     Key(
         ["control", mod],
         "s",
-        lazy.spawn(myTerm + " -e " + home + "/.config/qtile/desktop-env/th-bh-rv/sys-info.sh"),
+        lazy.spawn(
+            myTerm + " -e " + home + "/.config/qtile/desktop-env/th-bh-rv/sys-info.sh"
+        ),
         desc="Start full dev environment (docker, minikube, tmux, IDE, browser)",
     ),
-
     # widnow management
     Key(
         [mod],
@@ -570,12 +582,7 @@ keys = [
         lazy.layout.client_to_next(),
         desc="Move window to next stack",
     ),
-    Key(
-        [mod, "shift"],
-        "n",
-        lazy.group.next_window(),
-        desc="next window"
-    ),
+    Key([mod, "shift"], "n", lazy.group.next_window(), desc="next window"),
     Key(
         [mod, "shift"],
         "p",
@@ -588,19 +595,8 @@ keys = [
         lazy.layout.next(),
         desc="Move window focus to other window",
     ),
-
-    Key(
-        [mod],
-        "t",
-        lazy.window.toggle_floating(),
-        desc="toggle floating"
-    ),
-    Key(
-        [mod],
-        "f",
-        lazy.window.toggle_fullscreen(),
-        desc="toggle fullscreen"
-    ),
+    Key([mod], "t", lazy.window.toggle_floating(), desc="toggle floating"),
+    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="toggle fullscreen"),
     Key(
         [mod],
         "m",
@@ -625,7 +621,6 @@ keys = [
         lazy.to_screen(right_screen),
         desc="Move focus to right monitor",
     ),
-
     # system bindings
     Key(
         [],
@@ -704,9 +699,10 @@ groups.append(
     ScratchPad(
         "scratchpad",
         [
-            DropDown("pad", textEditor, x = 0, y= 0.1, height=0.9, width=0.3),
-            DropDown("calc", calculator, x = 0.8, y= 0.2, height=0.4, width=0.2),
-            DropDown("term", myTerm, x=0.15, y= 0.5, height=0.5, width=0.7),
+            DropDown("pad", textEditor, x=0, y=0.1, height=0.9, width=0.3),
+            DropDown("calc", calculator, x=0.8, y=0.2, height=0.4, width=0.2),
+            DropDown("term", myTerm, x=0.15, y=0.5, height=0.5, width=0.7),
+            DropDown("tasks", tasks, x=0, y=0.1, height=0.9, width=0.3),
         ],
     ),
 )
@@ -723,11 +719,9 @@ layout_theme = {
 }
 
 layouts = [
-    layout.Max(
-        **layout_theme
-    ),
+    layout.Max(**layout_theme),
     layout.Stack(**layout_theme, num_stacks=2),
-    layout.Spiral(**layout_theme)
+    layout.Spiral(**layout_theme),
 ]
 
 
@@ -737,6 +731,9 @@ def init_screens():
         Screen(),
         Screen(),
     ]
+
+
+screens = init_screens()
 
 
 #########################
@@ -776,11 +773,7 @@ mouse = [
         lazy.window.set_size_floating(),
         start=lazy.window.get_size(),
     ),
-    Click(
-        [mod],
-        "Button2",
-        lazy.window.bring_to_front()
-    ),
+    Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
 
@@ -838,12 +831,12 @@ EWW_CONFIG_DIR = os.path.expanduser("~/.config/eww/bar")
 #     except Exception as e:
 #         log.error("Error calling eww update: %s", e)
 
+
 def startup():
     autostartscript = "~/.config/qtile/desktop-env/th-bh-rv/autostart.sh"
     home = os.path.expanduser(autostartscript)
-    subprocess.Popen([
-        home
-    ])
+    subprocess.Popen([home])
+
 
 def push_workspaces_to_eww(qtile):
     groups = []
@@ -879,6 +872,7 @@ def push_workspaces_to_eww(qtile):
     except Exception as e:
         log.error("Error calling eww update: %s", e)
 
+
 @hook.subscribe.startup_once
 def autostart():
     startup()
@@ -894,8 +888,3 @@ def _push_eww_workspaces_on_startup():
 @hook.subscribe.client_killed
 def _update_eww_workspaces_on_change(*_args, **_kwargs):
     push_workspaces_to_eww(qtile)
-
-
-if __name__ in ["config", "__main__"]:
-    screens = init_screens()
-
