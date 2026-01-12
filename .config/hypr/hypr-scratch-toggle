@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Usage:
+#   hypr-scratch-toggle sp-term
+#   hypr-scratch-toggle sp-calc
+#
+# This script:
+#  - toggles special workspace if a window already exists there
+#  - otherwise spawns the app INTO that special workspace with float/size/move rules
+#  - uses flock so you cannot spawn 3x from one keypress burst
+
+NAME="${1:?missing name (sp-term|sp-tasks|sp-pad|sp-calc)}"
+SPECIAL="special:${NAME}"
+LOCK="/tmp/hypr-scratch-${NAME}.lock"
+
+exec 9>"$LOCK"
+if ! flock -n 9; then
+  # Another invocation is already running (prevents 3x spawns)
+  exit 0
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+  echo "jq is required: sudo pacman -S jq" >&2
+  exit 3
+fi
+
+# Do we already have any client on this special workspace?
+HAS_CLIENT="$(
+  hyprctl -j clients |
+    jq -r --arg ws "$SPECIAL" 'any(.[]; (.workspace.name // "") == $ws)'
+)"
+
+if [[ "$HAS_CLIENT" == "true" ]]; then
+  hyprctl dispatch togglespecialworkspace "$NAME"
+  exit 0
+fi
+
+# Spawn with rules (geometry at spawn-time; no windowrule matching required)
+case "$NAME" in
+sp-term)
+  CMD='kitty --class sp-term --title sp-term'
+  RULES='[workspace special:sp-term silent; float; size 70% 50%; move 15% 50%]'
+  ;;
+sp-pad)
+  CMD='featherpad'
+  RULES='[workspace special:sp-pad silent; float; size 30% 90%; move 0% 10%]'
+  ;;
+sp-tasks)
+  # Your system shows Tasks class is org.kde.tasks (GUI), so run it directly
+  CMD='tasks'
+  RULES='[workspace special:sp-tasks silent; float; size 30% 90%; move 0% 10%]'
+  ;;
+sp-calc)
+  CMD='kcalc'
+  RULES='[workspace special:sp-calc silent; float; size 20% 40%; move 80% 20%]'
+  ;;
+*)
+  echo "Unknown scratchpad: $NAME" >&2
+  exit 2
+  ;;
+esac
+
+# Make sure the special workspace is shown, then spawn
+hyprctl dispatch togglespecialworkspace "$NAME"
+hyprctl dispatch exec "$RULES $CMD"
