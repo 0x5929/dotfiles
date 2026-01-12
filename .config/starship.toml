@@ -1,9 +1,14 @@
-format = '$os$shell$all'
-right_format = """
-$time
-"""
+# format = '$os$shell$all'
+format = """
+$os$shell$directory$git_branch$git_status$git_metrics$package$python$fill$time
+$character"""
+# right_format = " $time"
+right_format = ""
 
 continuation_prompt = '▶▶ '
+
+[fill]
+symbol = " "
 
 [character]
 success_symbol = "[ ](bold green)"

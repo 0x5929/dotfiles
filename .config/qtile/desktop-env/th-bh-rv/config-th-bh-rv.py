@@ -19,8 +19,6 @@ Installation dependencies
 
 import os
 import json
-import time
-import colors
 import subprocess
 import logging
 from pathlib import Path
