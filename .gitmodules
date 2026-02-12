@@ -4,3 +4,6 @@
 [submodule ".config/alacritty/themes"]
 	path = .config/alacritty/themes
 	url = https://github.com/alacritty/alacritty-theme.git
+[submodule ".config/quickshell/todo_scratchpad"]
+	path = .config/quickshell/todo_scratchpad
+	url = git@github.com:0x5929/todo_scratch.git
