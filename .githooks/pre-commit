@@ -1,35 +1,90 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SRC="/home/kevin/.config/DankMaterialShell"
-DST=".config/DankMaterialShell"
+# Run from repo root (in case git runs hook from elsewhere)
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
 
-# Ensure source exists
-if [[ ! -d "$SRC" ]]; then
-  echo "pre-commit: source folder not found: $SRC"
-  exit 1
-fi
+# ---- Helpers ---------------------------------------------------------------
 
-if [[ ! -d "$DST" ]]; then
-  echo "pre-commit: dest folder not found: $SRC"
-  exit 1
-fi
+sync_path() {
+  local src="$1"
+  local dst="$2"
+  shift 2
+  local -a excludes=("$@")
 
-# Copy (sync) source -> repo destination
-# trailing slashes mean "copy contents"
-# --delete DEST files that are no longer in source, fully synchronizes with source
-rsync -a --delete \
-  --exclude 'plugins/.repos/' \
-  --exclude 'plugins/calculator/' \
-  --exclude 'plugins/dmsSessionizer/' \
-  --exclude 'plugins/emojiLauncher/' \
-  --exclude 'plugins/mediaPlayer/' \
-  --exclude 'plugins/niriWindows/' \
-  --exclude 'plugins/powerOptions/' \
-  --exclude 'plugins/webSearch/' \
-  "$SRC/" "$DST/"
+  if [[ -d "$src" ]]; then
+    mkdir -p "$dst"
 
-# Stage the copied changes so they are included in the commit
-git add "$DST"
+    local -a rsync_args=(-a --delete)
+    for ex in "${excludes[@]}"; do
+      rsync_args+=(--exclude "$ex")
+    done
 
-echo "pre-commit: synced $SRC -> $DST"
+    rsync "${rsync_args[@]}" "$src/" "$dst/"
+    git add "$dst"
+    echo "pre-commit: synced dir  $src -> $dst"
+    return 0
+  fi
+
+  if [[ -f "$src" ]]; then
+    mkdir -p "$(dirname "$dst")"
+    # For files, use rsync without trailing slash
+    rsync -a "$src" "$dst"
+    git add "$dst"
+    echo "pre-commit: synced file $src -> $dst"
+    return 0
+  fi
+
+  echo "pre-commit: WARN missing source, skipping: $src"
+  return 0
+}
+
+# ---- Config: source -> destination mappings -------------------------------
+
+# Convention:
+# - Store system files under a namespaced folder in your repo, e.g.:
+#   .system/etc/...
+#   .system/boot/...
+#
+# This avoids collisions with your repo's actual .config, etc.
+
+# DankMaterialShell excludes (submodules + cache)
+DMS_EXCLUDES=(
+  'plugins/.repos/'
+  'plugins/calculator/'
+  'plugins/dmsSessionizer/'
+  'plugins/emojiLauncher/'
+  'plugins/mediaPlayer/'
+  'plugins/niriWindows/'
+  'plugins/powerOptions/'
+  'plugins/webSearch/'
+)
+
+# 1) DankMaterialShell (directory)
+sync_path \
+  "/home/kevin/.config/DankMaterialShell" \
+  ".config/DankMaterialShell" \
+  "${DMS_EXCLUDES[@]}"
+
+# 2) mkinitcpio config (file)  [typo fixed from mkinitpcio]
+sync_path \
+  "/etc/mkinitcpio.conf" \
+  "./etc/mkinitcpio.conf"
+
+# 3) grub defaults (recommended to track instead of generated grub.cfg)
+sync_path \
+  "/etc/default/grub" \
+  "./etc/default/grub"
+
+# 4) Plymouth configs
+sync_path \
+  "/etc/plymouth" \
+  "./etc/plymouth"
+
+# Common Arch Plymouth theme locations
+sync_path \
+  "/usr/share/plymouth/themes" \
+  "./usr/share/plymouth/themes"
+
+echo "pre-commit: all sync tasks completed"
