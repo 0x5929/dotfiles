@@ -82,9 +82,4 @@ sync_path \
   "/etc/plymouth" \
   "./etc/plymouth"
 
-# Common Arch Plymouth theme locations
-sync_path \
-  "/usr/share/plymouth/themes" \
-  "./usr/share/plymouth/themes"
-
 echo "pre-commit: all sync tasks completed"
