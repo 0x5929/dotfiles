@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SRC="/home/kevin/.config/DankMaterialShell"
+DST=".config/DankMaterialShell"
+
+# Ensure source exists
+if [[ ! -d "$SRC" ]]; then
+  echo "pre-commit: source folder not found: $SRC"
+  exit 1
+fi
+
+if [[ ! -d "$DST" ]]; then
+  echo "pre-commit: dest folder not found: $SRC"
+  exit 1
+fi
+
+
+# Copy (sync) source -> repo destination
+# trailing slashes mean "copy contents"
+# --delete DEST files that are no longer in source, fully synchronizes with source
+rsync -a --delete "$SRC/" "$DST/"
+
+# Stage the copied changes so they are included in the commit
+git add "$DST"
+
+echo "pre-commit: synced $SRC -> $DST"

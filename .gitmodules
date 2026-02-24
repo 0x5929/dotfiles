@@ -7,3 +7,24 @@
 [submodule ".config/quickshell/todo_scratchpad"]
 	path = .config/quickshell/todo_scratchpad
 	url = git@github.com:0x5929/todo_scratch.git
+[submodule ".config/DankMaterialShell/plugins/calculator"]
+	path = .config/DankMaterialShell/plugins/calculator
+	url = https://github.com/rochacbruno/DankCalculator
+[submodule ".config/DankMaterialShell/plugins/dmsSessionizer"]
+	path = .config/DankMaterialShell/plugins/dmsSessionizer
+	url = https://github.com/leonardofranco01/dms-sessionizer
+[submodule ".config/DankMaterialShell/plugins/emojiLauncher"]
+	path = .config/DankMaterialShell/plugins/emojiLauncher
+	url = https://github.com/devnullvoid/dms-emoji-launcher
+[submodule ".config/DankMaterialShell/plugins/mediaPlayer"]
+	path = .config/DankMaterialShell/plugins/mediaPlayer
+	url = https://github.com/arrifat346afs/mediaPlayer
+[submodule ".config/DankMaterialShell/plugins/niriWindows"]
+	path = .config/DankMaterialShell/plugins/niriWindows
+	url = https://github.com/rochacbruno/DankNiriWindows
+[submodule ".config/DankMaterialShell/plugins/powerOptions"]
+	path = .config/DankMaterialShell/plugins/powerOptions
+	url = https://github.com/Nazahim/PowerOptions
+[submodule ".config/DankMaterialShell/plugins/webSearch"]
+	path = .config/DankMaterialShell/plugins/webSearch
+	url = https://github.com/devnullvoid/dms-web-search
