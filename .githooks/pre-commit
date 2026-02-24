@@ -15,11 +15,19 @@ if [[ ! -d "$DST" ]]; then
   exit 1
 fi
 
-
 # Copy (sync) source -> repo destination
 # trailing slashes mean "copy contents"
 # --delete DEST files that are no longer in source, fully synchronizes with source
-rsync -a --delete "$SRC/" "$DST/"
+rsync -a --delete \
+  --exclude 'plugins/.repos/' \
+  --exclude 'plugins/calculator/' \
+  --exclude 'plugins/dmsSessionizer/' \
+  --exclude 'plugins/emojiLauncher/' \
+  --exclude 'plugins/mediaPlayer/' \
+  --exclude 'plugins/niriWindows/' \
+  --exclude 'plugins/powerOptions/' \
+  --exclude 'plugins/webSearch/' \
+  "$SRC/" "$DST/"
 
 # Stage the copied changes so they are included in the commit
 git add "$DST"
