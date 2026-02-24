@@ -79,7 +79,7 @@ sync_path \
 
 # 4) Plymouth configs
 sync_path \
-  "/etc/plymouth" \
-  "./etc/plymouth"
+  "/etc/plymouth/plymouthd.conf" \
+  "./etc/plymouth/plymouthd.conf"
 
 echo "pre-commit: all sync tasks completed"
