@@ -1,0 +1,13 @@
+// window-rule {
+//     match app-id="^dms-dropdown-term$"
+//
+//     open-floating true
+//
+//     // pinned to bottom edge; x=0 centers when relative-to is a single side ("bottom")
+//     default-floating-position x=0 y=0 relative-to="bottom"
+//
+//     // tweak these to taste
+//     default-window-height { proportion 0.40; }  // 40% tall
+//     default-column-width  { proportion 1.00; }  // full width
+// }
+//

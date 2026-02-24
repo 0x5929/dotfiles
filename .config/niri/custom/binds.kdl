@@ -1,0 +1,6 @@
+binds {
+    Mod+D {spawn "kitten" "quick-access-terminal" "--detach";}
+    Mod+Z hotkey-overlay-title="Todo Scratchpad" {
+      spawn-sh "qs -c ~/Projects/personal/dotfiles/.config/quickshell/todo_scratchpad/quickshell/todo_scratchpad ipc call todo_scratchpad toggle";
+    }
+}
