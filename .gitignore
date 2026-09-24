@@ -5,3 +5,4 @@
 **/stack.yaml.lock
 
 .config/DankMaterialShell/plugins/.repos/
+.config/DankMaterialShell/plugin_settings.json

@@ -1,0 +1,3 @@
+spawn-at-startup "sh" "-c" "sleep 2 && mpvpaper -o 'no-audio --loop-playlist --video-rotate=90' DP-1 /home/kevin/Videos/live_wallpapers/1920/fav/"
+spawn-at-startup "sh" "-c" "sleep 2 && mpvpaper -o 'no-audio --loop-playlist' DP-3 /home/kevin/Videos/live_wallpapers/3440/fav/"
+spawn-at-startup "sh" "-c" "sleep 2 && mpvpaper -o 'no-audio --loop-playlist --panscan=1.0' DP-2 /home/kevin/Videos/live_wallpapers/3840/fav/"

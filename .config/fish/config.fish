@@ -3,7 +3,14 @@ if status is-interactive
     # set global editor to NVIM
     set -gx EDITOR nvim
 
+    # --- pyenv (project-local Python versions) ---
+    set -Ux PYENV_ROOT $HOME/.pyenv
+    fish_add_path -m $PYENV_ROOT/bin
+    fish_add_path -m $PYENV_ROOT/shims
+    pyenv init - | source
+    # --- /pyenv ---
     # aliases
+    alias btw="cat /etc/*release"
     alias vim=nvim
     alias open=xdg-open
     # alias pycharm=pycharm-professional
@@ -23,6 +30,9 @@ if status is-interactive
     #set -gx PATH /usr/pgsql-12/bin $PATH
     set -gx PATH /opt/pycharm-2025.3.1//bin $PATH
     set -gx PATH /home/kevin/.local/bin $PATH
+
+    # set claude code default model
+    set -Ux ANTHROPIC_MODEL claude-opus-4-6
     # vim binding
     # fish_vi_key_bindings
     fzf --fish | source

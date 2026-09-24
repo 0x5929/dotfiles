@@ -1,5 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export ANTHROPIC_MODEL:claude\x2dopus\x2d4\x2d6
 SETUVAR EDITOR:nvim
 SETUVAR --export PYENV_ROOT:/home/kevin/\x2epyenv
 SETUVAR VISUAL:nvim
@@ -8,4 +9,4 @@ SETUVAR _fisher_jorgebucaran_2F_fisher_files:\x7e/\x2econfig/fish/functions/fish
 SETUVAR _fisher_jorgebucaran_2F_nvm_2E_fish_files:\x7e/\x2econfig/fish/functions/_nvm_index_update\x2efish\x1e\x7e/\x2econfig/fish/functions/_nvm_list\x2efish\x1e\x7e/\x2econfig/fish/functions/_nvm_version_activate\x2efish\x1e\x7e/\x2econfig/fish/functions/_nvm_version_deactivate\x2efish\x1e\x7e/\x2econfig/fish/functions/nvm\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/nvm\x2efish\x1e\x7e/\x2econfig/fish/completions/nvm\x2efish
 SETUVAR _fisher_plugins:jorgebucaran/fisher\x1ejorgebucaran/nvm\x2efish
 SETUVAR _fisher_upgraded_to_4_4:\x1d
-SETUVAR fish_user_paths:/home/kevin/\x2elocal/bin\x1e/home/linuxbrew/\x2elinuxbrew/Homebrew/bin\x1e/usr/share/Modules/bin\x3a/usr/local/cuda\x2d11\x2e1/bin\x3a/usr/local/bin\x3a/usr/bin\x3a/bin\x3a/usr/local/sbin\x3a/usr/sbin\x3a/opt/bin\x3a/opt/script\x3a/home/kevin/bin\x3a/home/kevin/\x2elocal/bin
+SETUVAR fish_user_paths:/home/kevin/\x2epyenv/shims\x1e/home/kevin/\x2elocal/bin\x1e/home/linuxbrew/\x2elinuxbrew/Homebrew/bin\x1e/usr/share/Modules/bin\x3a/usr/local/cuda\x2d11\x2e1/bin\x3a/usr/local/bin\x3a/usr/bin\x3a/bin\x3a/usr/local/sbin\x3a/usr/sbin\x3a/opt/bin\x3a/opt/script\x3a/home/kevin/bin\x3a/home/kevin/\x2elocal/bin
