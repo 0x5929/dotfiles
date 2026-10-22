@@ -1,0 +1,57 @@
+{
+  "lockfileVersion": 1,
+  "plugins": {
+    "aiAssistant": {
+      "repo": "https://github.com/devnullvoid/dms-ai-assistant",
+      "commit": "dec1f5a3018c057a79b5f8365c74be367e58e220"
+    },
+    "calculator": {
+      "repo": "https://github.com/rochacbruno/DankCalculator",
+      "commit": "2f08bd47d8cb0caec7496aebc70b0b65c52e943b"
+    },
+    "dankDesktopWeather": {
+      "repo": "https://github.com/AvengeMedia/dms-plugins",
+      "path": "DankDesktopWeather",
+      "commit": "141841fc85e01494df6d217bd5a27c65da87256d"
+    },
+    "dankGifSearch": {
+      "repo": "https://github.com/AvengeMedia/dms-plugins",
+      "path": "DankGifSearch",
+      "commit": "141841fc85e01494df6d217bd5a27c65da87256d"
+    },
+    "dankLauncherKeys": {
+      "repo": "https://github.com/AvengeMedia/dms-plugins",
+      "path": "DankLauncherKeys",
+      "commit": "141841fc85e01494df6d217bd5a27c65da87256d"
+    },
+    "dmsSessionizer": {
+      "repo": "https://github.com/leonardofranco01/dms-sessionizer",
+      "commit": "110a031dd6d31282ee33d0b33b4a4ff9d15b1999"
+    },
+    "emojiLauncher": {
+      "repo": "https://github.com/devnullvoid/dms-emoji-launcher",
+      "commit": "9bbc5c0b0c41977dcdbacc49ae63c6d8b8670536"
+    },
+    "gitmojiLauncher": {
+      "repo": "https://github.com/lucyfire/dms-plugins",
+      "path": "gitmojiLauncher",
+      "commit": "3a22c32e06d153d6a13bb18b10eb41615c564a05"
+    },
+    "mediaPlayer": {
+      "repo": "https://github.com/arrifat346afs/mediaPlayer",
+      "commit": "56ec160ed3fe32ad55b920ff462727d918b6eb51"
+    },
+    "niriWindows": {
+      "repo": "https://github.com/rochacbruno/DankNiriWindows",
+      "commit": "b866af4cb599e7eeae90779b959f56b1a9905f18"
+    },
+    "powerOptions": {
+      "repo": "https://github.com/Nazahim/PowerOptions",
+      "commit": "95fa7949fd9614a21bcc7a14ff8cc917a7208cf8"
+    },
+    "webSearch": {
+      "repo": "https://github.com/devnullvoid/dms-web-search",
+      "commit": "d383a5433bec0375e45b6bd4c81c2c05a4c20be1"
+    }
+  }
+}

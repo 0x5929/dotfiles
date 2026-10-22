@@ -3,12 +3,6 @@ if status is-interactive
     # set global editor to NVIM
     set -gx EDITOR nvim
 
-    # --- pyenv (project-local Python versions) ---
-    set -Ux PYENV_ROOT $HOME/.pyenv
-    fish_add_path -m $PYENV_ROOT/bin
-    fish_add_path -m $PYENV_ROOT/shims
-    pyenv init - | source
-    # --- /pyenv ---
     # aliases
     alias btw="cat /etc/*release"
     alias vim=nvim
@@ -76,3 +70,5 @@ if status is-interactive
     cat ~/.cache/wal/sequences
 end
 alias fixpad="sudo /usr/local/sbin/fix-syna32e2.sh"
+mise activate fish | source
+mise activate fish | source
