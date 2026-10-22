@@ -1,4 +1,4 @@
-// Copy of dms/colors.kdl so Noctalia looks the same; edit freely.
+// Copy of dms/colors.kdl so Noctalia looks the same; edit freely as Noctalia config grows.
 
 layout {
     background-color "transparent"

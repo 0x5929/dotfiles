@@ -1,4 +1,4 @@
-// Copy of dms/layout.kdl; edit freely.
+// Copy of dms/layout.kdl; edit freely as Noctalia specific config grows.
 
 layout {
     gaps 8
