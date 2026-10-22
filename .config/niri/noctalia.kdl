@@ -1,0 +1,16 @@
+include "config.kdl"
+
+include "noctalia/startup.kdl"
+include "noctalia/rules.kdl"
+include "noctalia/colors.kdl"
+include "noctalia/layout.kdl"
+include "noctalia/alttab.kdl"
+include "noctalia/binds.kdl"
+
+// Read-only reuse of DMS's monitor + cursor files
+include "dms/outputs.kdl"
+include "dms/cursor.kdl"
+
+include "custom/binds.kdl"
+include "custom/scratch.kdl"
+// custom/wallpapers.kdl left out on purpose: live wallpapers are DMS-only
