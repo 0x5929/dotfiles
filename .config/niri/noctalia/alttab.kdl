@@ -1,0 +1,7 @@
+// Copy of dms/alttab.kdl; edit freely.
+
+recent-windows {
+    highlight {
+        corner-radius 12
+    }
+}

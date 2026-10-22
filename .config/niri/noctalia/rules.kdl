@@ -1,0 +1,13 @@
+// Noctalia blurred backdrop in the overview (needs [niri/backdrop] enabled in Noctalia)
+layer-rule {
+    match namespace="^noctalia-backdrop"
+    place-within-backdrop true
+}
+
+// Noctalia settings window floats
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
