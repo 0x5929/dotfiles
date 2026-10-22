@@ -1,7 +1,17 @@
-// Copy of dms/layout.kdl; edit freely as Noctalia specific config grows.
-
+// Global layout (LG, C49, TV)
 layout {
     gaps 8
+
+    always-center-single-column
+    center-focused-column "on-overflow"
+
+    // Mod+R toggles half <-> third
+    preset-column-widths {
+        proportion 0.5
+        proportion 0.33333
+    }
+
+    default-column-width { proportion 0.5; }
 
     border {
         width 4
@@ -18,3 +28,57 @@ window-rule {
     tiled-state true
     draw-border-with-background false
 }
+
+// Monitors
+
+// LG 34" ultrawide, global layout: opens at half, Mod+R toggles 1/2 <-> 1/3
+output "LG Electronics LG HDR WQHD 202NTXRJD386" {
+    mode "3440x1440@99.982"
+    position x=400 y=0
+}
+
+// Samsung C49, new windows open at 1/3; c49-autowidth.py grows them to 1/2 when there are 1-2 columns
+output "Samsung Electric Company C49HG9x HNKN903274" {
+    mode "3840x1080@143.999"
+    position x=0 y=1440
+
+    layout {
+        default-column-width { proportion 0.33333; }
+    }
+}
+
+// Samsung S90D TV, 3840x2160
+output "Samsung Electric Company S90D 0x01000E00" {
+    mode "3840x2160@60.000"
+    position x=4920 y=0
+
+    layout {
+        gaps 12
+        preset-column-widths {
+            proportion 0.33333
+            proportion 0.5
+            proportion 0.66667
+            proportion 1.0
+        }
+        default-column-width { proportion 0.5; }
+    }
+}
+
+// ASUS VG248, portrait, always full width
+output "Ancor Communications Inc VG248 GALMQS074204" {
+    mode "1920x1080@60.000"
+    transform "90"
+    position x=3840 y=600
+
+    layout {
+        default-column-width { proportion 1.0; }
+        preset-column-widths {
+            proportion 0.5
+            proportion 1.0
+        }
+        center-focused-column "never"
+    }
+}
+
+// Auto-size columns on the C49 (1-2 apps = halves, 3+ = thirds)
+spawn-sh-at-startup "python3 ~/.config/niri/scripts/c49-autowidth.py"

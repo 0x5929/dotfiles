@@ -9,7 +9,8 @@ include "noctalia/binds.kdl"
 
 // Read-only reuse of DMS's monitor + cursor files
 include "dms/outputs.kdl"
-include "dms/cursor.kdl"
+
+include "noctalia/cursor.kdl"
 
 include "custom/binds.kdl"
 include "custom/scratch.kdl"
