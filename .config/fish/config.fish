@@ -67,7 +67,13 @@ if status is-interactive
         pokemon-colorscripts -r -s -b --no-title
     end
 
-    cat ~/.cache/wal/sequences
+    # Only load pywal sequences if we are explicitly running inside a Qtile session
+    # AND we are not inside a Kitty window (since Kitty handles its own themes)
+    if test "$DESKTOP_SESSION" = qtile -o "$XDG_CURRENT_DESKTOP" = qtile
+        if not set -q KITTY_PID
+            cat ~/.cache/wal/sequences
+        end
+    end
 end
 alias fixpad="sudo /usr/local/sbin/fix-syna32e2.sh"
 mise activate fish | source

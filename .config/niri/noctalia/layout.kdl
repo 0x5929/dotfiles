@@ -44,6 +44,7 @@ output "Samsung Electric Company C49HG9x HNKN903274" {
 
     layout {
         default-column-width { proportion 0.33333; }
+        // center-focused-column "always"
     }
 }
 

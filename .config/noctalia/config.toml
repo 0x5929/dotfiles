@@ -1,2 +1,7 @@
 [wallpaper]
 directory = "/home/kevin/Pictures/wallpaper"
+
+
+[theme.templates.user.terminal-sequences]
+input_path = '~/.config/noctalia/templates/terminal-sequences'
+output_path = '~/.config/kitty/themes/noctalia.conf'

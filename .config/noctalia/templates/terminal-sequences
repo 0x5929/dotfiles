@@ -1,0 +1,6 @@
+# Generated dynamically by Noctalia
+foreground            {{colors.terminal_foreground.default.hex}}
+background            {{colors.terminal_background.default.hex}}
+selection_foreground  {{colors.terminal_foreground.default.hex}}
+selection_background  {{colors.terminal_background.default.hex}}
+
