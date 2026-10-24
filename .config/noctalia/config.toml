@@ -5,3 +5,8 @@ directory = "/home/kevin/Pictures/wallpaper"
 [theme.templates.user.terminal-sequences]
 input_path = '~/.config/noctalia/templates/terminal-sequences'
 output_path = '~/.config/kitty/themes/noctalia.conf'
+
+
+[theme.templates.user.niri-colors]
+input_path = '/home/kevin/.config/noctalia/templates/niri-colors.kdl.tmpl'
+output_path = '/home/kevin/.config/niri/noctalia-colors.kdl'
